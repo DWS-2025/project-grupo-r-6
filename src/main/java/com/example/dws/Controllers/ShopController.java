@@ -15,7 +15,7 @@ public class ShopController {
     private ShopRepository shopRepository;
 
     // Mostrar todas las tiendas
-    @GetMapping("/index")
+    @GetMapping
     public String getAllShops(Model model) {
         Collection<Shop> shops = shopRepository.findAll();
         model.addAttribute("shops", shops);
@@ -23,12 +23,12 @@ public class ShopController {
     }
 
     // Ver detalles de una tienda por su ID
-    @GetMapping("/{shopId}")
+    @GetMapping("/shops/{shopId}")
     public String getShopById(@PathVariable long shopId, Model model) {
         Shop shop = shopRepository.findById(shopId);
         if (shop != null) {
             model.addAttribute("shop", shop);
-            return "shopDetails"; // Vista que muestra los detalles de la tienda
+            return "Shop"; // Vista que muestra los detalles de la tienda
         } else {
             return "error"; // Vista de error si no se encuentra la tienda
         }
@@ -45,13 +45,13 @@ public class ShopController {
     @PostMapping("/save")
     public String saveShop(@ModelAttribute Shop shop) {
         shopRepository.save(shop); // Guardamos la tienda en el repositorio
-        return "redirect:/index"; // Redirige a la lista de tiendas
+        return "redirect:/"; // Redirige a la lista de tiendas
     }
 
     // Eliminar una tienda
     @PostMapping("/delete")
     public String deleteShop(@RequestParam long shopID) {
         shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
-        return "redirect:/index"; // Redirige a la lista de tiendas
+        return "redirect:/"; // Redirige a la lista de tiendas
     }
 }
