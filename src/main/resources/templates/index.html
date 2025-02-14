@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Categorías</title>
+    <title>Tiendas</title>
     <meta charset="UTF-8">
 </head>
 <body>
-<h1>Lista de Categorías</h1>
+<h1>Lista de Tiendas</h1>
 
 {{#categories}}
 <p> <a href="categories/{{id}}" class="button">{{name}}</a></p>
 {{/categories}}
 
-<h2>Agregar nueva categoría</h2>
+<h2>Agregar nueva Tienda</h2>
 <form action="/categories/add" method="post">
     <input type="text" name="categoryName" placeholder="Nombre de la categoría" required>
     <button type="submit">Agregar</button>

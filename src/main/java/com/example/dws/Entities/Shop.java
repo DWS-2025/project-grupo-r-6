@@ -6,8 +6,8 @@ import java.util.*;
 
 public class Shop {
     private String shopName;
-    private int shopID;
-    private HashMap<Integer, Product> products;
+    private long shopID;
+    private HashMap<Long, Product> products;
 
     public Shop(String shopName) {
         this.shopName = shopName;
@@ -21,7 +21,7 @@ public class Shop {
         this.shopName = shopName;
     }
     // Getter y Setter para shopID
-    public int getShopID() {
+    public long getShopID() {
         return shopID;
     }
     public void setShopID(int shopID) {
@@ -29,11 +29,11 @@ public class Shop {
     }
 
     // Getter y Setter para products
-    public HashMap<Integer, Product> getProducts() {
+    public HashMap<Long, Product> getProducts() {
         return products;
     }
 
-    public void setProducts(HashMap<Integer, Product> products) {
+    public void setProducts(HashMap<Long, Product> products) {
         this.products = products;
     }
     public void removeProduct(Product product){
