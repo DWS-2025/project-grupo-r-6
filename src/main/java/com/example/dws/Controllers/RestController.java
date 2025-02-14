@@ -3,7 +3,7 @@ package com.example.dws.Controllers;
 import com.example.dws.Entities.City;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
-import com.example.dws.Entities.ShopType;
+import com.example.dws.Enums.ShopType;
 import com.example.dws.Repositories.CitiesRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;

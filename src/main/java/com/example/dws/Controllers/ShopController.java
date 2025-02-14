@@ -1,6 +1,9 @@
 package com.example.dws.Controllers;
 
 import com.example.dws.Entities.*;
+import com.example.dws.Enums.ShopType;
+import com.example.dws.Enums.Size;
+import com.example.dws.Enums.Type;
 import com.example.dws.Repositories.CitiesRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
@@ -69,7 +72,7 @@ public class ShopController {
     public String getClothesForm(Model model, @RequestParam Type type, @RequestParam Size size, @RequestParam int prize, @RequestParam String brand, @PathVariable Long id, RedirectAttributes attributes) {
         model.addAttribute("shopId", id);
         Product product = new Product(type, size, (double)prize, brand);
-        this.productrepository.putProductsMap(product);
+        this.productrepository.addProduct(product);
         Shop shop = shoprepository.getShopById(id);
         product.putMap(shop, id);
         this.shoprepository.putProductsMap(product, id);

@@ -2,7 +2,7 @@ package com.example.dws.Repositories;
 
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
-import com.example.dws.Entities.ShopType;
+import com.example.dws.Enums.ShopType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;

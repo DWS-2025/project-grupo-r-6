@@ -2,13 +2,11 @@ package com.example.dws.Controllers;
 
 import com.example.dws.Entities.City;
 import com.example.dws.Entities.Shop;
-import com.example.dws.Entities.ShopType;
+import com.example.dws.Enums.ShopType;
 import com.example.dws.Repositories.CitiesRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;

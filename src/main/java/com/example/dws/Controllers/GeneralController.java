@@ -1,6 +1,7 @@
 package com.example.dws.Controllers;
 
 import com.example.dws.Entities.*;
+import com.example.dws.Enums.ShopType;
 import com.example.dws.Repositories.CitiesRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
@@ -79,7 +80,7 @@ public class GeneralController {
             this.shoprepository.removeProduct(index,indexShop);
         }
         ModelAndView modelAndView = new ModelAndView("myObjects");
-        modelAndView.addObject("product", this.productrepository.returnMyProducts());
+        modelAndView.addObject("product", this.productrepository.getAllProducts());
         return modelAndView;
 
     }

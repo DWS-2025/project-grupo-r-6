@@ -1,4 +1,4 @@
-package com.example.dws.Entities;
+package com.example.dws.Enums;
 
 public enum ShopType {
 

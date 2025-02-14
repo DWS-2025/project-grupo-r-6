@@ -1,6 +1,6 @@
 package com.example.dws.Entities;
 
-import org.springframework.stereotype.Repository;
+import com.example.dws.Enums.ShopType;
 
 import java.util.Collection;
 import java.util.HashMap;

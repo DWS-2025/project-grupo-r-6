@@ -39,8 +39,6 @@ public class CitiesRepository {
 
     }
 
-
-
     public City getCityByName(String cityName) {
         for (Map.Entry<Long, City> entry : this.cities.entrySet()) {
             City city = entry.getValue();

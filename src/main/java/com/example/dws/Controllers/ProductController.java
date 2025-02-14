@@ -2,8 +2,8 @@ package com.example.dws.Controllers;
 
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
-import com.example.dws.Entities.Size;
-import com.example.dws.Entities.Type;
+import com.example.dws.Enums.Size;
+import com.example.dws.Enums.Type;
 import com.example.dws.Repositories.CitiesRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
@@ -17,64 +17,83 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ProductController {
     @Autowired
-    private ShopRepository shoprepository;
+    private ShopRepository shopRepository;
     @Autowired
-    private ProductRepository productrepository;
+    private ProductRepository productRepository;
     @Autowired
     private CitiesRepository cityrepository;
-    @GetMapping({"/products"})
+
+    // Mostrar todos los productos
+    @GetMapping("/products")
     public String products(Model model) {
-        model.addAttribute("product", this.productrepository.returnMyProducts());
+        model.addAttribute("products", productRepository.getAllProducts());
         return "cities";
     }
-    @GetMapping({"/clothesForm"})
+
+    // Formulario para agregar ropa a una tienda
+    @GetMapping("/clothesForm")
     public String clothesShop(Model model, @RequestParam Long shopId) {
-        model.addAttribute("id", shopId);
+        model.addAttribute("shopId", shopId);
         return "clothesForm";
     }
-    @GetMapping({"/removeClothesForm"})
+
+    // Formulario para eliminar ropa
+    @GetMapping("/removeClothesForm")
     public String FormularioEliminarRopa(Model model, @RequestParam Long shopId) {
         model.addAttribute("shopId", shopId);
         return "removeClothesForm";
     }
 
+    // Agregar un producto a la tienda
     @GetMapping({"/addProduct"})
     public String addProduct(Model model, @RequestParam Type type, @RequestParam Size size, @RequestParam double prize, @RequestParam String brand, @RequestParam String[] shopsIds) {
         Product product = new Product(type, size, prize, brand);
         for (String shopId : shopsIds){
             Long id = Long.parseLong(shopId);
-            Shop shop = shoprepository.getShopById(id);
+            Shop shop = shopRepository.getShopById(id);
             if(shop != null){
                 product.putMap(shop, id);
-                this.shoprepository.putProductsMap(product, id);
+                this.shopRepository.putProductsMap(product, id);
             }
         }
-        this.productrepository.putProductsMap(product);
+        this.productRepository.addProduct(product);
         return "redirect:/products";
     }
+
+    // Formulario para seleccionar tienda a actualizar
     @GetMapping({"/formUpdateClothesId"})
     public String formUpdateClothes(Model model, @RequestParam Long shopId) {
-        model.addAttribute("indexShop", shopId);
+        model.addAttribute("shopId", shopId);
         return "selectIdForUpdateItem";
     }
-    @GetMapping({"/updateObject/{indexShop}"})
-    public String formUpdateClothes2(Model model, @PathVariable Long indexShop, @RequestParam Long id) {
-        return "redirect:/formUpdateClothes3/"+indexShop+'/'+id;
+
+    // Formulario para actualizar producto
+    @GetMapping("/updateObject/{shopId}")
+    public String formUpdateClothes2(@PathVariable Long shopId, @RequestParam Long productId) {
+        return "redirect:/formUpdateClothes3/" + shopId + '/' + productId;
     }
 
-    @GetMapping({"/formUpdateClothes3/{indexShop}/{id}"})
-    public String formUpdateClothes3(Model model,@PathVariable Long indexShop,@PathVariable Long id) {
-        model.addAttribute("indexShop", indexShop);
-        model.addAttribute("indexProduct", id);
-
+    // Formulario para actualizar producto - Vista final
+    @GetMapping("/formUpdateClothes3/{shopId}/{productId}")
+    public String formUpdateClothes3(Model model, @PathVariable Long shopId, @PathVariable Long productId) {
+        model.addAttribute("shopId", shopId);
+        model.addAttribute("productId", productId);
         return "updateItem";
     }
 
-    @GetMapping({"/updateObject/{indexShop}/{id}"})
-    public String ActualizarRopa(Model model,@PathVariable Long indexShop,@PathVariable Long id,@RequestParam Type type, @RequestParam Size size, @RequestParam int prize, @RequestParam String brand) {
-        Product product=new Product(type,size,prize,brand);
-        this.shoprepository.updateObject(product,indexShop,id);
+    // Actualizar producto en tienda
+    @GetMapping("/updateObject/{shopId}/{productId}")
+    public String actualizarRopa(
+            @PathVariable Long shopId,
+            @PathVariable Long productId,
+            @RequestParam Type type,
+            @RequestParam Size size,
+            @RequestParam double price,
+            @RequestParam String brand) {
 
-        return "redirect:/shopManagement/{indexShop}";
+        Product product = new Product(type, size, price, brand);
+        shopRepository.updateObject(product, shopId, productId);
+
+        return "redirect:/shopManagement/" + shopId;
     }
 }

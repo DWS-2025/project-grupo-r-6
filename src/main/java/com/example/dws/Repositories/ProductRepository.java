@@ -11,36 +11,29 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ProductRepository {
 
-    private Map<Long, Product> productsMap = new ConcurrentHashMap();
+    private Map<Long, Product> productsMap = new ConcurrentHashMap<>();
     private AtomicLong lastID = new AtomicLong();
-    private int productCounter = 0;
 
-
-    public ProductRepository() {
-    }
-
-    public ProductRepository(Map<Long, Product> productsMap) {
-        this.productsMap = productsMap;
-    }
-
-    public Product putProductsMap(Product product) {
-        long id = this.lastID.incrementAndGet();
+    // Agregar un nuevo producto con ID autogenerado
+    public Product addProduct(Product product) {
+        long id = lastID.incrementAndGet();
         product.setId(id);
-        this.productsMap.put(id, product);
-        ++this.productCounter;
+        productsMap.put(id, product);
         return product;
     }
 
-
-
-    public Product addMyproduct(Product product, Long id){
+    // Agregar un producto con ID específico
+    public Product addProductWithId(Product product, Long id) {
         if (id != null) {
-            this.productsMap.put(id, product);
+            product.setId(id);
+            productsMap.put(id, product);
         }
         return product;
     }
-    public Collection<Product> returnMyProducts(){
-        return this.productsMap.values();
+
+    // Obtener todos los productos
+    public Collection<Product> getAllProducts() {
+        return productsMap.values();
     }
 
 

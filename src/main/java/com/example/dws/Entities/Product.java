@@ -1,6 +1,9 @@
 package com.example.dws.Entities;
 
 
+import com.example.dws.Enums.Size;
+import com.example.dws.Enums.Type;
+
 import java.util.HashMap;
 
 public class Product {
@@ -29,53 +32,41 @@ public class Product {
         this.shops.put(id, shop);
     }
 
-    public Shop removeMap(Long id) {
-        Shop shop =this.shops.remove(id);
-        return shop != null ? shop : null;
+    public void removeShop(Long id) {
+        this.shops.remove(id);
     }
 
     public void removeAllShopsMap(){
         shops.clear();
     }
 
-
-
     public Type gettype() {
         return this.type;
     }
-
-    public Size getsize() {
-        return this.size;
-    }
-
-    public double getprize() {
-        return this.prize;
-    }
-
-    public String getbrand() {
-        return this.brand;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
     public void setType(Type type) {
         this.type = type;
     }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public Size getsize() {
+        return this.size;
     }
-
-    public void setPrize(double prize) {
-        this.prize = prize;
-    }
-
     public void setSize(Size size) {
         this.size = size;
     }
-
+    public double getprize() {
+        return this.prize;
+    }
+    public void setPrize(double prize) {
+        this.prize = prize;
+    }
+    public String getbrand() {
+        return this.brand;
+    }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+    public long getId() {
+        return this.id;
+    }
     public void setId(long id) {
         this.id = id;
     }
