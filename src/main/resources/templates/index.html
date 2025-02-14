@@ -7,24 +7,26 @@
 <body>
 <h1>Lista de Tiendas</h1>
 
-{{#categories}}
-<p> <a href="categories/{{id}}" class="button">{{name}}</a></p>
-{{/categories}}
+<!-- Mostrar tiendas -->
+{{#shops}}
+<p> <a href="shops/{{shopID}}" class="button">{{shopName}}</a></p>
+{{/shops}}
 
 <h2>Agregar nueva Tienda</h2>
-<form action="/categories/add" method="post">
-    <input type="text" name="categoryName" placeholder="Nombre de la categoría" required>
+<!-- Formulario para agregar una nueva tienda -->
+<form action="/shops/save" method="post">
+    <input type="text" name="shopName" placeholder="Nombre de la tienda" required>
     <button type="submit">Agregar</button>
 </form>
 
-<h2>Eliminar categoría</h2>
-<!-- Formulario para eliminar una categoría -->
-<form action="/categories/delete" method="post">
-    <select name="categoryId" required>
-        <option value="" disabled selected>Selecciona una categoría para eliminar</option>
-        {{#categories}}
-        <option value="{{id}}">{{name}}</option>
-        {{/categories}}
+<h2>Eliminar Tienda</h2>
+<!-- Formulario para eliminar una tienda -->
+<form action="/shops/delete" method="post">
+    <select name="shopID" required>
+        <option value="" disabled selected>Selecciona una tienda para eliminar</option>
+        {{#shops}}
+        <option value="{{shopID}}">{{shopName}}</option>
+        {{/shops}}
     </select>
     <button type="submit">Eliminar</button>
 </form>

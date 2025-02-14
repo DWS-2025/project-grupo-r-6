@@ -1,31 +1,35 @@
 package com.example.dws.Entities;
 
-import com.example.dws.Enums.ShopType;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Shop {
     private String shopName;
-    private long shopID;
-    private HashMap<Long, Product> products;
+    private AtomicLong shopID;  // Usar AtomicLong para manejar el ID de la tienda
+    private HashMap<Long, Product> products;  // Usar long como clave para productos
 
     public Shop(String shopName) {
         this.shopName = shopName;
+        this.shopID = new AtomicLong(0);  // Inicializar AtomicLong con 0
         this.products = new HashMap<>();
     }
+
     // Getter y Setter para shopName
     public String getShopName() {
         return shopName;
     }
+
     public void setShopName(String shopName) {
         this.shopName = shopName;
     }
+
     // Getter y Setter para shopID
     public long getShopID() {
-        return shopID;
+        return shopID.get();  // Devolver el valor de shopID como long
     }
-    public void setShopID(int shopID) {
-        this.shopID = shopID;
+
+    public void setShopID(long shopID) {
+        this.shopID.set(shopID);  // Establecer el valor de shopID
     }
 
     // Getter y Setter para products
@@ -36,7 +40,10 @@ public class Shop {
     public void setProducts(HashMap<Long, Product> products) {
         this.products = products;
     }
-    public void removeProduct(Product product){
-        products.remove(product);
+
+    // Método para eliminar un producto
+    public void removeProduct(Product product) {
+        this.products.remove(product.getProductId().get());  // Eliminar por el ID del producto
     }
 }
+

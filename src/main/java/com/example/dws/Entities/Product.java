@@ -56,4 +56,5 @@ public class Product {
     public void setShops(HashMap<AtomicLong, Product> shops) {
         this.shops = shops;
     }
+
 }
