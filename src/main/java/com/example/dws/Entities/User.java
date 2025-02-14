@@ -3,9 +3,8 @@ package com.example.dws.Entities;
 import com.example.dws.Enums.Size;
 import com.example.dws.Enums.Type;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 
 public class User {
     private long id;
