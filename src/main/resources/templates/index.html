@@ -14,14 +14,14 @@
 
 <h2>Agregar nueva Tienda</h2>
 <!-- Formulario para agregar una nueva tienda -->
-<form action="/shops/save" method="post">
+<form action="/save" method="post">
     <input type="text" name="shopName" placeholder="Nombre de la tienda" required>
     <button type="submit">Agregar</button>
 </form>
 
 <h2>Eliminar Tienda</h2>
 <!-- Formulario para eliminar una tienda -->
-<form action="/shops/delete" method="post">
+<form action="/delete" method="post">
     <select name="shopID" required>
         <option value="" disabled selected>Selecciona una tienda para eliminar</option>
         {{#shops}}

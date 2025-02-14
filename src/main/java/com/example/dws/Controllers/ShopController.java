@@ -45,13 +45,13 @@ public class ShopController {
     @PostMapping("/save")
     public String saveShop(@ModelAttribute Shop shop) {
         shopRepository.save(shop); // Guardamos la tienda en el repositorio
-        return "redirect:/shops"; // Redirige a la lista de tiendas
+        return "redirect:/index"; // Redirige a la lista de tiendas
     }
 
     // Eliminar una tienda
     @PostMapping("/delete")
     public String deleteShop(@RequestParam long shopID) {
         shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
-        return "redirect:/shops"; // Redirige a la lista de tiendas
+        return "redirect:/index"; // Redirige a la lista de tiendas
     }
 }
