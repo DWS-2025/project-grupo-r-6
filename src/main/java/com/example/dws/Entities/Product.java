@@ -5,69 +5,55 @@ import com.example.dws.Enums.Size;
 import com.example.dws.Enums.Type;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicLong;
+
 
 public class Product {
-    private Type type;
-    private Size size;
-    private String brand;
-    private double prize;
-    private long id = 0;
-    private HashMap<Long, Shop> shops;
+    private String productName;
+    private AtomicLong productId;
+    private double productPrize;
+    private HashMap<AtomicLong, Product> shops;
 
-    public Product(Type type, Size size, double prize, String brand) {
-        this.type = type;
-        this.size = size;
-        this.prize = prize;
-        this.brand = brand;
-        this.shops = new HashMap();
+    public Product(String productName, double productPrize) {
+        this.productName = productName;
+        this.productPrize = productPrize;
+        this.shops = new HashMap<>();
     }
 
-    public Shop putMap(Shop shop, Long id) {
-        shop.setId(id);
-        this.shops.put(id, shop);
-        return shop;
+    public void deleteShop(Shop shop){
+        this.shops.remove(shop);
     }
 
-    public void putShop(Shop shop, Long id){
-        this.shops.put(id, shop);
+
+    public String getProductName() {
+        return productName;
     }
 
-    public void removeShop(Long id) {
-        this.shops.remove(id);
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public void removeAllShopsMap(){
-        shops.clear();
+    public AtomicLong getProductId() {
+        return productId;
     }
 
-    public Type gettype() {
-        return this.type;
+    public void setProductId(AtomicLong productId) {
+        this.productId = productId;
     }
-    public void setType(Type type) {
-        this.type = type;
+
+    public double getProductPrize() {
+        return productPrize;
     }
-    public Size getsize() {
-        return this.size;
+
+    public void setProductPrize(double productPrize) {
+        this.productPrize = productPrize;
     }
-    public void setSize(Size size) {
-        this.size = size;
+
+    public HashMap<AtomicLong, Product> getShops() {
+        return shops;
     }
-    public double getprize() {
-        return this.prize;
-    }
-    public void setPrize(double prize) {
-        this.prize = prize;
-    }
-    public String getbrand() {
-        return this.brand;
-    }
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-    public long getId() {
-        return this.id;
-    }
-    public void setId(long id) {
-        this.id = id;
+
+    public void setShops(HashMap<AtomicLong, Product> shops) {
+        this.shops = shops;
     }
 }
