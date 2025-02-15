@@ -43,7 +43,7 @@ public class Shop {
 
     // Método para eliminar un producto
     public void removeProduct(Product product) {
-        this.products.remove(product.getProductId().get());  // Eliminar por el ID del producto
+        this.products.remove(product.getProductId());  // Eliminar por el ID del producto
     }
 }
 

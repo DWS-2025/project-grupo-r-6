@@ -10,20 +10,20 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Product {
     private String productName;
-    private AtomicLong productId;
+    private long productId;
     private double productPrize;
-    private HashMap<AtomicLong, Product> shops;
+    private HashMap<Long, Shop> shops;
 
     public Product(String productName, double productPrize) {
         this.productName = productName;
         this.productPrize = productPrize;
         this.shops = new HashMap<>();
+        this.productId = 0;
     }
 
     public void deleteShop(Shop shop){
-        this.shops.remove(shop);
+        this.shops.remove(shop.getShopID());
     }
-
 
     public String getProductName() {
         return productName;
@@ -33,11 +33,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public AtomicLong getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProductId(AtomicLong productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 
@@ -49,12 +49,11 @@ public class Product {
         this.productPrize = productPrize;
     }
 
-    public HashMap<AtomicLong, Product> getShops() {
+    public HashMap<Long, Shop> getShops() {
         return shops;
     }
 
-    public void setShops(HashMap<AtomicLong, Product> shops) {
+    public void setShops(HashMap<Long, Shop> shops) {
         this.shops = shops;
     }
-
 }

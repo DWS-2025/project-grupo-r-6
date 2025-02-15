@@ -1,6 +1,7 @@
 package com.example.dws.Controllers;
 
 import com.example.dws.Entities.Shop;
+import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,10 +25,17 @@ public class ShopController {
 
     // Ver detalles de una tienda por su ID
     @GetMapping("/shops/{shopId}")
-    public String getShopById(@PathVariable long shopId, Model model) {
+    public String getShopById(@PathVariable("shopId") long shopId, Model model) {
         Shop shop = shopRepository.findById(shopId);
         if (shop != null) {
             model.addAttribute("shop", shop);
+            // Mostrar los productos de la tienda y sus atributos
+            System.out.println("Productos de la tienda " + shop.getShopName() + ": ");
+            shop.getProducts().forEach((productId, product) -> {
+                System.out.println("Producto ID: " + product.getProductId());
+                System.out.println("Nombre: " + product.getProductName());
+                System.out.println("Precio: " + product.getProductPrize());
+            });
             return "Shop"; // Vista que muestra los detalles de la tienda
         } else {
             return "error"; // Vista de error si no se encuentra la tienda
