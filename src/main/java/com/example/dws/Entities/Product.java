@@ -4,6 +4,7 @@ package com.example.dws.Entities;
 import com.example.dws.Enums.Size;
 import com.example.dws.Enums.Type;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -52,6 +53,10 @@ public class Product {
 
     public HashMap<Long, Shop> getShops() {
         return shops;
+    }
+
+    public Collection<Shop> allShops(){
+        return this.shops.values();
     }
 
     public void setShops(HashMap<Long, Shop> shops) {

@@ -3,26 +3,32 @@
 <h1>Producto: {{product.productName}}</h1>
 
 <h3>Tiendas</h3>
-{{#product.shops.values}}
-<a href="/shops/{{.shopId}}"> {{.shopName}}</a>
+{{#product.allShops}}
+<a href="/shops/{{shopID}}"> {{shopName}}</a>
 <br>
-{{/product.shops.values}}
+{{/product.allShops}}
 
-{{^product.shops.values}}
+{{^product.allShops}}
 <p>No Products yet.</p>
-{{/product.shops.values}}
+{{/product.allShops}}
 
 <br>
 
-<h1>Add Product</h1>
-<form action="/shops/{{ shop.shopID }}/products/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
-    <p>Name: </p>
-    <input type='text' name='productName'/>
-    <p>Goals</p>
-    <input type='number' name='productPrize'/>
-
-    <input type='submit' value='Save'/>
+<form action="/products/{{ product.productId }}/addShop/" method="post">
+    <select name='shopID' required>
+        {{#shops}}
+        <option value='{{shopID}}'>{{shopName}}</option>
+        {{/shops}}
+    </select>
+    <input type='submit' value='Añadir Tienda'/>
 </form>
+
+<form action="/products/{{ product.productId }}/delete" method="post">
+    <input type='submit' value='Delete product'/>
+</form>
+
+<br>
+
 
 
 <a href="/">Back</a>
