@@ -1,16 +1,19 @@
 package com.example.dws.Entities;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Shop {
     private String shopName;
-    private AtomicLong shopID;  // Usar AtomicLong para manejar el ID de la tienda
+    private static AtomicLong counter= new AtomicLong(0);// Usar AtomicLong para manejar el ID de la tienda
+    private long shopID;
     private HashMap<Long, Product> products;  // Usar long como clave para productos
 
     public Shop(String shopName) {
         this.shopName = shopName;
-        this.shopID = new AtomicLong(0);  // Inicializar AtomicLong con 0
+        this.shopID = counter.getAndIncrement();  // Inicializar AtomicLong con 0
         this.products = new HashMap<>();
     }
 
@@ -25,11 +28,11 @@ public class Shop {
 
     // Getter y Setter para shopID
     public long getShopID() {
-        return shopID.get();  // Devolver el valor de shopID como long
+        return shopID;  // Devolver el valor de shopID como long
     }
 
     public void setShopID(long shopID) {
-        this.shopID.set(shopID);
+        this.shopID=shopID;
         // Establecer el valor de shopID
     }
 
@@ -40,6 +43,10 @@ public class Shop {
 
     public void setProducts(HashMap<Long, Product> products) {
         this.products = products;
+    }
+
+    public Collection<Product> getAllProducts() {
+        return this.products.values();
     }
 
     // Método para eliminar un producto
