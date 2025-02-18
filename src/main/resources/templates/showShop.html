@@ -3,14 +3,14 @@
 <h1>Tienda: {{shop.shopName}}</h1>
 
 <h3>Productos</h3>
-{{#shop.products.values}}
-<a href="/products/{{.productId}}"> {{.productName}}</a>
+{{#shop.allProducts}}
+<a href="/products/{{productId}}"> {{productName}}</a>
 <br>
-{{/shop.products.values}}
+{{/shop.allProducts}}
 
-{{^shop.products.values}}
+{{^shop.allProducts}}
 <p>No Products yet.</p>
-{{/shop.products.values}}
+{{/shop.allProducts}}
 
 <br>
 
