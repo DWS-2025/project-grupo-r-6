@@ -18,10 +18,6 @@ public class ProductRepository {
 
 
     public void save(Product product) {
-        if (product.getProductId() == 0) {
-            long id = nextId.getAndIncrement();
-            product.setProductId(id);
-        }
         this.products.put(product.getProductId(), product);
     }
 

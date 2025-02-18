@@ -28,10 +28,6 @@ public class ShopRepository {
 
     // Guardar o actualizar una tienda
     public void save(Shop shop) {
-        if (shop.getShopID() == 0) {  // Verificamos si el ID es 0 para asignar uno nuevo
-            long id = nextId.getAndIncrement();  // Obtener un nuevo ID
-            shop.setShopID(id);  // Asignar el ID a la tienda
-        }
         this.shops.put(shop.getShopID(), shop);  // Guardar o actualizar la tienda en el mapa
     }
 

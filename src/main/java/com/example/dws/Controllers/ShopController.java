@@ -31,14 +31,17 @@ public class ShopController {
         Product product1 = new Product("Producto 1", 20);
         Product product2 = new Product("Producto 2", 30);
 
-        shopRepository.addProductToShop(1, product1);
-        shopRepository.addProductToShop(1, product2);
-
-        productRepository.addShopToProduct(1, shop1);
-        productRepository.addShopToProduct(2, shop1);
-
         productRepository.save(product1);
         productRepository.save(product2);
+
+        shop1.getProducts().put(product1.getProductId(), product1);
+        shop1.getProducts().put(product2.getProductId(), product2);
+        shop2.getProducts().put(product2.getProductId(), product2);
+
+        product1.getShops().put(shop1.getShopID(), shop1);
+        product2.getShops().put(shop2.getShopID(), shop1);
+        product2.getShops().put(shop2.getShopID(), shop2);
+
     }
 
 
