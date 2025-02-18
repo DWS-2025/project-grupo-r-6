@@ -15,15 +15,7 @@ public class ProductRepository {
     private HashMap<Long, Product> products = new HashMap<>();
     private AtomicLong nextId = new AtomicLong(1);
 
-    public ProductRepository() {
-        Product product1 = new Product("Product 1", 15);
-        product1.setProductId(nextId.getAndIncrement());
-        products.put(product1.getProductId(), product1);
 
-        Product product2 = new Product("Product 2", 20);
-        product2.setProductId(nextId.getAndIncrement());
-        products.put(product2.getProductId(), product2);
-    }
 
     public void save(Product product) {
         if (product.getProductId() == 0) {

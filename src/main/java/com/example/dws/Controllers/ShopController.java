@@ -1,8 +1,10 @@
 package com.example.dws.Controllers;
 
+import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +16,33 @@ import java.util.Collection;
 public class ShopController {
     @Autowired
     private ShopRepository shopRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-    // Mostrar todas las tiendas
+    @PostConstruct
+    public void init() {
+
+        Shop shop1 = new Shop("Tienda1");
+        Shop shop2 = new Shop("Tienda2");
+
+        shopRepository.save(shop1);
+        shopRepository.save(shop2);
+
+        Product product1 = new Product("Producto 1", 20);
+        Product product2 = new Product("Producto 2", 30);
+
+        shopRepository.addProductToShop(1, product1);
+        shopRepository.addProductToShop(1, product2);
+
+        productRepository.addShopToProduct(1, shop1);
+        productRepository.addShopToProduct(2, shop1);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+    }
+
+
+        // Mostrar todas las tiendas
     @GetMapping
     public String getAllShops(Model model) {
         Collection<Shop> shops = shopRepository.findAll();
