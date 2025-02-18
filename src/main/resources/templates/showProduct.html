@@ -1,0 +1,30 @@
+<html>
+<body>
+<h1>Producto: {{product.productName}}</h1>
+
+<h3>Tiendas</h3>
+{{#product.shops.values}}
+<a href="/shops/{{.shopId}}"> {{.shopName}}</a>
+<br>
+{{/shop.products.values}}
+
+{{^shop.products}}
+<p>No Products yet.</p>
+{{/shop.products}}
+
+<br>
+
+<h1>Add Product</h1>
+<form action="/shops/{{ shop.shopID }}/products/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
+    <p>Name: </p>
+    <input type='text' name='productName'/>
+    <p>Goals</p>
+    <input type='number' name='productPrize'/>
+
+    <input type='submit' value='Save'/>
+</form>
+
+
+<a href="/">Back</a>
+</body>
+</html>

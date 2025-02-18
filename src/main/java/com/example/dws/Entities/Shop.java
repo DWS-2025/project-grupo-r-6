@@ -29,7 +29,8 @@ public class Shop {
     }
 
     public void setShopID(long shopID) {
-        this.shopID.set(shopID);  // Establecer el valor de shopID
+        this.shopID.set(shopID);
+        // Establecer el valor de shopID
     }
 
     // Getter y Setter para products

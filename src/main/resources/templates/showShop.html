@@ -1,0 +1,31 @@
+<html>
+<body>
+<h1>Tienda: {{shop.shopName}}</h1>
+
+<h3>Productos</h3>
+{{#shop.products.values}}
+<a href="/products/{{.productId}}"> {{.productName}}</a>
+<br>
+{{/shop.products.values}}
+
+{{^shop.products.values}}
+<p>No Products yet.</p>
+{{/shop.products.values}}
+
+<br>
+
+<h1>Add Product</h1>
+<form action="/shops/{{ shop.shopID }}/products/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
+    <p>Nombre del producto: </p>
+    <input type='text' name='productName'/>
+    <p>Precio del producto</p>
+    <input type='number' name='productPrize'/>
+
+    <input type='submit' value='Save'/>
+</form>
+
+
+<a href="/">Back</a>
+</body>
+</html>
+

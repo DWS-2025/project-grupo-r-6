@@ -63,7 +63,7 @@ public class ShopController {
                 System.out.println("Nombre: " + product.getProductName());
                 System.out.println("Precio: " + product.getProductPrize());
             });
-            return "Shop"; // Vista que muestra los detalles de la tienda
+            return "showShop"; // Vista que muestra los detalles de la tienda
         } else {
             return "error"; // Vista de error si no se encuentra la tienda
         }
