@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Product {
     private String productName;
+    private static AtomicLong counter = new AtomicLong(0);
     private long productId;
     private double productPrize;
     private HashMap<Long, Shop> shops;
@@ -18,7 +19,7 @@ public class Product {
         this.productName = productName;
         this.productPrize = productPrize;
         this.shops = new HashMap<>();
-        this.productId = 0;
+        this.productId = counter.getAndIncrement();
     }
 
     public void deleteShop(Shop shop){
