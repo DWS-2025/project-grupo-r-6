@@ -92,4 +92,13 @@ public class ShopController {
         shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
         return "redirect:/"; // Redirige a la lista de tiendas
     }
+    @PostMapping("/shops/{shopID}/products/new")
+    public String newProductToShop(Product product, @PathVariable long shopID){
+        Shop shop = shopRepository.findById(shopID);
+        shop.getProducts().put(product.getProductId(), product);
+        product.getShops().put(shopID, shop);
+        productRepository.save(product);
+        shopRepository.save(shop);
+        return "redirect:/shops/" + shopID;
+    }
 }
