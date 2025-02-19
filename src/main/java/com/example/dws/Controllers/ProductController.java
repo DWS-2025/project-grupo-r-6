@@ -48,4 +48,19 @@ public class ProductController {
         return "redirect:/products/" + productID;
     }
 
+    // Borra el producto de las tiendas que lo tengan y se borra del repository
+    @PostMapping("/products/{productID}/delete")
+    public String deleteProduct(@PathVariable("productID") long productID){
+        Product product = productRepository.findById(productID);
+        if(product != null){
+            shopRepository.removeProductFromAllShops(productID);
+            productRepository.deleteById(productID);
+            return "deleted_product";
+        } else{
+            return "product_not_found";
+        }
+    }
+
+
+
 }

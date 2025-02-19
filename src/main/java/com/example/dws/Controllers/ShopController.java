@@ -39,7 +39,7 @@ public class ShopController {
         shop2.getProducts().put(product2.getProductId(), product2);
 
         product1.getShops().put(shop1.getShopID(), shop1);
-        product2.getShops().put(shop2.getShopID(), shop1);
+        product2.getShops().put(shop1.getShopID(), shop1);
         product2.getShops().put(shop2.getShopID(), shop2);
 
     }
@@ -86,9 +86,10 @@ public class ShopController {
         return "redirect:/"; // Redirige a la lista de tiendas
     }
 
-    // Eliminar una tienda
+    // Borra la tienda de los productos que la tienen asignada y se borra la tienda
     @PostMapping("/delete")
     public String deleteShop(@RequestParam long shopID) {
+        productRepository.removeShopFromAllProducts(shopID);
         shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
         return "redirect:/"; // Redirige a la lista de tiendas
     }

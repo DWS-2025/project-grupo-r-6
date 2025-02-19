@@ -33,17 +33,9 @@ public class ProductRepository {
         return products.values();
     }
 
-    public void addShopToProduct(long productId, Shop shop) {
-        Product product = products.get(productId);
-        if (product != null) {
-            product.getShops().put(shop.getShopID(), shop);
-        }
-    }
-
-    public void removeShopFromProduct(long productId, Shop shop) {
-        Product product = products.get(productId);
-        if (product != null) {
-            product.getShops().remove(shop.getShopID());
+    public void removeShopFromAllProducts(long shopID){
+        for (Product product : products.values()){
+            product.getShops().remove(shopID);
         }
     }
 }

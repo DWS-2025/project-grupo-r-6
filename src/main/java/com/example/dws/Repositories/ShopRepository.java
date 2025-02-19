@@ -37,18 +37,10 @@ public class ShopRepository {
     }
 
     // Agregar un producto a una tienda específica
-    public void addProductToShop(long shopId, Product product) {
-        Shop shop = shops.get(shopId);  // Obtener la tienda por su ID
-        if (shop != null) {
-            shop.getProducts().put(product.getProductId(), product);  // Agregar el producto
+    public void removeProductFromAllShops(long productId) {
+        for (Shop shop : shops.values()) {
+            shop.getProducts().remove(productId);
         }
     }
 
-    // Eliminar un producto de una tienda específica
-    public void removeProductFromShop(long shopId, Product product) {
-        Shop shop = shops.get(shopId);  // Obtener la tienda por su ID
-        if (shop != null) {
-            shop.removeProduct(product);  // Llamar al método removeProduct de Shop
-        }
-    }
 }
