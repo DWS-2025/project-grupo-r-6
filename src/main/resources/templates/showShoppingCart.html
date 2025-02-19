@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<body>
+<h1>Carrito de: {{user.name}}</h1>
+
+<h3>Productos</h3>
+{{#user.allProducts}}
+<a href="/products/{{productId}}"> {{productName}}</a>
+<br>
+{{/user.allProducts}}
+
+{{^user.allProducts}}
+<p>No hay productos en el carrito todavia</p>
+{{/user.allProducts}}
+
+<br>
+
+
+
+<a href="/">Back</a>
+</body>
+</html>

@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public class ShopRepository {
     private HashMap<Long, Shop> shops = new HashMap<>();  // Usamos Long como clave en el HashMap
-    private AtomicLong nextId = new AtomicLong(1); // Para generar IDs únicos para las tiendas
+    private AtomicLong nextId = new AtomicLong(0); // Para generar IDs únicos para las tiendas
 
 
 

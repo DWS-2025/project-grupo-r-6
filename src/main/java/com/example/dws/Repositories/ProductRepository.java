@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public class ProductRepository {
     private HashMap<Long, Product> products = new HashMap<>();
-    private AtomicLong nextId = new AtomicLong(1);
+    private AtomicLong nextId = new AtomicLong(0);
 
 
 

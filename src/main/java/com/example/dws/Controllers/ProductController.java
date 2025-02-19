@@ -3,8 +3,10 @@ package com.example.dws.Controllers;
 
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
+import com.example.dws.Entities.User;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
+import com.example.dws.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,8 @@ public class ProductController {
     private ShopRepository shopRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/products/{productID}")
     public String getProductById(@PathVariable("productID") long productID, Model model) {
@@ -59,6 +63,23 @@ public class ProductController {
         } else{
             return "product_not_found";
         }
+    }
+    // Un usuario compra un producto y se añade a su carrito
+    @PostMapping("/products/{productID}/buy")
+    public String buyProduct(@PathVariable("productID") long productID, @RequestParam("username") String username){
+        Product product = productRepository.findById(productID);
+        if(product != null){
+            User user = userRepository.findByName(username);
+            if(user != null){
+                user.addProduct(productID, product);
+                return "redirect:/users/" + user.getId();
+            } else{
+                return "user_not_found";
+            }
+        } else{
+            return "product_not_found";
+        }
+
     }
 
 
