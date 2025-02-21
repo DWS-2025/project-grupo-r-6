@@ -1,9 +1,13 @@
 package com.example.dws.Controllers;
 
+import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
+import com.example.dws.Entities.User;
+import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
+import com.example.dws.Repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,10 @@ public class ShopController {
     private ShopRepository shopRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostConstruct
     public void init() {
@@ -33,6 +41,11 @@ public class ShopController {
 
         productRepository.save(product1);
         productRepository.save(product2);
+
+        User user1 = new User("Adri", "adri@gmail.com");
+        userRepository.save(user1);
+        Comment comment1 = new Comment(user1, "Atención Al Cliente", "Muy buena atencion al cliente");
+        commentRepository.save(comment1);
 
         shop1.getProducts().put(product1.getProductId(), product1);
         shop1.getProducts().put(product2.getProductId(), product2);
@@ -59,13 +72,6 @@ public class ShopController {
         Shop shop = shopRepository.findById(shopId);
         if (shop != null) {
             model.addAttribute("shop", shop);
-            // Mostrar los productos de la tienda y sus atributos
-            System.out.println("Productos de la tienda " + shop.getShopName() + ": ");
-            shop.getProducts().forEach((productId, product) -> {
-                System.out.println("Producto ID: " + product.getProductId());
-                System.out.println("Nombre: " + product.getProductName());
-                System.out.println("Precio: " + product.getProductPrize());
-            });
             return "showShop"; // Vista que muestra los detalles de la tienda
         } else {
             return "error"; // Vista de error si no se encuentra la tienda

@@ -18,11 +18,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostConstruct
-    public void init(){
-        User user1 = new User("Adri", "adri@gmail.com");
-        userRepository.save(user1);
-    }
 
     @GetMapping("/users/{userID}")
     public String getShopingCart(@PathVariable("userID") long userID, Model model){

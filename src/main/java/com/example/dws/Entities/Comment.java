@@ -9,6 +9,7 @@ public class Comment {
     private long id;
     private static AtomicLong counter= new AtomicLong(0);
 
+
     public Comment(User user, String issue, String message) {
         this.user = user;
         this.issue = issue;
@@ -40,11 +41,11 @@ public class Comment {
         this.message = message;
     }
 
-    public long getId() {
+    public long getCommentId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setCommentId(long id) {
         this.id = id;
     }
 }

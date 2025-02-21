@@ -36,7 +36,7 @@ public class ShopRepository {
         this.shops.remove(id);  // Eliminar la tienda
     }
 
-    // Agregar un producto a una tienda específica
+    // Elimina los productos de todas las tiendas
     public void removeProductFromAllShops(long productId) {
         for (Shop shop : shops.values()) {
             shop.getProducts().remove(productId);
