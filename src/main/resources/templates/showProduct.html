@@ -37,6 +37,20 @@
 
 <br>
 
+<h1>Actualizar Producto</h1>
+<form action="/products/{{ product.productId }}/update/" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
+    <p>Nombre del producto: </p>
+    <input type='text' name='productName'/>
+    <p>Precio del producto</p>
+    <input type='number' name='productPrize'/>
+
+    <input type='submit' value='Actualizar'/>
+</form>
+
+<br>
+
+
+
 
 
 <a href="/">Back</a>
