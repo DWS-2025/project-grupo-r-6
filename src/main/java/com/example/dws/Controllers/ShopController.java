@@ -47,6 +47,8 @@ public class ShopController {
         Comment comment1 = new Comment(user1, "Atención Al Cliente", "Muy buena atencion al cliente");
         commentRepository.save(comment1);
 
+        shop1.getComments().put(comment1.getCommentId(), comment1);
+
         shop1.getProducts().put(product1.getProductId(), product1);
         shop1.getProducts().put(product2.getProductId(), product2);
         shop2.getProducts().put(product2.getProductId(), product2);

@@ -16,19 +16,26 @@
 
 <h3>Comentarios</h3>
 {{#shop.allComments}}
-<p><strong> Comentario de {{user.getName}}</strong></p>
-<p><em>Asunto: {{issue}}</em></p>
-<p>{{message}}</p>
+<a href="/comments/{{commentId}}"> Asunto: {{issue}}</a>
 <br>
-{{#shop.allComments}}
+{{/shop.allComments}}
 
-{{^comments}}
+{{^shop.allComments}}
 <p>No hay comentarios aún.</p>
-{{/comments}}
+{{/shop.allComments}}
 
 <br>
 
 <h1>Add Product</h1>
+<form action="/shops/{{ shop.shopID }}/products/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
+    <p>Nombre del producto: </p>
+    <input type='text' name='productName'/>
+    <p>Precio del producto</p>
+    <input type='number' name='productPrize'/>
+
+    <input type='submit' value='Save'/>
+</form>
+<h1>Add Comment</h1>
 <form action="/shops/{{ shop.shopID }}/products/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
     <p>Nombre del producto: </p>
     <input type='text' name='productName'/>

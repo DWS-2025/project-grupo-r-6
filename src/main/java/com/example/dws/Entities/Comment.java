@@ -6,7 +6,7 @@ public class Comment {
     private User user;
     private String issue;
     private String message;
-    private long id;
+    private long commentId;
     private static AtomicLong counter= new AtomicLong(0);
 
 
@@ -14,7 +14,7 @@ public class Comment {
         this.user = user;
         this.issue = issue;
         this.message = message;
-        this.id = counter.getAndIncrement();
+        this.commentId = counter.getAndIncrement();
     }
 
     public User getUser() {
@@ -42,10 +42,10 @@ public class Comment {
     }
 
     public long getCommentId() {
-        return this.id;
+        return this.commentId;
     }
 
     public void setCommentId(long id) {
-        this.id = id;
+        this.commentId = id;
     }
 }

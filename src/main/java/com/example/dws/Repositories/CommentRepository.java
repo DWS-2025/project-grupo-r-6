@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-
+@Repository
 public class CommentRepository {
     private HashMap<Long, Comment> coments = new HashMap<>();  // Usamos Long como clave en el HashMap
     private AtomicLong nextId = new AtomicLong(0); // Para generar IDs únicos para las tiendas
