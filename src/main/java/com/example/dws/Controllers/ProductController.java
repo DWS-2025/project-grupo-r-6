@@ -81,6 +81,16 @@ public class ProductController {
         }
 
     }
+    @PostMapping("/products/{productId}/update/")
+    public String updateProduct(Product product, @PathVariable long productId){
+        Product actual = this.productRepository.findById(productId);
+        actual.setProductName(product.getProductName());
+        actual.setProductPrize(product.getProductPrize());
+        this.productRepository.save(actual);
+        return "updated_product";
+    }
+
+
 
 
 
