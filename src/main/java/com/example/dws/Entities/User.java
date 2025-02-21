@@ -5,21 +5,22 @@ import com.example.dws.Enums.Type;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class User {
+    private static AtomicLong counter= new AtomicLong(0);
     private long id;
     private String name;
     private String email;
     private HashMap<Long, Product> userProducts;
 
-    public User() {
-        this.userProducts = new HashMap<>();
-    }
+
     public User(String name, String email){
         this.name = name;
         this.email = email;
         this.userProducts = new HashMap<>();
+        this.id = counter.getAndIncrement();
     }
 
     public long getId() {return id;}

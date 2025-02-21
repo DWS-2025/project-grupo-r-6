@@ -1,33 +1,27 @@
 package com.example.dws.Entities;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Comment {
-    private String name;
-    private String mail;
+    private User user;
     private String issue;
     private String message;
     private long id;
+    private static AtomicLong counter= new AtomicLong(0);
 
-    public Comment(String name, String mail, String issue, String message) {
-        this.name = name;
-        this.mail = mail;
+    public Comment(User user, String issue, String message) {
+        this.user = user;
         this.issue = issue;
         this.message = message;
+        this.id = counter.getAndIncrement();
     }
 
-    public String getName() {
-        return this.name;
+    public User getUser() {
+        return user;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMail() {
-        return this.mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getIssue() {

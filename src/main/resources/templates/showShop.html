@@ -14,6 +14,20 @@
 
 <br>
 
+<h3>Comentarios</h3>
+{{#comments}}
+<p><strong> Comentario de {{user.name}}</strong></p>
+<p><em>Asunto: {{issue}}</em></p>
+<p>{{message}}</p>
+<br>
+{{/comments}}
+
+{{^comments}}
+<p>No hay comentarios aún.</p>
+{{/comments}}
+
+<br>
+
 <h1>Add Product</h1>
 <form action="/shops/{{ shop.shopID }}/products/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
     <p>Nombre del producto: </p>

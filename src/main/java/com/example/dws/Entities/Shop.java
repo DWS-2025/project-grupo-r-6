@@ -10,11 +10,13 @@ public class Shop {
     private static AtomicLong counter= new AtomicLong(0);// Usar AtomicLong para manejar el ID de la tienda
     private long shopID;
     private HashMap<Long, Product> products;  // Usar long como clave para productos
+    private HashMap<Long, Comment> comments;
 
     public Shop(String shopName) {
         this.shopName = shopName;
         this.shopID = counter.getAndIncrement();  // Inicializar AtomicLong con 0
         this.products = new HashMap<>();
+        this.comments = new HashMap<>();
     }
 
     // Getter y Setter para shopName
@@ -52,6 +54,14 @@ public class Shop {
     // Método para eliminar un producto
     public void removeProduct(Product product) {
         this.products.remove(product.getProductId());  // Eliminar por el ID del producto
+    }
+
+    public HashMap<Long, Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(HashMap<Long, Comment> comments) {
+        this.comments = comments;
     }
 }
 
