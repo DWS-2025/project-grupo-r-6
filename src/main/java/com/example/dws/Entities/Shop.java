@@ -59,6 +59,7 @@ public class Shop {
     public HashMap<Long, Comment> getComments() {
         return comments;
     }
+    public void setComment(HashMap<Long, Comment> comments) {this.comments = comments;}
     public Collection<Comment> allComments() {
         return this.comments.values();
     }
