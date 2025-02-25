@@ -61,6 +61,7 @@ public class ShopController {
         commentRepository.save(comment1);
 
         shop1.getComments().put(comment1.getCommentId(), comment1);
+        comment1.getShops().put(shop1.getShopID(), shop1);
 
         shop1.getProducts().put(product1.getProductId(), product1);
         shop1.getProducts().put(product2.getProductId(), product2);
@@ -73,7 +74,7 @@ public class ShopController {
     }
 
 
-        // Mostrar todas las tiendas
+    // Mostrar todas las tiendas
     @GetMapping
     public String getAllShops(Model model) {
         Collection<Shop> shops = shopRepository.findAll();
@@ -129,8 +130,9 @@ public class ShopController {
         shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
         return "redirect:/"; // Redirige a la lista de tiendas
     }
+
     @PostMapping("/shops/{shopID}/products/new")
-    public String newProductToShop(Product product, @PathVariable long shopID){
+    public String newProductToShop(Product product, @PathVariable long shopID) {
         Shop shop = shopRepository.findById(shopID);
         shop.getProducts().put(product.getProductId(), product);
         product.getShops().put(shopID, shop);
@@ -138,4 +140,16 @@ public class ShopController {
         shopRepository.save(shop);
         return "redirect:/shops/" + shopID;
     }
+
+    @PostMapping("/shops/{shopID}/comments/new")
+    public String newCommentToShop(Comment comment, @PathVariable long shopID) {
+        Shop shop = shopRepository.findById(shopID);
+        shop.getComments().put(comment.getCommentId(), comment);
+        comment.getShops().put(shopID, shop);
+        commentRepository.save(comment);
+        shopRepository.save(shop);
+        return "redirect:/shops/" + shopID;
+
+    }
 }
+
