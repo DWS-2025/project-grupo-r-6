@@ -6,16 +6,28 @@
 </head>
 <body>
 <h1>Lista de Tiendas</h1>
-
 <!-- Mostrar tiendas -->
-{{#shops}}
-<p> <a href="shops/{{shopID}}" class="button">{{shopName}}</a></p>
-{{/shops}}
+<table border="1">
+    <tr>
+        <th>Nombre de la Tienda</th>
+        <th>Imagen</th>
+    </tr>
+    {{#shops}}
+    <tr>
+        <td>{{shopName}}</td>
+        <td><img src="/image/{{imageName}}" width="100"></td>
+    </tr>
+    {{/shops}}
+</table>
+<br>
 
 <h2>Agregar nueva Tienda</h2>
 <!-- Formulario para agregar una nueva tienda -->
-<form action="/save" method="post">
+<form action="/save" method="post" enctype="multipart/form-data">
     <input type="text" name="shopName" placeholder="Nombre de la tienda" required>
+    <p>Image name: </p>
+    <input type='text' name='imageName'/>
+    <p>Image file:</p><input type='file' name='image' accept=".jpg, .jpeg"/>
     <button type="submit">Agregar</button>
 </form>
 

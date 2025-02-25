@@ -1,8 +1,9 @@
 <html>
 <body>
 <h1>Producto: {{product.productName}}</h1>
+<h1>Precio: {{product.productPrize}}</h1>
 
-<h3>Tiendas</h3>
+<h3>El producto se encuentra disponible en estas tiendas:</h3>
 {{#product.allShops}}
 <a href="/shops/{{shopID}}"> {{shopName}}</a>
 <br>

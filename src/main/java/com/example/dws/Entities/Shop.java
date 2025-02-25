@@ -11,12 +11,14 @@ public class Shop {
     private long shopID;
     private HashMap<Long, Product> products;  // Usar long como clave para productos
     private HashMap<Long, Comment> comments;
+    private String imageName;
 
-    public Shop(String shopName) {
+    public Shop(String shopName, String imageName) {
         this.shopName = shopName;
         this.shopID = counter.getAndIncrement();  // Inicializar AtomicLong con 0
         this.products = new HashMap<>();
         this.comments = new HashMap<>();
+        this.imageName = imageName;
     }
 
     // Getter y Setter para shopName

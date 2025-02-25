@@ -9,11 +9,22 @@ import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 
 @Controller
@@ -27,11 +38,13 @@ public class ShopController {
     @Autowired
     private UserRepository userRepository;
 
+    private static final Path IMAGES_FOLDER = Paths.get("uploads");
+
     @PostConstruct
     public void init() {
 
-        Shop shop1 = new Shop("Tienda1");
-        Shop shop2 = new Shop("Tienda2");
+        Shop shop1 = new Shop("PullAndCow", "Pull");
+        Shop shop2 = new Shop("Bresh", "Bresh");
 
         shopRepository.save(shop1);
         shopRepository.save(shop2);
@@ -80,18 +93,33 @@ public class ShopController {
         }
     }
 
-    // Crear una nueva tienda (Formulario)
-    @GetMapping("/new")
-    public String createShopForm(Model model) {
-        model.addAttribute("shop", new Shop("")); // Inicializar un objeto Shop vacío
-        return "shopForm"; // Vista con el formulario para crear una tienda
-    }
 
     // Guardar una nueva tienda
     @PostMapping("/save")
-    public String saveShop(@ModelAttribute Shop shop) {
-        shopRepository.save(shop); // Guardamos la tienda en el repositorio
-        return "redirect:/"; // Redirige a la lista de tiendas
+    public String saveShop(@RequestParam String shopName,
+                           @RequestParam String imageName,
+                           @RequestParam MultipartFile image) throws IOException {
+        // Crear directorio si no existe
+        Files.createDirectories(IMAGES_FOLDER);
+
+        // Guardar la imagen
+        Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
+        Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+        // Crear y guardar la tienda en el repository
+        Shop shop = new Shop(shopName, imageName);
+        shopRepository.save(shop);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/image/{imageName}")
+    public ResponseEntity<Resource> viewImage(@PathVariable String imageName) throws MalformedURLException {
+        Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
+        Resource image = new UrlResource(imagePath.toUri());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                .body(image);
     }
 
     // Borra la tienda de los productos que la tienen asignada y se borra la tienda
