@@ -50,7 +50,20 @@
 
     <input type='submit' value='Save'/>
 </form>
+<h2>Eliminar Comentario</h2>
+<form action="/deleteComment" method="post">
+    <!-- Campo oculto para enviar el ID de la tienda -->
+    <input type="hidden" name="shopId" value="{{shop.shopID}}">
 
+    <select name="commentId" required>
+        <option value="" disabled selected>Selecciona un comentario para eliminar</option>
+        {{#shop.allComments}}
+        <option value="{{commentId}}">{{issue}}</option>
+        {{/shop.allComments}}
+    </select>
+
+    <button type="submit">Eliminar</button>
+</form>
 
 <a href="/">Back</a>
 </body>

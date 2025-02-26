@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collection;
 
@@ -39,4 +40,19 @@ public class CommentController {
             return "error"; // Vista de error si no se encuentra la tienda
         }
     }
+    @PostMapping("/deleteComment")
+    public String deleteComment(@RequestParam long commentId, @RequestParam long shopId) {
+        // Buscar la tienda a la que pertenece el comentario
+        Shop shop = shopRepository.findById(shopId);
+
+        // Eliminar el comentario del HashMap de la tienda
+        shop.getComments().remove(commentId);
+        shopRepository.save(shop); // Guardar la tienda actualizada
+
+        // Finalmente, eliminar el comentario del repositorio
+        commentRepository.deleteById(commentId);
+
+        return "redirect:/shops/" + shopId; // Redirige a la tienda afectada
+    }
+
 }
