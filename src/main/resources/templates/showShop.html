@@ -16,7 +16,7 @@
 
 <h3>Comentarios</h3>
 {{#shop.allComments}}
-<a href="/comments/{{commentId}}"> Asunto: {{issue}}</a>
+<a href="/comments/{{shop.shopID}}/{{commentId}}"> Asunto: {{issue}}</a>
 <br>
 {{/shop.allComments}}
 
@@ -39,6 +39,8 @@
 
 <h1>Add Comment</h1>
 <form action="/shops/{{ shop.shopID }}/comments/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
+    <p>Usuario: </p>
+    <input type='text' name='user'/>
     <p>Asunto: </p>
     <input type='text' name='issue'/>
     <p>Comentario: </p>

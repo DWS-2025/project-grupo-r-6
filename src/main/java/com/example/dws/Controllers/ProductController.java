@@ -45,9 +45,13 @@ public class ProductController {
         Product product = productRepository.findById(productID);
         Shop shop = shopRepository.findById(shopID);
 
-        if (!product.getShops().containsKey(shopID)) product.getShops().put(shopID, shop);
+        if (!product.getShops().containsKey(shopID)){
+            product.getShops().put(shopID, shop) ;
+            shop.getProducts().put(productID, product) ;
+        }
 
         productRepository.save(product);
+        shopRepository.save(shop);
 
         return "redirect:/products/" + productID;
     }
@@ -82,11 +86,12 @@ public class ProductController {
 
     }
     @PostMapping("/products/{productId}/update/")
-    public String updateProduct(Product product, @PathVariable long productId){
+    public String updateProduct(Product product, @PathVariable long productId,Model model ){
         Product actual = this.productRepository.findById(productId);
         actual.setProductName(product.getProductName());
         actual.setProductPrize(product.getProductPrize());
         this.productRepository.save(actual);
+        model.addAttribute("product", actual);
         return "updated_product";
     }
 

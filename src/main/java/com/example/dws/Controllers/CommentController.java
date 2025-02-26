@@ -24,12 +24,16 @@ public class CommentController {
     private CommentRepository commentRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ShopRepository shopRepository;
 
-    @GetMapping("/comments/{commentId}")
-    public String getCommentsById(@PathVariable("commentId") long commentId, Model model) {
+    @GetMapping("/comments/{shopId}/{commentId}")
+    public String getCommentsById(@PathVariable("commentId") long commentId,@PathVariable("shopId") long shopId ,Model model) {
         Comment comment = commentRepository.findById(commentId);
+        Shop shop = shopRepository.findById(shopId);
         if (comment != null) {
             model.addAttribute("comment", comment);
+            model.addAttribute("shop", shop);
             return "showComment"; // Vista que muestra los detalles de la tienda
         } else {
             return "error"; // Vista de error si no se encuentra la tienda

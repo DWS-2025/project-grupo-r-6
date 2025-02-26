@@ -61,7 +61,6 @@ public class ShopController {
         commentRepository.save(comment1);
 
         shop1.getComments().put(comment1.getCommentId(), comment1);
-        comment1.getShops().put(shop1.getShopID(), shop1);
 
         shop1.getProducts().put(product1.getProductId(), product1);
         shop1.getProducts().put(product2.getProductId(), product2);
@@ -83,8 +82,8 @@ public class ShopController {
     }
 
     // Ver detalles de una tienda por su ID
-    @GetMapping("/shops/{shopId}")
-    public String getShopById(@PathVariable("shopId") long shopId, Model model) {
+    @GetMapping("/shops/{shopID}")
+    public String getShopById(@PathVariable("shopID") long shopId, Model model) {
         Shop shop = shopRepository.findById(shopId);
         if (shop != null) {
             model.addAttribute("shop", shop);
@@ -142,14 +141,14 @@ public class ShopController {
     }
 
     @PostMapping("/shops/{shopID}/comments/new")
-    public String newCommentToShop(Comment comment, @PathVariable long shopID) {
+    public String newCommentToShop(@RequestParam String user, @RequestParam String issue,@RequestParam String message, @PathVariable long shopID) {
         Shop shop = shopRepository.findById(shopID);
+        User useraux = userRepository.findByName(user);
+        Comment comment= new Comment(useraux,issue,message);
         shop.getComments().put(comment.getCommentId(), comment);
-        comment.getShops().put(shopID, shop);
         commentRepository.save(comment);
         shopRepository.save(shop);
         return "redirect:/shops/" + shopID;
-
     }
 }
 

@@ -9,14 +9,12 @@ public class Comment {
     private String message;
     private long commentId;
     private static AtomicLong counter= new AtomicLong(0);
-    private HashMap<Long, Shop> shops;
 
 
     public Comment(User user, String issue, String message) {
         this.user = user;
         this.issue = issue;
         this.message = message;
-        this.shops = new HashMap<>();
         this.commentId = counter.getAndIncrement();
     }
 
@@ -52,7 +50,4 @@ public class Comment {
         this.commentId = id;
     }
 
-    public HashMap<Long, Shop> getShops() {
-        return shops;
-    }
 }
