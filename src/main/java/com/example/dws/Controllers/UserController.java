@@ -5,11 +5,13 @@ import com.example.dws.Entities.User;
 import com.example.dws.Repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 
@@ -26,7 +28,7 @@ public class UserController {
             model.addAttribute("user", user);
             return "showShoppingCart";
         }
-        return "user_not_found";
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
     }
 
     @GetMapping("/users/name/")
@@ -36,6 +38,6 @@ public class UserController {
             model.addAttribute("user", user);
             return "showShoppingCart";
         }
-        return "user_not_found";
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
     }
 }

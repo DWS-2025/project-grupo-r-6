@@ -13,11 +13,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -89,7 +91,7 @@ public class ShopController {
             model.addAttribute("shop", shop);
             return "showShop"; // Vista que muestra los detalles de la tienda
         } else {
-            return "error"; // Vista de error si no se encuentra la tienda
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
     }
 
@@ -99,18 +101,27 @@ public class ShopController {
     public String saveShop(@RequestParam String shopName,
                            @RequestParam String imageName,
                            @RequestParam MultipartFile image) throws IOException {
-        // Crear directorio si no existe
-        Files.createDirectories(IMAGES_FOLDER);
+        if (shopName != null && !shopName.trim().isEmpty()) {
+            if(!image.isEmpty() && imageName.trim().isEmpty()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Si quieres añadir una imagen el nobre de la imagen no puede ser vacío");
+            } else {
+                // Crear directorio si no existe
+                Files.createDirectories(IMAGES_FOLDER);
 
-        // Guardar la imagen
-        Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
-        Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+                // Guardar la imagen
+                Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
+                Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // Crear y guardar la tienda en el repository
-        Shop shop = new Shop(shopName, imageName);
-        shopRepository.save(shop);
+                // Crear y guardar la tienda en el repository
+                Shop shop = new Shop(shopName, imageName);
+                shopRepository.save(shop);
+            }
 
-        return "redirect:/";
+            return "redirect:/";
+        } else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de la tienda no puede ser vacío");
+        }
+
     }
 
     @GetMapping("/image/{imageName}")
@@ -125,13 +136,27 @@ public class ShopController {
     // Borra la tienda de los productos que la tienen asignada y se borra la tienda
     @PostMapping("/delete")
     public String deleteShop(@RequestParam long shopID) {
-        productRepository.removeShopFromAllProducts(shopID);
-        shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
-        return "redirect:/"; // Redirige a la lista de tiendas
+        if(shopRepository.findById(shopID) == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
+        } else{
+            productRepository.removeShopFromAllProducts(shopID);
+            shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
+            return "redirect:/"; // Redirige a la lista de tiendas
+        }
     }
 
     @PostMapping("/shops/{shopID}/products/new")
-    public String newProductToShop(Product product, @PathVariable long shopID) {
+    public String newProductToShop(@RequestParam String productName, @RequestParam(required = false) Double productPrize, @PathVariable long shopID) {
+        if(shopRepository.findById(shopID) == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
+        }
+        if (productPrize == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El precio del producto no puede estar vacío");
+        }
+        if (productName.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
+        }
+        Product product = new Product(productName, productPrize);
         Shop shop = shopRepository.findById(shopID);
         shop.getProducts().put(product.getProductId(), product);
         product.getShops().put(shopID, shop);
@@ -142,13 +167,22 @@ public class ShopController {
 
     @PostMapping("/shops/{shopID}/comments/new")
     public String newCommentToShop(@RequestParam String user, @RequestParam String issue,@RequestParam String message, @PathVariable long shopID) {
-        Shop shop = shopRepository.findById(shopID);
-        User useraux = userRepository.findByName(user);
-        Comment comment= new Comment(useraux,issue,message);
-        shop.getComments().put(comment.getCommentId(), comment);
-        commentRepository.save(comment);
-        shopRepository.save(shop);
-        return "redirect:/shops/" + shopID;
+        if (!user.trim().isEmpty()){
+            Shop shop = shopRepository.findById(shopID);
+            if (shop == null){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
+            }
+            User useraux = userRepository.findByName(user);
+            if (useraux == null){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
+            }
+            Comment comment= new Comment(useraux,issue,message);
+            shop.getComments().put(comment.getCommentId(), comment);
+            commentRepository.save(comment);
+            shopRepository.save(shop);
+            return "redirect:/shops/" + shopID;
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacio");
     }
 }
 
