@@ -47,15 +47,19 @@ public class ShopController {
 
         Shop shop1 = new Shop("PullAndCow", "Pull");
         Shop shop2 = new Shop("Bresh", "Bresh");
+        Shop shop3 = new Shop("XtraVarios", "XtraVarios");
 
         shopRepository.save(shop1);
         shopRepository.save(shop2);
+        shopRepository.save(shop3);
 
-        Product product1 = new Product("Producto 1", 20);
-        Product product2 = new Product("Producto 2", 30);
+        Product product1 = new Product("Camiseta", 20);
+        Product product2 = new Product("Sudadera", 35);
+        Product product3 = new Product("Zapatillas", 62.99);
 
         productRepository.save(product1);
         productRepository.save(product2);
+        productRepository.save(product3);
 
         User user1 = new User("Adri", "adri@gmail.com");
         userRepository.save(user1);
@@ -66,11 +70,17 @@ public class ShopController {
 
         shop1.getProducts().put(product1.getProductId(), product1);
         shop1.getProducts().put(product2.getProductId(), product2);
+        shop1.getProducts().put(product3.getProductId(), product3);
+        shop2.getProducts().put(product1.getProductId(), product1);
         shop2.getProducts().put(product2.getProductId(), product2);
+        shop3.getProducts().put(product3.getProductId(), product3);
 
         product1.getShops().put(shop1.getShopID(), shop1);
+        product1.getShops().put(shop2.getShopID(), shop2);
         product2.getShops().put(shop1.getShopID(), shop1);
         product2.getShops().put(shop2.getShopID(), shop2);
+        product3.getShops().put(shop1.getShopID(), shop1);
+        product3.getShops().put(shop3.getShopID(), shop3);
 
     }
 

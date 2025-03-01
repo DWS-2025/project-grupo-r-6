@@ -1,18 +1,32 @@
 package com.example.dws.Controllers;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
+
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResponseStatusException.class)
-    public ModelAndView handleResponseStatusException(ResponseStatusException exception) {
-        ModelAndView modelAndView = new ModelAndView("message"); // Redirige a message.mustache
+    @ExceptionHandler({ResponseStatusException.class, Exception.class})
+    public ModelAndView handleException(Exception exception, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("message");
         modelAndView.addObject("error", true);
-        modelAndView.addObject("message", exception.getReason()); // Usa getReason() en lugar de getMessage()
+        modelAndView.addObject("previousPage", request.getHeader("Referer"));
+
+        if (exception instanceof ResponseStatusException resExp) {
+            modelAndView.addObject("message", resExp.getReason());
+            modelAndView.addObject("status", resExp.getStatusCode().value());  // Pasa el código de estado HTTP
+        } else {
+            modelAndView.addObject("message", exception.getMessage());
+            modelAndView.addObject("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+
         return modelAndView;
     }
 }

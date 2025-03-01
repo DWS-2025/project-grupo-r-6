@@ -1,53 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
+<header class="main-title">
+    <h1>INDIE-TOX</h1>
+</header>
+
 <head>
-    <title>Tiendas</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiendas</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Lista de Tiendas</h1>
-<!-- Mostrar tiendas -->
-<table border="1">
-    <tr>
-        <th>Nombre de la Tienda</th>
-        <th>Imagen</th>
-    </tr>
-    {{#shops}}
-    <tr>
-        <td><a href="shops/{{shopID}}">{{shopName}}</a></td>
-        <td><img src="/image/{{imageName}}" width="100"></td>
-    </tr>
-    {{/shops}}
-</table>
-<br>
 
-<h2>Agregar nueva Tienda</h2>
-<!-- Formulario para agregar una nueva tienda -->
-<form action="/save" method="post" enctype="multipart/form-data">
-    <input type="text" name="shopName" placeholder="Nombre de la tienda">
-    <p>Image name: </p>
-    <input type='text' name='imageName'/>
-    <p>Image file:</p><input type='file' name='image' accept=".jpg, .jpeg"/>
-    <button type="submit">Agregar</button>
-</form>
-
-<h2>Eliminar Tienda</h2>
-<!-- Formulario para eliminar una tienda -->
-<form action="/delete" method="post">
-    <select name="shopID" required>
-        <option value="" disabled selected>Selecciona una tienda para eliminar</option>
+<section>
+    <h2>Nuestras Tiendas</h2>
+    <div class="shops-container">
         {{#shops}}
-        <option value="{{shopID}}">{{shopName}}</option>
+        <div class="shop-item">
+            <a href="shops/{{shopID}}">
+                <img src="/image/{{imageName}}" alt="{{shopName}}" class="shop-image">
+                <p>{{shopName}}</p>
+            </a>
+        </div>
         {{/shops}}
-    </select>
-    <button type="submit">Eliminar</button>
-</form>
+    </div>
+</section>
 
-<h2>Ver Mi Carrito de Compra</h2>
-<form action="/users/name/" method="get">
-    <input type="text" name="userName" placeholder="Nombre de usuario" required>
-    <button type="submit">Ver carrito</button>
-</form>
+
+<section>
+    <h2>Agregar Tienda</h2>
+    <form action="/save" method="post" enctype="multipart/form-data">
+        <input type="text" name="shopName" placeholder="Nombre de la tienda" required>
+        <input type="text" name="imageName" placeholder="Nombre de la imagen" required>
+        <input type="file" name="image" accept=".jpg, .jpeg" required>
+        <button type="submit">Agregar</button>
+    </form>
+</section>
+
+<section>
+    <h2>Eliminar Tienda</h2>
+    <form action="/delete" method="post">
+        <select name="shopID" required>
+            <option value="" disabled selected>Selecciona una tienda</option>
+            {{#shops}}
+            <option value="{{shopID}}">{{shopName}}</option>
+            {{/shops}}
+        </select>
+        <button type="submit">Eliminar</button>
+    </form>
+</section>
+
+<section>
+    <h2>Ver Mi Carrito</h2>
+    <form action="/users/name/" method="get">
+        <input type="text" name="userName" placeholder="Nombre de usuario" required>
+        <button type="submit">Ver carrito</button>
+    </form>
+</section>
 
 </body>
 </html>
