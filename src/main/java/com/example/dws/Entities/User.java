@@ -1,7 +1,6 @@
 package com.example.dws.Entities;
 
-import com.example.dws.Enums.Size;
-import com.example.dws.Enums.Type;
+
 
 import java.util.Collection;
 import java.util.HashMap;

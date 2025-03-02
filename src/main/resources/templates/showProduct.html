@@ -51,8 +51,7 @@
 <section>
     <h2>Comprar Producto</h2>
     <form action="/products/{{ product.productId }}/buy" method="post">
-        <label for="username">Nombre de usuario:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" placeholder="Nombre de Usuario">
         <button type="submit">Comprar Producto</button>
     </form>
 </section>
@@ -60,10 +59,8 @@
 <section>
     <h2>Actualizar Producto</h2>
     <form action="/products/{{ product.productId }}/update/" method="post">
-        <p>Nombre del producto:</p>
-        <input type="text" name="productName" required>
-        <p>Precio del producto:</p>
-        <input type="number" name="productPrize" required>
+        <input type="text" name="productName" placeholder="Nombre del Producto">
+        <input type="number" name="productPrize" placeholder="Precio del Producto">
         <button type="submit">Actualizar</button>
     </form>
 </section>
