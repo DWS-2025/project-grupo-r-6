@@ -1,59 +1,76 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto: {{product.productName}}</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
 <body>
-<h1>Producto: {{product.productName}}</h1>
-<h1>Precio: {{product.productPrize}}</h1>
 
-<h3>El producto se encuentra disponible en estas tiendas:</h3>
-{{#product.allShops}}
-<a href="/shops/{{shopID}}"> {{shopName}}</a>
+<header class="third-title">
+    <h3>{{product.productName}}</h3>
+</header>
+
+<section>
+    <h2>Precio: {{product.productPrize}} </h2>
+
+    <h2>El producto se encuentra disponible en estas tiendas:</h2>
+    {{#product.allShops}}
+    <a href="/shops/{{shopID}}" class="shop-link">{{shopName}}</a>
+    <br>
+    {{/product.allShops}}
+
+    {{^product.allShops}}
+    <p>No hay tiendas disponibles para este producto.</p>
+    {{/product.allShops}}
+
+</section>
 <br>
-{{/product.allShops}}
+<section>
+    <h2>Añadir Tienda</h2>
+    <form action="/products/{{ product.productId }}/addShop/" method="post">
+        <select name="shopID" required>
+            {{#shops}}
+            <option value="{{shopID}}">{{shopName}}</option>
+            {{/shops}}
+        </select>
+        <button type="submit">Añadir Tienda</button>
+    </form>
+</section>
 
-{{^product.allShops}}
-<p>No Products yet.</p>
-{{/product.allShops}}
+<section>
+    <h2>Eliminar Producto</h2>
+    <form action="/products/{{ product.productId }}/delete" method="post">
+        <button type="submit">Eliminar Producto</button>
+    </form>
+</section>
 
-<br>
+<section>
+    <h2>Comprar Producto</h2>
+    <form action="/products/{{ product.productId }}/buy" method="post">
+        <label for="username">Nombre de usuario:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Comprar Producto</button>
+    </form>
+</section>
 
-<form action="/products/{{ product.productId }}/addShop/" method="post">
-    <select name='shopID' required>
-        {{#shops}}
-        <option value='{{shopID}}'>{{shopName}}</option>
-        {{/shops}}
-    </select>
-    <input type='submit' value='Añadir Tienda'/>
-</form>
+<section>
+    <h2>Actualizar Producto</h2>
+    <form action="/products/{{ product.productId }}/update/" method="post">
+        <p>Nombre del producto:</p>
+        <input type="text" name="productName" required>
+        <p>Precio del producto:</p>
+        <input type="number" name="productPrize" required>
+        <button type="submit">Actualizar</button>
+    </form>
+</section>
 
-<form action="/products/{{ product.productId }}/delete" method="post">
-    <input type='submit' value='Delete product'/>
-</form>
+<section>
+    <a href="/" class="back-link">Volver</a>
+</section>
 
-<br>
-
-<form action="/products/{{ product.productId }}/buy" method="post">
-    <label for="username">Nombre de usuario:</label>
-    <input type="text" id="username" name="username" required>
-    <input type="submit" value="Comprar objeto"/>
-</form>
-
-<br>
-
-<h1>Actualizar Producto</h1>
-<form action="/products/{{ product.productId }}/update/" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
-    <p>Nombre del producto: </p>
-    <input type='text' name='productName'/>
-    <p>Precio del producto</p>
-    <input type='number' name='productPrize'/>
-
-    <input type='submit' value='Actualizar'/>
-</form>
-
-<br>
-
-
-
-
-
-<a href="/">Back</a>
 </body>
 </html>

@@ -1,21 +1,31 @@
 <!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de: {{user.name}}</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
 <body>
-<h1>Carrito de: {{user.name}}</h1>
 
-<h3>Productos</h3>
-{{#user.allProducts}}
-<a href="/products/{{productId}}"> {{productName}}</a>
+<section>
+    <h1>Carrito de: {{user.name}}</h1>
+
+    <h3>Lista de Productos</h3>
+    {{#user.allProducts}}
+    <a href="/products/{{productId}}">{{productName}}</a><br>
+    {{/user.allProducts}}
+
+    {{^user.allProducts}}
+    <p>No hay productos en el carrito todavía.</p>
+    {{/user.allProducts}}
+</section>
+
+<section>
+    <a href="/" class="back-link">Volver</a>
+</section>
 <br>
-{{/user.allProducts}}
-
-{{^user.allProducts}}
-<p>No hay productos en el carrito todavia</p>
-{{/user.allProducts}}
-
-<br>
-
-
-
-<a href="/">Back</a>
 </body>
 </html>

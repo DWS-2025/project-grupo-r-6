@@ -1,9 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentario: {{comment.issue}}</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
 <body>
-<h1>Comentario: {{comment.issue}}</h1>
-<h2>Usuario: {{comment.user.getName}}</h2>
-<h3>{{comment.message}}</h3>
-<a href="/shops/{{shop.shopID}}">Back</a>
+
+<section>
+    <h1>Asunto: {{comment.issue}}</h1>
+    <h3>Comentario escrito por: {{comment.user.getName}}</h3>
+    <p>{{comment.message}}</p>
+</section>
+
+<section>
+    <a href="/shops/{{shop.shopID}}" class="back-link">Volver</a>
+</section>
+
 </body>
 </html>

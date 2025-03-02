@@ -4,22 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Error {{ status }}</title>
-  <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        .error-container { max-width: 500px; margin: auto; background: #f8d7da; padding: 20px; border-radius: 5px; }
-        .error-title { color: #721c24; font-size: 24px; }
-        .error-message { color: #721c24; font-size: 18px; }
-        .error-code { font-size: 20px; font-weight: bold; color: #721c24; }
-        .back-link { display: inline-block; margin-top: 10px; padding: 10px 15px; background: #721c24; color: white; text-decoration: none; border-radius: 5px; }
-    </style>
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+
 <div class="error-container">
   <h1 class="error-title">¡Error!</h1>
   <p class="error-message">{{ message }}</p>
   <p class="error-code">Código de error: {{ status }}</p>
-  <a href="{{ previousPage }}" class="back-link">Volver</a>
+  <a href="{{ previousPage }}" class="back-link-error">Volver</a>
 </div>
+
 </body>
 </html>
+
 

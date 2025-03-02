@@ -1,71 +1,80 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{shop.shopName}}</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
 <body>
-<h1>Tienda: {{shop.shopName}}</h1>
 
-<img src="/image/{{shop.imageName}}" width="100">
+<header class="second-title">
+    <h2>{{shop.shopName}}</h2>
+</header>
 
-<h3>Productos</h3>
-{{#shop.allProducts}}
-<a href="/products/{{productId}}"> {{productName}}</a>
+<section>
+    <img src="/image/{{shop.imageName}}" class="shop-image-large" alt="{{shop.shopName}}">
+</section>
+
+<section>
+    <h2>Productos</h2>
+    {{#shop.allProducts}}
+    <a href="/products/{{productId}}">{{productName}}</a><br>
+    {{/shop.allProducts}}
+    {{^shop.allProducts}}
+    <p>No hay productos aún.</p>
+    {{/shop.allProducts}}
+</section>
 <br>
-{{/shop.allProducts}}
-
-{{^shop.allProducts}}
-<p>No Products yet.</p>
-{{/shop.allProducts}}
-
+<section>
+    <h2>Comentarios</h2>
+    {{#shop.allComments}}
+    <a href="/comments/{{shop.shopID}}/{{commentId}}">Asunto: {{issue}}</a><br>
+    {{/shop.allComments}}
+    {{^shop.allComments}}
+    <p>No hay comentarios aún.</p>
+    {{/shop.allComments}}
+</section>
 <br>
 
-<h3>Comentarios</h3>
-{{#shop.allComments}}
-<a href="/comments/{{shop.shopID}}/{{commentId}}"> Asunto: {{issue}}</a>
-<br>
-{{/shop.allComments}}
+<section>
+    <h2>Agregar Producto</h2>
+    <form action="/shops/{{ shop.shopID }}/products/new" method="post">
+        <input type="text" name="productName" placeholder="Nombre del producto" required>
+        <input type="number" name="productPrize" placeholder="Precio del producto" required>
+        <button type="submit">Agregar</button>
+    </form>
+</section>
 
-{{^shop.allComments}}
-<p>No hay comentarios aún.</p>
-{{/shop.allComments}}
+<section>
+    <h2>Agregar Comentario</h2>
+    <form action="/shops/{{ shop.shopID }}/comments/new" method="post">
+        <input type="text" name="user" placeholder="Usuario" required>
+        <input type="text" name="issue" placeholder="Asunto" required>
+        <input type="text" name="message" placeholder="Comentario" required>
+        <button type="submit">Agregar</button>
+    </form>
+</section>
 
-<br>
+<section>
+    <h2>Eliminar Comentario</h2>
+    <form action="/deleteComment" method="post">
+        <input type="hidden" name="shopId" value="{{shop.shopID}}">
+        <select name="commentId" required>
+            <option value="" disabled selected>Selecciona un comentario</option>
+            {{#shop.allComments}}
+            <option value="{{commentId}}">{{issue}}</option>
+            {{/shop.allComments}}
+        </select>
+        <button type="submit">Eliminar</button>
+    </form>
+</section>
 
-<h1>Add Product</h1>
-<form action="/shops/{{ shop.shopID }}/products/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
-    <p>Nombre del producto: </p>
-    <input type='text' name='productName'/>
-    <p>Precio del producto</p>
-    <input type='number' name='productPrize'/>
+<section>
+    <a href="/" class="back-link">Volver</a>
+</section>
 
-    <input type='submit' value='Save'/>
-</form>
-
-
-<h1>Add Comment</h1>
-<form action="/shops/{{ shop.shopID }}/comments/new" method="post" style="background-color: #c2c2c2; width: 200px; padding: 10px;">
-    <p>Usuario: </p>
-    <input type='text' name='user'/>
-    <p>Asunto: </p>
-    <input type='text' name='issue'/>
-    <p>Comentario: </p>
-    <input type='text' name='message' />
-
-    <input type='submit' value='Save'/>
-</form>
-<h2>Eliminar Comentario</h2>
-<form action="/deleteComment" method="post">
-    <!-- Campo oculto para enviar el ID de la tienda -->
-    <input type="hidden" name="shopId" value="{{shop.shopID}}">
-
-    <select name="commentId" required>
-        <option value="" disabled selected>Selecciona un comentario para eliminar</option>
-        {{#shop.allComments}}
-        <option value="{{commentId}}">{{issue}}</option>
-        {{/shop.allComments}}
-    </select>
-
-    <button type="submit">Eliminar</button>
-</form>
-
-<a href="/">Back</a>
 </body>
 </html>
-

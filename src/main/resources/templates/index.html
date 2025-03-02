@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<header class="main-title">
-    <h1>INDIE-TOX</h1>
-</header>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tiendas</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
+
+<header class="main-title">
+    <h1>INDIE-TOX</h1>
+</header>
 <body>
 
 <section>
@@ -31,9 +32,9 @@
 <section>
     <h2>Agregar Tienda</h2>
     <form action="/save" method="post" enctype="multipart/form-data">
-        <input type="text" name="shopName" placeholder="Nombre de la tienda" required>
-        <input type="text" name="imageName" placeholder="Nombre de la imagen" required>
-        <input type="file" name="image" accept=".jpg, .jpeg" required>
+        <input type="text" name="shopName" placeholder="Nombre de la tienda">
+        <input type="text" name="imageName" placeholder="Nombre de la imagen">
+        <input type="file" name="image" accept=".jpg, .jpeg">
         <button type="submit">Agregar</button>
     </form>
 </section>

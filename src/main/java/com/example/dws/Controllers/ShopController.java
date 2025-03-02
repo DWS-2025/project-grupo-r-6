@@ -63,10 +63,19 @@ public class ShopController {
 
         User user1 = new User("Adri", "adri@gmail.com");
         userRepository.save(user1);
-        Comment comment1 = new Comment(user1, "Atención Al Cliente", "Muy buena atencion al cliente");
+        Comment comment1 = new Comment(user1, "Atención Al Cliente", "Tuve una excelente experiencia con el servicio al cliente. Fueron muy amables y me ayudaron a encontrar lo que buscaba. ¡Muy satisfecho!");
+        Comment comment2 = new Comment(user1, " Calidad excelente", " Me encanta la calidad de la ropa que compré. Las prendas son cómodas, bien hechas y duran mucho. ¡Definitivamente volveré a comprar!");
+        Comment comment3 = new Comment(user1, "Muy cómoda", "Compré una camiseta y unos pantalones, y ambos son increíblemente cómodos. La tela es suave y perfecta para el verano. Muy feliz con mi compra.");
+        Comment comment4 = new Comment(user1, "Tienda muy bonita", "La tienda física tiene un ambiente muy agradable y moderno. Los productos están bien organizados y la experiencia de compra es muy cómoda.");
         commentRepository.save(comment1);
+        commentRepository.save(comment2);
+        commentRepository.save(comment3);
+        commentRepository.save(comment4);
 
         shop1.getComments().put(comment1.getCommentId(), comment1);
+        shop1.getComments().put(comment2.getCommentId(), comment2);
+        shop1.getComments().put(comment3.getCommentId(), comment3);
+        shop2.getComments().put(comment4.getCommentId(), comment4);
 
         shop1.getProducts().put(product1.getProductId(), product1);
         shop1.getProducts().put(product2.getProductId(), product2);

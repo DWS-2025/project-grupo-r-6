@@ -3,7 +3,7 @@ body {
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #e4e4e4;
     color: #333;
 }
 
@@ -17,11 +17,26 @@ h1, h2 {
 }
 
 .main-title h1 {
-    font-size: 2.5em;
+    font-size: 4em;
     color: #007bff;
-    margin-bottom: 40px;
+    margin-bottom: 70px;
     text-transform: uppercase;
 }
+
+.second-title h2 {
+    font-size: 3em;
+    color: #007bff;
+    margin-bottom: 70px;
+    text-align: left;
+}
+
+.third-title h3 {
+    font-size: 2em;
+    color: #007bff;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
 
 table {
     width: 100%;
@@ -51,6 +66,15 @@ tr:hover {
     object-fit: cover; /* Make the images cover the area without distorting */
     border-radius: 5px;
     margin-bottom: 10px;
+}
+
+.shop-image-large {
+    width: 80%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease-in-out;
 }
 
 
@@ -122,3 +146,60 @@ button:hover {
         grid-template-columns: 1fr;
     }
 }
+
+.back-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.back-link:hover {
+    background: #0056b3;
+}
+
+
+.error-container {
+    max-width: 500px;
+    margin: auto;
+    background: #f8d7da;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.error-title {
+    color: #721c24;
+    font-size: 24px;
+}
+
+.error-message {
+    color: #721c24;
+    font-size: 18px;
+}
+
+.error-code {
+    font-size: 20px;
+    font-weight: bold;
+    color: #721c24;
+}
+
+.back-link-error {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: #721c24;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.back-link-error:hover {
+    background: #5c1216;
+}
+
+
