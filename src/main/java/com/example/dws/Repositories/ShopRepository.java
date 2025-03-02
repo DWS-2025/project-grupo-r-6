@@ -11,32 +11,32 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class ShopRepository {
-    private HashMap<Long, Shop> shops = new HashMap<>();  // Usamos Long como clave en el HashMap
-    private AtomicLong nextId = new AtomicLong(0); // Para generar IDs únicos para las tiendas
+    private HashMap<Long, Shop> shops = new HashMap<>();  // Use Long as the key in the HashMap
+    private AtomicLong nextId = new AtomicLong(0); // To generate unique IDs for the shops
 
 
 
-    // Obtener todas las tiendas
+    // Get all the shops
     public Collection<Shop> findAll() {
         return shops.values();
     }
 
-    // Encontrar una tienda por su ID
+    // Find a shop by its ID
     public Shop findById(long id) {
         return shops.get(id);
     }
 
-    // Guardar o actualizar una tienda
+    // Save or update a shop
     public void save(Shop shop) {
-        this.shops.put(shop.getShopID(), shop);  // Guardar o actualizar la tienda en el mapa
+        this.shops.put(shop.getShopID(), shop);  //Save or update the shop in the map
     }
 
-    // Eliminar una tienda por su ID
+    // Delete a shop by its ID
     public void deleteById(long id) {
         this.shops.remove(id);  // Eliminar la tienda
     }
 
-    // Elimina los productos de todas las tiendas
+    // Delete the products from all shops
     public void removeProductFromAllShops(long productId) {
         for (Shop shop : shops.values()) {
             shop.getProducts().remove(productId);

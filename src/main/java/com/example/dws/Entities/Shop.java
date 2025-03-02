@@ -7,21 +7,21 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Shop {
     private String shopName;
-    private static AtomicLong counter= new AtomicLong(0);// Usar AtomicLong para manejar el ID de la tienda
+    private static AtomicLong counter= new AtomicLong(0);// Use AtomicLong to manage the shop ID
     private long shopID;
-    private HashMap<Long, Product> products;  // Usar long como clave para productos
+    private HashMap<Long, Product> products;  // Use long as the key for products
     private HashMap<Long, Comment> comments;
     private String imageName;
 
     public Shop(String shopName, String imageName) {
         this.shopName = shopName;
-        this.shopID = counter.getAndIncrement();  // Inicializar AtomicLong con 0
+        this.shopID = counter.getAndIncrement();  // Initialize AtomicLong with 0
         this.products = new HashMap<>();
         this.comments = new HashMap<>();
         this.imageName = imageName;
     }
 
-    // Getter y Setter para shopName
+    // Getter y Setter for shopName
     public String getShopName() {
         return shopName;
     }
@@ -30,17 +30,17 @@ public class Shop {
         this.shopName = shopName;
     }
 
-    // Getter y Setter para shopID
+    // Getter y Setter for shopID
     public long getShopID() {
-        return shopID;  // Devolver el valor de shopID como long
+        return shopID;  //Return the value of shopID as a long
     }
 
     public void setShopID(long shopID) {
         this.shopID=shopID;
-        // Establecer el valor de shopID
+        // Set the value of shopID
     }
 
-    // Getter y Setter para products
+    // Getter y Setter for products
     public HashMap<Long, Product> getProducts() {
         return products;
     }
@@ -53,9 +53,9 @@ public class Shop {
         return this.products.values();
     }
 
-    // Método para eliminar un producto
+    // Method to remove a product
     public void removeProduct(Product product) {
-        this.products.remove(product.getProductId());  // Eliminar por el ID del producto
+        this.products.remove(product.getProductId());  // Delete by product ID
     }
 
     public HashMap<Long, Comment> getComments() {

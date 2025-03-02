@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
         if (exception instanceof ResponseStatusException resExp) {
             modelAndView.addObject("message", resExp.getReason());
-            modelAndView.addObject("status", resExp.getStatusCode().value());  // Pasa el código de estado HTTP
+            modelAndView.addObject("status", resExp.getStatusCode().value());  // Pass HTTP status code
         } else {
             modelAndView.addObject("message", exception.getMessage());
             modelAndView.addObject("status", HttpStatus.INTERNAL_SERVER_ERROR.value());

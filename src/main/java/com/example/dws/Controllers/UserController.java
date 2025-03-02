@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-
+    // Show shopping cart of a user by its ID
     @GetMapping("/users/{userID}")
     public String getShopingCart(@PathVariable("userID") long userID, Model model){
         User user = userRepository.findByID(userID);
@@ -30,7 +30,7 @@ public class UserController {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
     }
-
+    // Show shopping cart of a user by its name
     @GetMapping("/users/name/")
     public String getShopingCartByName(@RequestParam("userName") String userName, Model model){
         User user = userRepository.findByName(userName);

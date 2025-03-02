@@ -85,28 +85,28 @@ public class ShopController {
     }
 
 
-    // Mostrar todas las tiendas
+    // Show all shops
     @GetMapping
     public String getAllShops(Model model) {
         Collection<Shop> shops = shopRepository.findAll();
         model.addAttribute("shops", shops);
-        return "index"; // Vista que muestra todas las tiendas
+        return "index"; // View showing all the shops
     }
 
-    // Ver detalles de una tienda por su ID
+    // View details of a shop by its ID
     @GetMapping("/shops/{shopID}")
     public String getShopById(@PathVariable("shopID") long shopId, Model model) {
         Shop shop = shopRepository.findById(shopId);
         if (shop != null) {
             model.addAttribute("shop", shop);
-            return "showShop"; // Vista que muestra los detalles de la tienda
+            return "showShop"; // View showing shop details
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
     }
 
 
-    // Guardar una nueva tienda
+    // Save new shop
     @PostMapping("/save")
     public String saveShop(@RequestParam String shopName,
                            @RequestParam String imageName,
@@ -115,14 +115,14 @@ public class ShopController {
             if(!image.isEmpty() && imageName.trim().isEmpty()){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Si quieres añadir una imagen el nobre de la imagen no puede ser vacío");
             } else {
-                // Crear directorio si no existe
+                // Create a directory if it doesn´t exist
                 Files.createDirectories(IMAGES_FOLDER);
 
-                // Guardar la imagen
+                //Save image
                 Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
                 Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
-                // Crear y guardar la tienda en el repository
+                // Create and save the shop in the repository
                 Shop shop = new Shop(shopName, imageName);
                 shopRepository.save(shop);
             }
@@ -143,18 +143,18 @@ public class ShopController {
                 .body(image);
     }
 
-    // Borra la tienda de los productos que la tienen asignada y se borra la tienda
+    // Delete the shop of the products that have it assigned and the shop is deleted
     @PostMapping("/delete")
     public String deleteShop(@RequestParam long shopID) {
         if(shopRepository.findById(shopID) == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         } else{
             productRepository.removeShopFromAllProducts(shopID);
-            shopRepository.deleteById(shopID); // Eliminar la tienda por su ID
-            return "redirect:/"; // Redirige a la lista de tiendas
+            shopRepository.deleteById(shopID); // Remove the shop by its ID
+            return "redirect:/"; // Redirect to shop list
         }
     }
-
+    // Add new product to the shop
     @PostMapping("/shops/{shopID}/products/new")
     public String newProductToShop(@RequestParam String productName, @RequestParam(required = false) Double productPrize, @PathVariable long shopID) {
         if(shopRepository.findById(shopID) == null){
@@ -174,7 +174,7 @@ public class ShopController {
         shopRepository.save(shop);
         return "redirect:/shops/" + shopID;
     }
-
+    // Add new comment to the shop
     @PostMapping("/shops/{shopID}/comments/new")
     public String newCommentToShop(@RequestParam String user, @RequestParam String issue,@RequestParam String message, @PathVariable long shopID) {
         if (!user.trim().isEmpty()){

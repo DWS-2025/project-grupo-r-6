@@ -12,25 +12,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public class CommentRepository {
-    private HashMap<Long, Comment> coments = new HashMap<>();  // Usamos Long como clave en el HashMap
-    private AtomicLong nextId = new AtomicLong(0); // Para generar IDs únicos para las tiendas
+    private HashMap<Long, Comment> coments = new HashMap<>();   // Use Long as the key in the HashMap
+    private AtomicLong nextId = new AtomicLong(0); // To generate unique IDs for the shops
 
     public Collection<Comment> findAll() {
         return coments.values();
     }
 
-    // Encontrar un comentario por su ID
+    // Save or update a comment
     public Comment findById(long id) {
         return coments.get(id);
     }
 
-    // Guardar o actualizar un comentario
+    // Delete a comment by its ID
     public void save(Comment comment) {
-        this.coments.put(comment.getCommentId(), comment);  // Guardar o actualizar el comentario en el mapa
+        this.coments.put(comment.getCommentId(), comment);  // Save or update the comment in the map
     }
 
-    // Eliminar un comentario por su ID
+    // Delete a comment by its ID
     public void deleteById(long id) {
-        this.coments.remove(id);  // Eliminar la tienda
+        this.coments.remove(id);  // Remove comment
     }
 }

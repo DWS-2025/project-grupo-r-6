@@ -36,9 +36,9 @@ public class ProductController {
             model.addAttribute("product", product);
             Collection<Shop> shops = shopRepository.findAll();
             model.addAttribute("shops", shops);
-            return "showProduct"; // Vista que muestra los detalles de la tienda
+            return "showProduct"; // View showing shop details
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El prodcuto seleccionado no existe");// Vista de error si no se encuentra la tienda
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El prodcuto seleccionado no existe");// Error view if shop not found
         }
     }
 
@@ -64,7 +64,7 @@ public class ProductController {
         return "redirect:/products/" + productID;
     }
 
-    // Borra el producto de las tiendas que lo tengan y se borra del repository
+    // Delete product from the shops that have it and delete it from the repository
     @PostMapping("/products/{productID}/delete")
     public String deleteProduct(@PathVariable("productID") long productID){
         Product product = productRepository.findById(productID);
@@ -76,7 +76,7 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
         }
     }
-    // Un usuario compra un producto y se añade a su carrito
+    // A user purchases a product and adds it to their cart
     @PostMapping("/products/{productID}/buy")
     public String buyProduct(@PathVariable("productID") long productID, @RequestParam("username") String username){
         Product product = productRepository.findById(productID);

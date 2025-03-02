@@ -40,7 +40,7 @@ public class CommentController {
         if (comment != null) {
             model.addAttribute("comment", comment);
             model.addAttribute("shop", shop);
-            return "showComment"; // Vista que muestra los detalles de la tienda
+            return "showComment"; // View showing shop details
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
         }
@@ -48,20 +48,20 @@ public class CommentController {
     @PostMapping("/deleteComment")
     public String deleteComment(@RequestParam long commentId, @RequestParam long shopId) {
         if(commentRepository.findById(commentId) != null){
-            // Buscar la tienda a la que pertenece el comentario
+            // Search the shop the comment belong to
             Shop shop = shopRepository.findById(shopId);
             if(shop == null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
             }
 
-            // Eliminar el comentario del HashMap de la tienda
+            // Remove comment from shop hashmap
             shop.getComments().remove(commentId);
-            shopRepository.save(shop); // Guardar la tienda actualizada
+            shopRepository.save(shop); // Save the updated shop
 
-            // Finalmente, eliminar el comentario del repositorio
+            // Finally, remove the comment from the repository
             commentRepository.deleteById(commentId);
 
-            return "redirect:/shops/" + shopId; // Redirige a la tienda afectada
+            return "redirect:/shops/" + shopId; // Redirect to the affected shop
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
         }
