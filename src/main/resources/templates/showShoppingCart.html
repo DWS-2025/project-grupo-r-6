@@ -11,16 +11,17 @@
 <body>
 
 <section>
-    <h1>Carrito de: {{user.name}}</h1>
+    <div class="cart-text">
+        <h1>Carrito de: {{user.name}}</h1>
+        <h3>Lista de Productos</h3>
+        {{#user.allProducts}}
+        <a href="/products/{{productId}}" class="link-select">{{productName}} {{productPrize}}</a><br>
+        {{/user.allProducts}}
 
-    <h3>Lista de Productos</h3>
-    {{#user.allProducts}}
-    <a href="/products/{{productId}}">{{productName}}</a><br>
-    {{/user.allProducts}}
-
-    {{^user.allProducts}}
-    <p>No hay productos en el carrito todavía.</p>
-    {{/user.allProducts}}
+        {{^user.allProducts}}
+        <p>No hay productos en el carrito todavía.</p>
+        {{/user.allProducts}}
+    </div>
 </section>
 
 <section>

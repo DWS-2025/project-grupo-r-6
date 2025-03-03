@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    max-width: 900px;
+    max-width: 80%;
     margin: 0 auto;
     padding: 20px;
     background-color: #e4e4e4;
@@ -21,6 +21,7 @@ h1, h2 {
     color: #007bff;
     margin-bottom: 70px;
     text-transform: uppercase;
+    background-color: #abc3e3;
 }
 
 .second-title h2 {
@@ -28,13 +29,17 @@ h1, h2 {
     color: #007bff;
     margin-bottom: 70px;
     text-align: left;
+    background-color: #abc3e3;
+    padding: 20px;
 }
 
 .third-title h3 {
     font-size: 2em;
     color: #007bff;
+    padding: 10px;
     margin-bottom: 40px;
     text-align: left;
+    background-color: #abc3e3;
 }
 
 
@@ -59,13 +64,18 @@ th {
 tr:hover {
     background: #f1f1f1;
 }
-
+/*SHOP*/
+/* Image index style*/
 .shop-image {
     width: 100%;
     height: 200px; /* Set a fixed height for all images */
     object-fit: cover; /* Make the images cover the area without distorting */
     border-radius: 5px;
     margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+.shop-image:hover{
+    transform: scale(1.2);
 }
 
 .shop-image-large {
@@ -77,37 +87,7 @@ tr:hover {
     transition: all 0.3s ease-in-out;
 }
 
-
-form {
-    background: white;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-input, select, button {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-button {
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    border: none;
-}
-
-button:hover {
-    background: #0056b3;
-}
-
-/* Mosaico de tiendas */
+/* Shop mosaic*/
 .shops-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -134,6 +114,71 @@ button:hover {
     color: #333;
 }
 
+/*Comment*/
+.comment-text{
+    background-color: #e1da9d;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    padding: 10px 20px;
+    border: 3px solid #e1da9d;
+    border-radius: 10px;
+}
+.comment-select{
+    display: inline-block;
+    background-color: #e1da9d;
+    padding: 10px 20px;
+    border: 3px solid black;
+    margin-bottom: 10px;
+    transition: transform 0.1s ease;
+    text-decoration: none;
+    color: black;
+}
+
+.comment-select:hover{
+    transform: scale(1.1);
+}
+
+/* Shopping Cart*/
+.cart-text{
+    background-color: #99bd77;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    padding: 10px 20px;
+    border: 3px solid #99bd77;
+    border-radius: 10px;
+}
+
+form {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+input, select, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/*Button*/
+button {
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+
 /* Media Queries */
 @media (max-width: 768px) {
     .shops-container {
@@ -147,6 +192,14 @@ button:hover {
     }
 }
 
+/*link*/
+.link-select{
+    display: inline-block;
+    transition: transform 0.1s ease;
+}
+.link-select:hover{
+    transform: scale(1.1);
+}
 .back-link {
     display: inline-block;
     padding: 10px 20px;
@@ -170,6 +223,7 @@ button:hover {
     background: #f8d7da;
     padding: 20px;
     border-radius: 5px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) ;
 }
 
 .error-title {

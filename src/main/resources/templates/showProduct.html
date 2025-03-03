@@ -18,10 +18,19 @@
     <h2>Precio: {{product.productPrize}} </h2>
 
     <h2>El producto se encuentra disponible en estas tiendas:</h2>
-    {{#product.allShops}}
-    <a href="/shops/{{shopID}}" class="shop-link">{{shopName}}</a>
+
+    <div class="shops-container">
+        {{#product.allShops}}
+        <div class="shop-item">
+            <a href="/shops/{{shopID}}">
+                <img src="/image/{{imageName}}" alt="{{shopName}}" class="shop-image">
+                <p>{{shopName}}</p>
+            </a>
+        </div>
+        {{/product.allShops}}
+    </div>
     <br>
-    {{/product.allShops}}
+
 
     {{^product.allShops}}
     <p>No hay tiendas disponibles para este producto.</p>
