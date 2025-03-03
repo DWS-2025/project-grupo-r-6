@@ -21,7 +21,7 @@
 <section>
     <h2>Productos</h2>
     {{#shop.allProducts}}
-    <a href="/products/{{productId}}">{{productName}}</a><br>
+    <a href="/products/{{productId}}" class="link-select">{{productName}}</a><br>
     {{/shop.allProducts}}
     {{^shop.allProducts}}
     <p>No hay productos aún.</p>
@@ -31,7 +31,7 @@
 <section>
     <h2>Comentarios</h2>
     {{#shop.allComments}}
-    <a href="/comments/{{shop.shopID}}/{{commentId}}">Asunto: {{issue}}</a><br>
+    <a href="/comments/{{shop.shopID}}/{{commentId}}" class="comment-select">Asunto: {{issue}}</a><br>
     {{/shop.allComments}}
     {{^shop.allComments}}
     <p>No hay comentarios aún.</p>
