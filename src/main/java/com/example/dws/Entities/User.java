@@ -3,24 +3,31 @@ package com.example.dws.Entities;
 
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 public class User {
-    private static AtomicLong counter= new AtomicLong(0);
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     private String email;
-    private HashMap<Long, Product> userProducts;
+    @OneToMany
+    private List<Product> userProducts;
 
+    public User() {
+
+    }
 
     public User(String name, String email){
         this.name = name;
         this.email = email;
-        this.userProducts = new HashMap<>();
-        this.id = counter.getAndIncrement();
+        this.userProducts = new ArrayList<>();
     }
 
     public long getId() {return id;}

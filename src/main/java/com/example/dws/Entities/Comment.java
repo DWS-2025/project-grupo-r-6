@@ -1,22 +1,30 @@
 package com.example.dws.Entities;
 
+import jakarta.persistence.*;
+
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Entity
 public class Comment {
+    @OneToOne
     private User user;
     private String issue;
     private String message;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long commentId;
-    private static AtomicLong counter= new AtomicLong(0);
 
+    public Comment() {
+
+    }
 
     public Comment(User user, String issue, String message) {
         this.user = user;
         this.issue = issue;
         this.message = message;
-        this.commentId = counter.getAndIncrement();
     }
+
 
     public User getUser() {
         return user;
