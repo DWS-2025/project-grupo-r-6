@@ -7,6 +7,8 @@ import com.example.dws.Entities.User;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
+import com.example.dws.Service.ProductService;
+import com.example.dws.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,23 +20,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 
 @Controller
 public class ProductController {
     @Autowired
-    private ShopRepository shopRepository;
+    private ShopService shopService;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/products/{productID}")
     public String getProductById(@PathVariable("productID") long productID,Model model) {
-        Product product = productRepository.findById(productID);
-        if (product != null) {
+        Optional<Product> product = productService.findById(productID);
+        if (product.isPresent()) {
             model.addAttribute("product", product);
-            Collection<Shop> shops = shopRepository.findAll();
+            List<Shop> shops = shopService.findAll();
             model.addAttribute("shops", shops);
             return "showProduct"; // View showing shop details
         } else {
@@ -44,33 +48,25 @@ public class ProductController {
 
     @PostMapping("/products/{productID}/addShop/")
     public String addShopToProduct(@PathVariable("productID") long productID, long shopID) {
-        Product product = productRepository.findById(productID);
-        if (product == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El prodcuto seleccionado no existe");
+        Optional<Product> product = productService.findById(productID);
+        if (product.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
         }
-        Shop shop = shopRepository.findById(shopID);
-        if(shop == null){
+        Optional<Shop> shop = shopService.findById(shopID);
+        if(shop.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-
-        if (!product.getShops().containsKey(shopID)){
-            product.getShops().put(shopID, shop) ;
-            shop.getProducts().put(productID, product) ;
-        }
-
-        productRepository.save(product);
-        shopRepository.save(shop);
-
+        productService.saveShopInProduct(product.get(), shop.get());
         return "redirect:/products/" + productID;
     }
 
     // Delete product from the shops that have it and delete it from the repository
     @PostMapping("/products/{productID}/delete")
     public String deleteProduct(@PathVariable("productID") long productID){
-        Product product = productRepository.findById(productID);
-        if(product != null){
-            shopRepository.removeProductFromAllShops(productID);
-            productRepository.deleteById(productID);
+        Optional<Product> product = productService.findById(productID);
+        if(product.isPresent()){
+            shopService.removeProductFromAllShops(productID);
+            productService.deleteById(productID);
             return "deleted_product";
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
@@ -79,12 +75,12 @@ public class ProductController {
     // A user purchases a product and adds it to their cart
     @PostMapping("/products/{productID}/buy")
     public String buyProduct(@PathVariable("productID") long productID, @RequestParam("username") String username){
-        Product product = productRepository.findById(productID);
-        if(product != null){
-            User user = userRepository.findByName(username);
-            if(user != null){
-                user.addProduct(productID, product);
-                return "redirect:/users/" + user.getId();
+        Optional<Product> product = productService.findById(productID);
+        if(product.isPresent()){
+            Optional<User> user = userService.findByName(username);
+            if(user.isPresent()){
+                userService.addProduct(user, product);
+                return "redirect:/users/" + userService.getId(user);
             } else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }
@@ -95,8 +91,8 @@ public class ProductController {
     }
     @PostMapping("/products/{productId}/update/")
     public String updateProduct(@RequestParam String productName, @RequestParam(required = false) Double productPrize, @PathVariable long productId,Model model ){
-        Product product = this.productRepository.findById(productId);
-        if (product == null){
+        Optional<Product> product = productService.findById(productId);
+        if (product.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
         }
         if (productPrize == null) {
@@ -105,9 +101,8 @@ public class ProductController {
         if (productName.trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
-        product.setProductName(productName);
-        product.setProductPrize(productPrize);
-        this.productRepository.save(product);
+
+        this.productService.update(product.get(),productName,productPrize);
         model.addAttribute("product", product);
         return "updated_product";
     }
