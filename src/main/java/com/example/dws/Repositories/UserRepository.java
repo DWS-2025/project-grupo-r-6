@@ -23,14 +23,7 @@ public interface UserRepository  extends JpaRepository<User, Long> {
         return users.get(userID);
     }
 
-    public User findByName(String userName){
-        for(User user : users.values()){
-            if(user.getName().equals(userName)){
-                return user;
-            }
-        }
-        return null;
-    }
+
 
     public void deleteByID(long userID){
         this.users.remove(userID);

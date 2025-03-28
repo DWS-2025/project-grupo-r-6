@@ -20,16 +20,15 @@ public class CommentService {
         return commentRepository.findById(id);
     }
 
-    public void save(Shop postToComment, Comment comment) {
-        postToComment.getComments().add(comment);
-        comment.setAuthor(userService.getLoggedUser());
-        commentsRepository.save(comment);
+    public void save(Shop shopToComment, Comment comment) {
+        shopToComment.getComments().add(comment);
+        comment.setUser(userService.findUserById(comment.getUser().getId()));
+        commentRepository.save(comment);
     }
 
-    public void delete(Long commentId, Post post) {
-        // We assume that the comment exists
+    public void delete(Long commentId, Shop shop) {
         Comment comment = this.findById(commentId).get();
-        post.getComments().remove(comment);
-        commentsRepository.delete(comment);
+        shop.getComments().remove(comment);
+        commentRepository.delete(comment);
     }
 }
