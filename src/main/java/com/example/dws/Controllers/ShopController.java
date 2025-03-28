@@ -8,6 +8,9 @@ import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
+import com.example.dws.Service.CommentService;
+import com.example.dws.Service.ShopService;
+import com.example.dws.Service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +31,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ShopController {
     @Autowired
-    private ShopRepository shopRepository;
+    private ShopService shopService;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     private static final Path IMAGES_FOLDER = Paths.get("uploads");
 
@@ -97,7 +102,7 @@ public class ShopController {
     // Show all shops
     @GetMapping
     public String getAllShops(Model model) {
-        Collection<Shop> shops = shopRepository.findAll();
+        List<Shop> shops = shopService.findAll();
         model.addAttribute("shops", shops);
         return "index"; // View showing all the shops
     }
@@ -105,8 +110,8 @@ public class ShopController {
     // View details of a shop by its ID
     @GetMapping("/shops/{shopID}")
     public String getShopById(@PathVariable("shopID") long shopId, Model model) {
-        Shop shop = shopRepository.findById(shopId);
-        if (shop != null) {
+        Optional<Shop> shop = shopService.findById(shopId);
+        if (shop.isPresent()) {
             model.addAttribute("shop", shop);
             return "showShop"; // View showing shop details
         } else {
@@ -124,6 +129,8 @@ public class ShopController {
             if(!image.isEmpty() && imageName.trim().isEmpty()){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Si quieres añadir una imagen el nobre de la imagen no puede ser vacío");
             } else {
+                /* Cambiar foto a BBDD
+
                 // Create a directory if it doesn´t exist
                 Files.createDirectories(IMAGES_FOLDER);
 
@@ -131,18 +138,19 @@ public class ShopController {
                 Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
                 Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
+                 */
+
                 // Create and save the shop in the repository
                 Shop shop = new Shop(shopName, imageName);
-                shopRepository.save(shop);
+                shopService.saveShop(shop);
             }
-
             return "redirect:/";
         } else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de la tienda no puede ser vacío");
         }
 
     }
-
+    /// PARA VER LA IMAGEN, NO SE SI SE USA
     @GetMapping("/image/{imageName}")
     public ResponseEntity<Resource> viewImage(@PathVariable String imageName) throws MalformedURLException {
         Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
@@ -155,18 +163,18 @@ public class ShopController {
     // Delete the shop of the products that have it assigned and the shop is deleted
     @PostMapping("/delete")
     public String deleteShop(@RequestParam long shopID) {
-        if(shopRepository.findById(shopID) == null){
+        if(shopService.findById(shopID).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         } else{
-            productRepository.removeShopFromAllProducts(shopID);
-            shopRepository.deleteById(shopID); // Remove the shop by its ID
+            productService.removeShopFromAllProducts(shopID);
+            shopService.deleteById(shopID); // Remove the shop by its ID
             return "redirect:/"; // Redirect to shop list
         }
     }
     // Add new product to the shop
     @PostMapping("/shops/{shopID}/products/new")
     public String newProductToShop(@RequestParam String productName, @RequestParam(required = false) Double productPrize, @PathVariable long shopID) {
-        if(shopRepository.findById(shopID) == null){
+        if(shopService.findById(shopID).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
         if (productPrize == null) {
@@ -176,29 +184,31 @@ public class ShopController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
         Product product = new Product(productName, productPrize);
+        productService.saveProduct();
+        /*    PASAR ESTO AL PRODUCT SERVICE
         Shop shop = shopRepository.findById(shopID);
         shop.getProducts().put(product.getProductId(), product);
         product.getShops().put(shopID, shop);
         productRepository.save(product);
         shopRepository.save(shop);
+
+         */
         return "redirect:/shops/" + shopID;
     }
     // Add new comment to the shop
     @PostMapping("/shops/{shopID}/comments/new")
     public String newCommentToShop(@RequestParam String user, @RequestParam String issue,@RequestParam String message, @PathVariable long shopID) {
         if (!user.trim().isEmpty()){
-            Shop shop = shopRepository.findById(shopID);
-            if (shop == null){
+            Optional<Shop> shop = shopService.findById(shopID);
+            if (shop.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
             }
-            User useraux = userRepository.findByName(user);
+            User useraux = userService.findByName(user);
             if (useraux == null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }
             Comment comment= new Comment(useraux,issue,message);
-            shop.getComments().put(comment.getCommentId(), comment);
-            commentRepository.save(comment);
-            shopRepository.save(shop);
+            shopService.saveComment(shop.get(), comment);
             return "redirect:/shops/" + shopID;
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacio");
