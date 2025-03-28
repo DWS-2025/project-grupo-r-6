@@ -30,7 +30,7 @@ public class ProductController {
     private UserRepository userRepository;
 
     @GetMapping("/products/{productID}")
-    public String getProductById(@PathVariable("productID") long productID, Model model) {
+    public String getProductById(@PathVariable("productID") long productID,Model model) {
         Product product = productRepository.findById(productID);
         if (product != null) {
             model.addAttribute("product", product);

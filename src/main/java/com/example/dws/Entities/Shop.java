@@ -1,24 +1,30 @@
 package com.example.dws.Entities;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
+import jakarta.persistence.*;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+@Entity
 public class Shop {
-    private String shopName;
-    private static AtomicLong counter= new AtomicLong(0);// Use AtomicLong to manage the shop ID
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long shopID;
-    private HashMap<Long, Product> products;  // Use long as the key for products
-    private HashMap<Long, Comment> comments;
+    private String shopName;
+    @ManyToMany (mappedBy = "shops")
+    private List<Product> products;
+    @OneToMany
+    private List<Comment> comments;
     private String imageName;
 
     public Shop(String shopName, String imageName) {
         this.shopName = shopName;
-        this.shopID = counter.getAndIncrement();  // Initialize AtomicLong with 0
-        this.products = new HashMap<>();
-        this.comments = new HashMap<>();
+        this.products = new ArrayList<>();
+        this.comments = new ArrayList<>();
         this.imageName = imageName;
+    }
+
+    public Shop() {
+
     }
 
     // Getter y Setter for shopName
@@ -41,32 +47,31 @@ public class Shop {
     }
 
     // Getter y Setter for products
-    public HashMap<Long, Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(HashMap<Long, Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 
-    public Collection<Product> getAllProducts() {
-        return this.products.values();
+    public List<Product> getAllProducts() {
+        return this.products;
     }
 
     // Method to remove a product
     public void removeProduct(Product product) {
-        this.products.remove(product.getProductId());  // Delete by product ID
+        this.products.remove(product);  // Delete by product ID
     }
 
-    public HashMap<Long, Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
-    public void setComment(HashMap<Long, Comment> comments) {this.comments = comments;}
-    public Collection<Comment> allComments() {
-        return this.comments.values();
+    public void setComment(List<Comment> comments) {this.comments = comments;}
+    public List<Comment> allComments() {
+        return this.comments;
     }
-
-    public void setComments(HashMap<Long, Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 }

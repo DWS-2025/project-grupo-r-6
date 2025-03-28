@@ -1,28 +1,39 @@
 package com.example.dws.Entities;
 
 
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-
+@Entity
 public class Product {
-    private String productName;
-    private static AtomicLong counter = new AtomicLong(0);
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long productId;
+
+    private String productName;
+
     private double productPrize;
-    private HashMap<Long, Shop> shops;
+
+    @ManyToMany
+    private List<Shop> shops;
 
     public Product(String productName, double productPrize) {
         this.productName = productName;
         this.productPrize = productPrize;
-        this.shops = new HashMap<>();
-        this.productId = counter.getAndIncrement();
+        this.shops = new ArrayList<>();
+    }
+
+    public Product() {
+
     }
 
     public void deleteShop(Shop shop){
-        this.shops.remove(shop.getShopID());
+        this.shops.remove(shop);
     }
 
     public String getProductName() {
@@ -49,15 +60,15 @@ public class Product {
         this.productPrize = productPrize;
     }
 
-    public HashMap<Long, Shop> getShops() {
-        return shops;
+    public List<Shop> getShops() {
+        return this.shops;
     }
 
-    public Collection<Shop> allShops(){
-        return this.shops.values();
+    public List<Shop> allShops(){
+        return this.shops;
     }
 
-    public void setShops(HashMap<Long, Shop> shops) {
+    public void setShops(List<Shop> shops) {
         this.shops = shops;
     }
 }
