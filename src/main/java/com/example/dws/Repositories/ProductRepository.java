@@ -2,6 +2,7 @@ package com.example.dws.Repositories;
 
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -11,7 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class ProductRepository {
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    /*
     private HashMap<Long, Product> products = new HashMap<>();
     private AtomicLong nextId = new AtomicLong(0);
 
@@ -38,4 +41,5 @@ public class ProductRepository {
             product.getShops().remove(shopID);
         }
     }
+     */
 }

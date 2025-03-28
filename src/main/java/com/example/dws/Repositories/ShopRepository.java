@@ -3,6 +3,7 @@ package com.example.dws.Repositories;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -10,7 +11,8 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class ShopRepository {
+public interface ShopRepository extends JpaRepository<Shop, Long> {
+    /*
     private HashMap<Long, Shop> shops = new HashMap<>();  // Use Long as the key in the HashMap
     private AtomicLong nextId = new AtomicLong(0); // To generate unique IDs for the shops
 
@@ -42,5 +44,7 @@ public class ShopRepository {
             shop.getProducts().remove(productId);
         }
     }
+
+     */
 
 }

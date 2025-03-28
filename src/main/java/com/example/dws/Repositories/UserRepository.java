@@ -1,6 +1,8 @@
 package com.example.dws.Repositories;
 
 import com.example.dws.Entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -8,7 +10,8 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class UserRepository {
+public interface UserRepository  extends JpaRepository<User, Long> {
+    /*
     private HashMap<Long, User> users = new HashMap<>();
     private AtomicLong nextId = new AtomicLong(0);
 
@@ -36,4 +39,6 @@ public class UserRepository {
     public Collection<User> findAll(){
         return users.values();
     }
+
+     */
 }
