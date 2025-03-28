@@ -47,7 +47,7 @@ public class ShopController {
     private UserService userService;
 
     private static final Path IMAGES_FOLDER = Paths.get("uploads");
-
+    /*
     @PostConstruct
     public void init() {
 
@@ -98,7 +98,7 @@ public class ShopController {
         product3.getShops().put(shop3.getShopID(), shop3);
 
     }
-
+    */
 
     // Show all shops
     @GetMapping

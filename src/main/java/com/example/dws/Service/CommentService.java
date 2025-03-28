@@ -21,9 +21,8 @@ public class CommentService {
         return commentRepository.findById(id);
     }
 
-    public void save(Shop shopToComment, Comment comment) {
-        shopToComment.getComments().add(comment);
-        comment.setUser(userService.findUserById(comment.getUser().getId()));
+    public void save(Shop shop, Comment comment) {
+        shop.getComments().add(comment);
         commentRepository.save(comment);
     }
 
