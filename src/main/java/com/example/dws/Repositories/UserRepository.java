@@ -7,10 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public interface UserRepository  extends JpaRepository<User, Long> {
+    Optional<User> findByName(String userName);
     /*
     private HashMap<Long, User> users = new HashMap<>();
     private AtomicLong nextId = new AtomicLong(0);

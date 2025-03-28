@@ -8,6 +8,7 @@ import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
 import com.example.dws.Service.ProductService;
+import com.example.dws.Service.ShopService;
 import com.example.dws.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,7 +66,7 @@ public class ProductController {
     public String deleteProduct(@PathVariable("productID") long productID){
         Optional<Product> product = productService.findById(productID);
         if(product.isPresent()){
-            shopService.removeProductFromAllShops(productID);
+            shopService.removeProductFromAllShops(product.get());
             productService.deleteById(productID);
             return "deleted_product";
         } else{
@@ -79,8 +80,8 @@ public class ProductController {
         if(product.isPresent()){
             Optional<User> user = userService.findByName(username);
             if(user.isPresent()){
-                userService.addProduct(user, product);
-                return "redirect:/users/" + userService.getId(user);
+                userService.addProduct(user.get(), product.get());
+                return "redirect:/users/" + userService.getId(user.get());
             } else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }

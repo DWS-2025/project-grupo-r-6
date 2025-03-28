@@ -45,12 +45,12 @@ public class User {
         this.email = email;
     }
 
-    public Collection<Product> allProducts(){
-        return this.userProducts.values();
+    public List<Product> allProducts(){
+        return this.userProducts;
     }
 
-    public void addProduct(Long productId, Product product) {
-        this.userProducts.put(productId, product);
+    public void addProduct(Product product) {
+        this.userProducts.add(product);
     }
 
     public void removeProduct(Long productId) {

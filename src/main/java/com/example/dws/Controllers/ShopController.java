@@ -11,6 +11,7 @@ import com.example.dws.Repositories.UserRepository;
 import com.example.dws.Service.CommentService;
 import com.example.dws.Service.ShopService;
 import com.example.dws.Service.UserService;
+import com.example.dws.Service.ProductService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,7 +143,7 @@ public class ShopController {
 
                 // Create and save the shop in the repository
                 Shop shop = new Shop(shopName, imageName);
-                shopService.saveShop(shop);
+                shopService.save(shop);
             }
             return "redirect:/";
         } else{
@@ -166,7 +167,7 @@ public class ShopController {
         if(shopService.findById(shopID).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         } else{
-            productService.removeShopFromAllProducts(shopID);
+            productService.removeShopFromAllProducts(shopService.findById(shopID).get());
             shopService.deleteById(shopID); // Remove the shop by its ID
             return "redirect:/"; // Redirect to shop list
         }
@@ -184,14 +185,13 @@ public class ShopController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
         Product product = new Product(productName, productPrize);
-        productService.saveProduct();
+        productService.saveShopInProduct(product, shopService.findById(shopID).get());
         /*    PASAR ESTO AL PRODUCT SERVICE
         Shop shop = shopRepository.findById(shopID);
         shop.getProducts().put(product.getProductId(), product);
         product.getShops().put(shopID, shop);
         productRepository.save(product);
         shopRepository.save(shop);
-
          */
         return "redirect:/shops/" + shopID;
     }
@@ -203,11 +203,11 @@ public class ShopController {
             if (shop.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
             }
-            User useraux = userService.findByName(user);
-            if (useraux == null){
+            Optional<User> useraux = userService.findByName(user);
+            if (useraux.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }
-            Comment comment= new Comment(useraux,issue,message);
+            Comment comment= new Comment(useraux.get(),issue,message);
             shopService.saveComment(shop.get(), comment);
             return "redirect:/shops/" + shopID;
         }

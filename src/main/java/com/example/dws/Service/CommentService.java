@@ -9,6 +9,7 @@ import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.CommentRepository;
 
+@Service
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
@@ -26,6 +27,9 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    public void deleteById(long id) {
+        commentRepository.deleteById(id);
+    }
     public void delete(Long commentId, Shop shop) {
         Comment comment = this.findById(commentId).get();
         shop.getComments().remove(comment);

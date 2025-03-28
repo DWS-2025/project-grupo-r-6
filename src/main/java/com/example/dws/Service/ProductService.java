@@ -25,9 +25,17 @@ public class ProductService {
     public void deleteById(long id){
         productRepository.deleteById(id);
     }
+    public void save(Product product) {
+        productRepository.save(product);
+    }
     public void update(Product product, String name, double price) {
         product.setProductName(name);
         product.setProductPrize(price);
         productRepository.save(product);
+    }
+    public void removeShopFromAllProducts(Shop shop) {
+        for (Product product : productRepository.findAll()) {
+            product.getShops().remove(shop);
+        }
     }
 }

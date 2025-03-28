@@ -1,6 +1,7 @@
 package com.example.dws.Service;
 
 import com.example.dws.Entities.Comment;
+import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.Repositories.ShopRepository;
@@ -25,7 +26,7 @@ public class ShopService {
         return shopRepository.findById(id);
     }
 
-    public void saveShop(Shop shop){
+    public void save(Shop shop){
         shopRepository.save(shop);
     }
 
@@ -37,5 +38,10 @@ public class ShopService {
         shop.getComments().add(comment);
         commentRepository.save(comment);
         shopRepository.save(shop);
+    }
+    public void removeProductFromAllShops(Product product) {
+        for (Shop shop : shopRepository.findAll()) {
+            shop.getProducts().remove(product);
+        }
     }
 }

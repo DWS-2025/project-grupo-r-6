@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -23,8 +24,8 @@ public class UserController {
     // Show shopping cart of a user by its ID
     @GetMapping("/users/{userID}")
     public String getShopingCart(@PathVariable("userID") long userID, Model model){
-        User user = userRepository.findByID(userID);
-        if(user != null){
+        Optional<User> user = userRepository.findById(userID);
+        if(user.isPresent()){
             model.addAttribute("user", user);
             return "showShoppingCart";
         }
@@ -33,8 +34,8 @@ public class UserController {
     // Show shopping cart of a user by its name
     @GetMapping("/users/name/")
     public String getShopingCartByName(@RequestParam("userName") String userName, Model model){
-        User user = userRepository.findByName(userName);
-        if(user != null){
+        Optional<User> user = userRepository.findByName(userName);
+        if(user.isPresent()){
             model.addAttribute("user", user);
             return "showShoppingCart";
         }
