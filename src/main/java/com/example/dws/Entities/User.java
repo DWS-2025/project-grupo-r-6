@@ -2,11 +2,12 @@ package com.example.dws.Entities;
 
 
 
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-
+@Entity
 public class User {
     private static AtomicLong counter= new AtomicLong(0);
     private long id;
