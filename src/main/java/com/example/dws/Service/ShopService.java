@@ -5,9 +5,13 @@ import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.Repositories.ShopRepository;
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +47,18 @@ public class ShopService {
         for (Shop shop : shopRepository.findAll()) {
             shop.getProducts().remove(product);
         }
+    }
+
+    public void save(Shop shop, MultipartFile imageFile) throws IOException {
+        if(!imageFile.isEmpty()) {
+            shop.setImageFile(BlobProxy.generateProxy(imageFile.getInputStream(),
+                    imageFile.getSize()));
+        } this.save(shop);
+    }
+
+    public Blob getShopImage(Long shopID) {
+        return shopRepository.findById(shopID)
+                .map(Shop::getImageFile)
+                .orElse(null);
     }
 }

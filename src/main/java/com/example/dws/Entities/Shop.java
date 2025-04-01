@@ -2,6 +2,7 @@ package com.example.dws.Entities;
 
 import jakarta.persistence.*;
 
+import java.sql.Blob;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 @Entity
@@ -15,17 +16,26 @@ public class Shop {
     @OneToMany
     private List<Comment> comments;
     private String imageName;
+    @Lob
+    private Blob imageFile;
 
     public Shop(String shopName, String imageName) {
         this.shopName = shopName;
         this.products = new ArrayList<>();
         this.comments = new ArrayList<>();
         this.imageName = imageName;
+
     }
 
     public Shop() {
 
     }
+
+
+    public void setImageFile(Blob imageFile) {
+        this.imageFile = imageFile;
+    }
+
 
     // Getter y Setter for shopName
     public String getShopName() {
@@ -73,6 +83,10 @@ public class Shop {
     }
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Blob getImageFile() {
+        return imageFile;
     }
 }
 

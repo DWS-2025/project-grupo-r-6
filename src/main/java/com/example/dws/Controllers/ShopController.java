@@ -13,6 +13,7 @@ import com.example.dws.Service.ShopService;
 import com.example.dws.Service.UserService;
 import com.example.dws.Service.ProductService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -31,6 +32,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -113,7 +116,7 @@ public class ShopController {
     public String getShopById(@PathVariable("shopID") long shopId, Model model) {
         Optional<Shop> shop = shopService.findById(shopId);
         if (shop.isPresent()) {
-            model.addAttribute("shop", shop);
+            model.addAttribute("shop", shop.get());
             return "showShop"; // View showing shop details
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
@@ -143,7 +146,7 @@ public class ShopController {
 
                 // Create and save the shop in the repository
                 Shop shop = new Shop(shopName, imageName);
-                shopService.save(shop);
+                shopService.save(shop, image);
             }
             return "redirect:/";
         } else{
@@ -151,14 +154,18 @@ public class ShopController {
         }
 
     }
-    /// PARA VER LA IMAGEN, NO SE SI SE USA
-    @GetMapping("/image/{imageName}")
-    public ResponseEntity<Resource> viewImage(@PathVariable String imageName) throws MalformedURLException {
-        Path imagePath = IMAGES_FOLDER.resolve(imageName + ".jpg");
-        Resource image = new UrlResource(imagePath.toUri());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                .body(image);
+
+    @GetMapping("/image/{shopID}")
+    public void viewImage(@PathVariable Long shopID, HttpServletResponse response) throws SQLException, IOException {
+        Blob imageBlob = shopService.getShopImage(shopID);
+
+        if (imageBlob != null) {
+            response.setContentType("image/jpeg"); // Cambia según el formato de la imagen
+            response.getOutputStream().write(imageBlob.getBytes(1, (int) imageBlob.length()));
+            response.getOutputStream().flush();
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     // Delete the shop of the products that have it assigned and the shop is deleted
