@@ -13,7 +13,7 @@ public class Shop {
     private String shopName;
     @ManyToMany (mappedBy = "shops")
     private List<Product> products;
-    @OneToMany
+    @OneToMany (mappedBy = "shop")
     private List<Comment> comments;
     private String imageName;
     @Lob

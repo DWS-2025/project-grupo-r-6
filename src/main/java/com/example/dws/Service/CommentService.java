@@ -21,11 +21,9 @@ public class CommentService {
         return commentRepository.findById(id);
     }
 
-    public void save(Shop shop, Comment comment) {
-        shop.getComments().add(comment);
+    public void save(Comment comment) {
         commentRepository.save(comment);
     }
-
     public void deleteById(long id) {
         commentRepository.deleteById(id);
     }

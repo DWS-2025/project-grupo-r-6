@@ -7,22 +7,27 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long commentId;
     @OneToOne
     private User user;
     private String issue;
     private String message;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long commentId;
+
+
+    @ManyToOne
+    private Shop shop;
 
     public Comment() {
 
     }
 
-    public Comment(User user, String issue, String message) {
+    public Comment(User user, String issue, String message, Shop shop) {
         this.user = user;
         this.issue = issue;
         this.message = message;
+        this.shop = shop;
     }
 
 

@@ -5,11 +5,15 @@ import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.Repositories.ShopRepository;
+import jakarta.transaction.Transactional;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.File;
 import java.io.IOException;
 import java.sql.Blob;
 import java.util.List;
@@ -38,9 +42,14 @@ public class ShopService {
         shopRepository.deleteById(id);
     }
 
+    @Transactional
     public void saveComment(Shop shop, Comment comment){
         shop.getComments().add(comment);
         commentRepository.save(comment);
+        shopRepository.save(shop);
+    }
+    public void saveProduct(Shop shop, Product product){
+        shop.getProducts().add(product);
         shopRepository.save(shop);
     }
     public void removeProductFromAllShops(Product product) {
