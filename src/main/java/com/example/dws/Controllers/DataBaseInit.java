@@ -1,5 +1,8 @@
 package com.example.dws.Controllers;
 
+import com.example.dws.DTOs.GeneralMapper;
+import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
@@ -29,6 +32,8 @@ public class DataBaseInit implements CommandLineRunner {
     private ProductService productService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private GeneralMapper generalMapper;
 
 
     @Override
@@ -36,6 +41,9 @@ public class DataBaseInit implements CommandLineRunner {
         Shop shop1=new Shop("PullAndCow", "Pull");
         Shop shop2=new Shop("Bresh", "Bershka");
         Shop shop3=new Shop("Zaro", "Zara");
+        ShopDTO shopDTO1 = generalMapper.shopToShopDTO(shop1);
+        ShopDTO shopDTO2 = generalMapper.shopToShopDTO(shop2);
+        ShopDTO shopDTO3 = generalMapper.shopToShopDTO(shop3);
 
         shopService.save(shop1);
         shopService.save(shop2);
@@ -44,6 +52,10 @@ public class DataBaseInit implements CommandLineRunner {
         Product product1=new Product("Camiseta", 20);
         Product product2=new Product("Sudadera", 35);
         Product product3=new Product("Zapatillas", 62.99);
+        ProductDTO productDTO1 = generalMapper.productToProductDTO(product1);
+        ProductDTO productDTO2 = generalMapper.productToProductDTO(product2);
+        ProductDTO productDTO3 = generalMapper.productToProductDTO(product3);
+
         productService.save(product1);
         productService.save(product2);
         productService.save(product3);
@@ -54,9 +66,9 @@ public class DataBaseInit implements CommandLineRunner {
         Comment comment= new Comment(user, "Atención Al ClienteA", "Tuve una excelente experiencia con el servicio al cliente. Fueron muy amables y me ayudaron a encontrar lo que buscaba. ¡Muy satisfecho!", shop1 );
         commentService.save(comment);
 
-        shopService.saveProduct(shop1, product1);
-        shopService.saveProduct(shop2, product2);
-        shopService.saveProduct(shop3, product3);
+        shopService.saveProduct(shopDTO1, productDTO1);
+        shopService.saveProduct(shopDTO2, productDTO2);
+        shopService.saveProduct(shopDTO3, productDTO3);
     }
 
 /*
