@@ -1,6 +1,8 @@
 package com.example.dws.Controllers;
 
 
+import com.example.dws.DTOs.CommentDTO;
+import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
@@ -38,8 +40,8 @@ public class CommentController {
 
     @GetMapping("/comments/{shopId}/{commentId}")
     public String getCommentsById(@PathVariable("commentId") long commentId,@PathVariable("shopId") long shopId ,Model model) {
-        Optional<Comment> comment = commentService.findById(commentId);
-        Optional<Shop> shop = shopService.findById(shopId);
+        Optional<CommentDTO> comment = commentService.findById(commentId);
+        Optional<ShopDTO> shop = shopService.findById(shopId);
         if(shop.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }

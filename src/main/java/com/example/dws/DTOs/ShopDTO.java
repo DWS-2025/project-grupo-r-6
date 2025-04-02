@@ -6,7 +6,7 @@ import com.example.dws.Entities.Product;
 import java.sql.Blob;
 import java.util.List;
 
-record ShopDTO(
+public record ShopDTO(
         Long id,
         String shopName,
         List<Product> products,

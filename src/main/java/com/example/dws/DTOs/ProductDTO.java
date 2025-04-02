@@ -4,7 +4,7 @@ import com.example.dws.Entities.Shop;
 
 import java.util.List;
 
-record ProductDTO(
+public record ProductDTO(
         Long id,
         String productName,
         double productPrize,

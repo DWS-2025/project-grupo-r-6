@@ -2,7 +2,7 @@ package com.example.dws.DTOs;
 
 import com.example.dws.Entities.User;
 
-record CommentDTO(
+public record CommentDTO(
         Long id,
         User user,
         String issue,

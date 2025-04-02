@@ -4,7 +4,7 @@ import com.example.dws.Entities.Product;
 
 import java.util.List;
 
-record UserDTO(
+public record UserDTO(
         Long id,
         String name,
         String email,
