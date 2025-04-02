@@ -5,6 +5,8 @@ import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface GeneralMapper {
     ShopDTO shopToShopDTO(Shop shop);
@@ -13,4 +15,5 @@ public interface GeneralMapper {
     Shop shopDTOToShop(ShopDTO shopDTO);
     Product productDTOToProduct(ProductDTO productDTO);
     Comment commentDTOToComment(CommentDTO commentDTO);
+    List<ShopDTO> ToListShopDTO(List<Shop> shops);
 }

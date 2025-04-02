@@ -1,5 +1,8 @@
 package com.example.dws.Controllers;
 
+import com.example.dws.DTOs.CommentDTO;
+import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
@@ -54,17 +57,17 @@ public class ShopController {
     // Show all shops
     @GetMapping
     public String getAllShops(Model model) {
-        List<Shop> shops = shopService.findAll();
-        model.addAttribute("shops", shops);
+        List<ShopDTO> shopsDTO = shopService.findAll();
+        model.addAttribute("shops", shopsDTO);
         return "index"; // View showing all the shops
     }
 
     // View details of a shop by its ID
     @GetMapping("/shops/{shopID}")
     public String getShopById(@PathVariable("shopID") long shopId, Model model) {
-        Optional<Shop> shop = shopService.findById(shopId);
-        if (shop.isPresent()) {
-            model.addAttribute("shop", shop.get());
+        Optional<ShopDTO> shopDTO = shopService.findById(shopId);
+        if (shopDTO.isPresent()) {
+            model.addAttribute("shop", shopDTO.get());
             return "showShop"; // View showing shop details
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
@@ -129,18 +132,17 @@ public class ShopController {
     }
     // Add new product to the shop
     @PostMapping("/shops/{shopID}/products/new")
-    public String newProductToShop(@RequestParam String productName, @RequestParam(required = false) Double productPrize, @PathVariable long shopID) {
+    public String newProductToShop(ProductDTO productDTO, @PathVariable long shopID) {
         if(shopService.findById(shopID).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-        if (productPrize == null) {
+        if (productDTO.productName() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El precio del producto no puede estar vacío");
         }
-        if (productName.trim().isEmpty()) {
+        if (productDTO.productName().trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
-        Product product = new Product(productName, productPrize);
-        productService.saveShopInProduct(product, shopService.findById(shopID).get());
+        productService.saveShopInProduct(productDTO, shopService.findById(shopID).get());
         /*    PASAR ESTO AL PRODUCT SERVICE
         Shop shop = shopRepository.findById(shopID);
         shop.getProducts().put(product.getProductId(), product);
@@ -152,18 +154,17 @@ public class ShopController {
     }
     // Add new comment to the shop
     @PostMapping("/shops/{shopID}/comments/new")
-    public String newCommentToShop(@RequestParam String user, @RequestParam String issue,@RequestParam String message, @PathVariable long shopID) {
-        if (!user.trim().isEmpty()){
-            Optional<Shop> shop = shopService.findById(shopID);
-            if (shop.isEmpty()){
+    public String newCommentToShop(CommentDTO commentDTO, @PathVariable long shopID) {
+        if (!commentDTO.user().getName().isEmpty()){
+            Optional<ShopDTO> shopDTO = shopService.findById(shopID);
+            if (shopDTO.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
             }
-            Optional<User> useraux = userService.findByName(user);
+            Optional<User> useraux = userService.findByName(commentDTO.user().getName());
             if (useraux.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }
-            Comment comment= new Comment(useraux.get(),issue,message, shop.get());
-            shopService.saveComment(shop.get(), comment);
+            shopService.saveComment(shopDTO.get(), commentDTO);
             return "redirect:/shops/" + shopID;
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacio");

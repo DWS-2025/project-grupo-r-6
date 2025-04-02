@@ -57,14 +57,13 @@ public class CommentController {
     public String deleteComment(@RequestParam long commentId, @RequestParam long shopId) {
         if(commentService.findById(commentId).isPresent()){
             // Search the shop the comment belong to
-            Optional<Shop> shop = shopService.findById(shopId);
-            if(shop.isEmpty()){
+            Optional<ShopDTO> shopDTO = shopService.findById(shopId);
+            if(shopDTO.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
             }
-
             // Remove comment from shop hashmap
-            shop.get().getComments().remove(commentService.findById(commentId).get());
-            shopService.save(shop.get()); // Save the updated shop
+            shopService.getComments(shopDTO.get()).remove(commentService.findById(commentId).get());
+            shopService.save(shopDTO.get()); // Save the updated shop
 
             // Finally, remove the comment from the repository
             commentService.deleteById(commentId);
