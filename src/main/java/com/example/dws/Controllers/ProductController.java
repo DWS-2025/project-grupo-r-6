@@ -1,6 +1,9 @@
 package com.example.dws.Controllers;
 
 
+import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Entities.User;
@@ -36,10 +39,10 @@ public class ProductController {
 
     @GetMapping("/products/{productID}")
     public String getProductById(@PathVariable("productID") long productID,Model model) {
-        Optional<Product> product = productService.findById(productID);
-        if (product.isPresent()) {
-            model.addAttribute("product", product);
-            List<Shop> shops = shopService.findAll();
+        Optional<ProductDTO> productDTO = productService.findById(productID);
+        if (productDTO.isPresent()) {
+            model.addAttribute("product", productDTO);
+            List<ShopDTO> shops = shopService.findAll();
             model.addAttribute("shops", shops);
             return "showProduct"; // View showing shop details
         } else {
@@ -49,24 +52,24 @@ public class ProductController {
 
     @PostMapping("/products/{productID}/addShop/")
     public String addShopToProduct(@PathVariable("productID") long productID, long shopID) {
-        Optional<Product> product = productService.findById(productID);
-        if (product.isEmpty()){
+        Optional<ProductDTO> productDTO = productService.findById(productID);
+        if (productDTO.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
         }
-        Optional<Shop> shop = shopService.findById(shopID);
-        if(shop.isEmpty()) {
+        Optional<ShopDTO> shopDTO = shopService.findById(shopID);
+        if(shopDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-        productService.saveShopInProduct(product.get(), shop.get());
+        productService.saveShopInProduct(productDTO.get(), shopDTO.get());
         return "redirect:/products/" + productID;
     }
 
     // Delete product from the shops that have it and delete it from the repository
     @PostMapping("/products/{productID}/delete")
     public String deleteProduct(@PathVariable("productID") long productID){
-        Optional<Product> product = productService.findById(productID);
-        if(product.isPresent()){
-            shopService.removeProductFromAllShops(product.get());
+        Optional<ProductDTO> productDTO = productService.findById(productID);
+        if(productDTO.isPresent()){
+            shopService.removeProductFromAllShops(productDTO.get());
             productService.deleteById(productID);
             return "deleted_product";
         } else{
@@ -76,12 +79,12 @@ public class ProductController {
     // A user purchases a product and adds it to their cart
     @PostMapping("/products/{productID}/buy")
     public String buyProduct(@PathVariable("productID") long productID, @RequestParam("username") String username){
-        Optional<Product> product = productService.findById(productID);
-        if(product.isPresent()){
-            Optional<User> user = userService.findByName(username);
-            if(user.isPresent()){
-                userService.addProduct(user.get(), product.get());
-                return "redirect:/users/" + userService.getId(user.get());
+        Optional<ProductDTO> productDTO = productService.findById(productID);
+        if(productDTO.isPresent()){
+            Optional<UserDTO> userDTO = userService.findByName(username);
+            if(userDTO.isPresent()){
+                userService.addProduct(userDTO.get(), productDTO.get());
+                return "redirect:/users/" + userService.getId(userDTO.get());
             } else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }
@@ -91,19 +94,19 @@ public class ProductController {
 
     }
     @PostMapping("/products/{productId}/update/")
-    public String updateProduct(@RequestParam String productName, @RequestParam(required = false) Double productPrize, @PathVariable long productId,Model model ){
-        Optional<Product> product = productService.findById(productId);
+    public String updateProduct(ProductDTO productDTO, @PathVariable long productId,Model model ){
+        Optional<ProductDTO> product = productService.findById(productId);
         if (product.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
         }
-        if (productPrize == null) {
+        if (productDTO.productPrize()== null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El precio del producto no puede estar vacío");
         }
-        if (productName.trim().isEmpty()) {
+        if (productDTO.productName().trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
 
-        this.productService.update(product.get(),productName,productPrize);
+        this.productService.update(productId,productDTO);
         model.addAttribute("product", product);
         return "updated_product";
     }

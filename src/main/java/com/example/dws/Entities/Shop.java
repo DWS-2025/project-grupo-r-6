@@ -77,13 +77,13 @@ public class Shop {
     public List<Comment> getComments() {
         return comments;
     }
-    public void setComment(List<Comment> comments) {this.comments = comments;}
-    public List<Comment> allComments() {
-        return this.comments;
-    }
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+    public List<Comment> allComments() {
+        return this.comments;
+    }
+
 
     public Blob getImageFile() {
         return imageFile;

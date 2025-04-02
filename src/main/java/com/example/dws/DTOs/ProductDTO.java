@@ -7,7 +7,7 @@ import java.util.List;
 public record ProductDTO(
         Long id,
         String productName,
-        double productPrize,
+        Double productPrize,
         List<Shop> shops
 ) {
 }

@@ -33,6 +33,7 @@ public class ShopService {
     private GeneralMapper generalMapper;
 
     public List<ShopDTO> findAll(){
+        System.out.println(generalMapper.ToListShopDTO(shopRepository.findAll()));
         return generalMapper.ToListShopDTO(shopRepository.findAll());
     }
 

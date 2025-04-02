@@ -3,6 +3,7 @@ package com.example.dws.Controllers;
 import com.example.dws.DTOs.CommentDTO;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
@@ -106,7 +107,7 @@ public class ShopController {
 
     }
 
-    @GetMapping("/image/{shopID}")
+    @GetMapping("/shopImage/{shopID}")
     public void viewImage(@PathVariable Long shopID, HttpServletResponse response) throws SQLException, IOException {
         Blob imageBlob = shopService.getShopImage(shopID);
 
@@ -160,7 +161,7 @@ public class ShopController {
             if (shopDTO.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
             }
-            Optional<User> useraux = userService.findByName(commentDTO.user().getName());
+            Optional<UserDTO> useraux = userService.findByName(commentDTO.user().getName());
             if (useraux.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }

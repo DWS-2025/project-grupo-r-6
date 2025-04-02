@@ -42,10 +42,13 @@ public class CommentService {
         commentRepository.delete(comment);
     }*/
 
-    private CommentDTO commentToCommentDTO(Optional<Comment> comment) {
+    private CommentDTO  productToProductDTO(Optional<Comment> comment) {
         return generalMapper.commentToCommentDTO(comment.get());
     }
     private Comment commentDTOToComment(CommentDTO commentDTO) {
         return generalMapper.commentDTOToComment(commentDTO);
+    }
+    private CommentDTO commentToCommentDTO(Optional<Comment> comment){
+        return generalMapper.commentToCommentDTO(comment.get());
     }
 }

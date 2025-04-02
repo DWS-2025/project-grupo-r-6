@@ -17,6 +17,7 @@ public class Comment {
 
 
     @ManyToOne
+    @JoinColumn(name = "shop_shopid")
     private Shop shop;
 
     public Comment() {
@@ -50,6 +51,7 @@ public class Comment {
     public String getMessage() {
         return this.message;
     }
+
 
     public void setMessage(String message) {
         this.message = message;

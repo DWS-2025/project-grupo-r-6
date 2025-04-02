@@ -7,7 +7,7 @@ import java.sql.Blob;
 import java.util.List;
 
 public record ShopDTO(
-        Long id,
+        Long shopID,
         String shopName,
         List<Product> products,
         List<Comment> comments,
