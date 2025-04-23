@@ -8,9 +8,11 @@ import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.ProductRepository;
+import com.example.dws.Repositories.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -19,18 +21,33 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private GeneralMapper generalMapper;
+    @Autowired
+    private ShopRepository shopRepository;
 
 
     public Optional<ProductDTO> findById(long id) {
         return Optional.of(productToProductDTO(productRepository.findById(id)));
     }
-    public void saveShopInProduct(ProductDTO productDTO, ShopDTO shopDTO) {
+
+    public Optional<ProductDTO> findByName(String name) {
+        return Optional.of(productToProductDTO(productRepository.findByproductName(name)));
+    }
+
+
+    public void saveProductInShop(ProductDTO productDTO, ShopDTO shopDTO) {
         Product product = productDTOToProduct(productDTO);
+        if(product.getShops() == null){
+            product.setShops(new ArrayList<>());
+        }
         Shop shop = generalMapper.shopDTOToShop(shopDTO);
         if (!product.getShops().contains(shop)) {
             product.getShops().add(shop);
         }
+        if (!shop.getProducts().contains(product)) {
+            shop.getProducts().add(product);
+        }
         productRepository.save(product);
+
     }
     public void deleteById(long id){
         productRepository.deleteById(id);

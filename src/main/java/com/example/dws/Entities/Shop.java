@@ -11,7 +11,7 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long shopID;
     private String shopName;
-    @ManyToMany (mappedBy = "shops")
+    @ManyToMany(mappedBy = "shops", fetch = FetchType.EAGER)
     private List<Product> products;
     @OneToMany (mappedBy = "shop")
     private List<Comment> comments;
@@ -28,7 +28,8 @@ public class Shop {
     }
 
     public Shop() {
-
+        this.products = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
 

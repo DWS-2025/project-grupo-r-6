@@ -2,12 +2,15 @@ package com.example.dws.DTOs;
 
 import com.example.dws.Entities.Shop;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record ProductDTO(
-        Long id,
+        Long productId,
         String productName,
         Double productPrize,
-        List<Shop> shops
+        List<ShopBasicDTO> shops
 ) {
+
 }
+

@@ -20,21 +20,20 @@
     <h2>El producto se encuentra disponible en estas tiendas:</h2>
 
     <div class="shops-container">
-        {{#product.allShops}}
+        {{#product.shops}}
         <div class="shop-item">
             <a href="/shops/{{shopID}}">
-                <img src="/image/{{imageName}}" alt="{{shopName}}" class="shop-image">
                 <p>{{shopName}}</p>
             </a>
         </div>
-        {{/product.allShops}}
+        {{/product.shops}}
     </div>
     <br>
 
 
-    {{^product.allShops}}
+    {{^product.shops}}
     <p>No hay tiendas disponibles para este producto.</p>
-    {{/product.allShops}}
+    {{/product.shops}}
 
 </section>
 <br>
@@ -42,9 +41,9 @@
     <h2>Añadir Tienda</h2>
     <form action="/products/{{ product.productId }}/addShop/" method="post">
         <select name="shopID" required>
-            {{#shops}}
+            {{#allShops}}
             <option value="{{shopID}}">{{shopName}}</option>
-            {{/shops}}
+            {{/allShops}}
         </select>
         <button type="submit">Añadir Tienda</button>
     </form>

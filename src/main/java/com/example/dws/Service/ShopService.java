@@ -8,10 +8,13 @@ import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.CommentRepository;
+import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +31,8 @@ import java.util.Optional;
 public class ShopService {
     @Autowired
     private ShopRepository shopRepository;
+    @Autowired
+    private ProductRepository productRepository;
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
@@ -42,12 +48,17 @@ public class ShopService {
         return Optional.of(shopDTO);
     }
 
-    public void save(ShopDTO shopDTO){
-        shopRepository.save(shopDTOToShop(shopDTO));
+    public Optional<ShopDTO> findByName(String name){
+        Shop shop = shopRepository.findByshopName(name).get();
+        return Optional.of(generalMapper.shopToShopDTO(shop));
     }
-    public void save(Shop shop){
+
+
+    public void save(ShopDTO shopDTO){
+        Shop shop = shopDTOToShop(shopDTO);
         shopRepository.save(shop);
     }
+
 
     public void deleteById(Long id){
         shopRepository.deleteById(id);
@@ -66,10 +77,12 @@ public class ShopService {
         Shop shop= shopDTOToShop(shopDTO);
         return shop.getComments();
     }
+    @Transactional
     public void saveProduct(ShopDTO shopDTO, ProductDTO productDTO){
-        Shop shop= shopDTOToShop(shopDTO);
-        Product product= generalMapper.productDTOToProduct(productDTO);
+        Shop shop = shopDTOToShop(shopDTO);
+        Product product = generalMapper.productDTOToProduct(productDTO);
         shop.getProducts().add(product);
+        product.getShops().add(shop);
         shopRepository.save(shop);
     }
     public void removeProductFromAllShops(ProductDTO productDTO) {
@@ -79,11 +92,23 @@ public class ShopService {
         }
     }
 
-    public void save(Shop shop, MultipartFile imageFile) throws IOException {
+    public void save(ShopDTO shopDTO, MultipartFile imageFile) throws IOException {
+        Shop shop = shopDTOToShop(shopDTO);
         if(!imageFile.isEmpty()) {
             shop.setImageFile(BlobProxy.generateProxy(imageFile.getInputStream(),
                     imageFile.getSize()));
-        } this.save(shop);
+        } this.save(shopDTO);
+    }
+
+    public void saveShopWithImage(Shop shop, String imagePath) throws IOException {
+        InputStream inputStream = new ClassPathResource("/static/" + imagePath).getInputStream();
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "imageFile",
+                imagePath,
+                "image/jpeg",
+                inputStream
+        );
+        this.save(generalMapper.shopToShopDTO(shop), multipartFile);
     }
 
     public Blob getShopImage(Long shopID) {
@@ -92,7 +117,7 @@ public class ShopService {
                 .orElse(null);
     }
 
-    private ShopDTO shopToShopDTO(Optional<Shop> shop) {
+    public ShopDTO shopToShopDTO(Optional<Shop> shop) {
         return generalMapper.shopToShopDTO(shop.get());
     }
     private Shop shopDTOToShop(ShopDTO shopDTO) {

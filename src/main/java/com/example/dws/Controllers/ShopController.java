@@ -1,9 +1,6 @@
 package com.example.dws.Controllers;
 
-import com.example.dws.DTOs.CommentDTO;
-import com.example.dws.DTOs.ProductDTO;
-import com.example.dws.DTOs.ShopDTO;
-import com.example.dws.DTOs.UserDTO;
+import com.example.dws.DTOs.*;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
@@ -38,6 +35,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +50,8 @@ public class ShopController {
     private CommentService commentService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private GeneralMapper generalMapper;
 
     private static final Path IMAGES_FOLDER = Paths.get("uploads");
 
@@ -68,6 +68,8 @@ public class ShopController {
     public String getShopById(@PathVariable("shopID") long shopId, Model model) {
         Optional<ShopDTO> shopDTO = shopService.findById(shopId);
         if (shopDTO.isPresent()) {
+            System.out.println("Productos de la tienda: " + shopDTO.get().products());
+            System.out.println("Comentarios de la tienda: " + shopDTO.get().comments());
             model.addAttribute("shop", shopDTO.get());
             return "showShop"; // View showing shop details
         } else {
@@ -98,7 +100,7 @@ public class ShopController {
 
                 // Create and save the shop in the repository
                 Shop shop = new Shop(shopName, imageName);
-                shopService.save(shop, image);
+                shopService.save(shopService.shopToShopDTO(Optional.of(shop)), image);
             }
             return "redirect:/";
         } else{
@@ -143,25 +145,30 @@ public class ShopController {
         if (productDTO.productName().trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
-        productService.saveShopInProduct(productDTO, shopService.findById(shopID).get());
-        /*    PASAR ESTO AL PRODUCT SERVICE
-        Shop shop = shopRepository.findById(shopID);
-        shop.getProducts().put(product.getProductId(), product);
-        product.getShops().put(shopID, shop);
-        productRepository.save(product);
-        shopRepository.save(shop);
-         */
+
+        productService.saveProductInShop(productDTO, shopService.findById(shopID).get());
         return "redirect:/shops/" + shopID;
     }
     // Add new comment to the shop
     @PostMapping("/shops/{shopID}/comments/new")
     public String newCommentToShop(CommentDTO commentDTO, @PathVariable long shopID) {
-        if (!commentDTO.user().getName().isEmpty()){
+        if (commentDTO.user() == null) {
+            Optional<UserDTO> useraux = userService.findByName(commentDTO.user().getName());
             Optional<ShopDTO> shopDTO = shopService.findById(shopID);
             if (shopDTO.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
             }
+/*
+            // Crear comentario a partir del usuario encontrado
+            CommentDTO aux = new CommentDTO(
+                    commentDTO.commentId(),
+                    useraux.get(),
+                    commentDTO.issue(),
+                    commentDTO.message()
+            );
             Optional<UserDTO> useraux = userService.findByName(commentDTO.user().getName());
+*/
+
             if (useraux.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }

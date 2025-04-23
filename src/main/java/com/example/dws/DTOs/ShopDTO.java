@@ -9,10 +9,9 @@ import java.util.List;
 public record ShopDTO(
         Long shopID,
         String shopName,
-        List<Product> products,
-        List<Comment> comments,
-        String imageName,
-        Blob imageFile
+        List<ProductBasicDTO> products,
+        List<CommentDTO> comments,
+        String imageName
 ) {
 
 }

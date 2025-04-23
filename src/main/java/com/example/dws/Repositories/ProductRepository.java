@@ -1,5 +1,7 @@
 package com.example.dws.Repositories;
 
+import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,11 +10,14 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    Optional<Product> findByproductName(String productName);
 
     /*
     private HashMap<Long, Product> products = new HashMap<>();

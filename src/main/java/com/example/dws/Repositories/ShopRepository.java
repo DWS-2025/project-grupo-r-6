@@ -1,17 +1,22 @@
 package com.example.dws.Repositories;
 
+import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
+import com.example.dws.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public interface ShopRepository extends JpaRepository<Shop, Long> {
+
+    Optional<Shop> findByshopName(String shopName);
     /*
     private HashMap<Long, Shop> shops = new HashMap<>();  // Use Long as the key in the HashMap
     private AtomicLong nextId = new AtomicLong(0); // To generate unique IDs for the shops

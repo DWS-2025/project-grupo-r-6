@@ -17,7 +17,7 @@ public class Comment {
 
 
     @ManyToOne
-    @JoinColumn(name = "shop_shopid")
+    //@JoinColumn(name = "shop_shopid")
     private Shop shop;
 
     public Comment() {
@@ -65,4 +65,11 @@ public class Comment {
         this.commentId = id;
     }
 
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
+    }
 }

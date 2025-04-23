@@ -8,6 +8,6 @@ public record UserDTO(
         Long id,
         String name,
         String email,
-        List<Product> products
+        List<ProductDTO> userProducts
 ) {
 }

@@ -2,6 +2,7 @@ package com.example.dws.Controllers;
 
 
 import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.ShopBasicDTO;
 import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Product;
@@ -41,8 +42,8 @@ public class ProductController {
     public String getProductById(@PathVariable("productID") long productID,Model model) {
         Optional<ProductDTO> productDTO = productService.findById(productID);
         if (productDTO.isPresent()) {
-            model.addAttribute("product", productDTO);
-            List<ShopDTO> shops = shopService.findAll();
+            model.addAttribute("product", productDTO.get());
+            List<ShopBasicDTO> shops = productDTO.get().shops();
             model.addAttribute("shops", shops);
             return "showProduct"; // View showing shop details
         } else {
@@ -60,7 +61,7 @@ public class ProductController {
         if(shopDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-        productService.saveShopInProduct(productDTO.get(), shopDTO.get());
+        productService.saveProductInShop(productDTO.get(), shopDTO.get());
         return "redirect:/products/" + productID;
     }
 

@@ -19,7 +19,7 @@ public class Product {
 
     private double productPrize;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Shop> shops;
 
     public Product(String productName, double productPrize) {
@@ -29,7 +29,7 @@ public class Product {
     }
 
     public Product() {
-
+        this.shops = new ArrayList<>();
     }
 
     public void deleteShop(Shop shop){
