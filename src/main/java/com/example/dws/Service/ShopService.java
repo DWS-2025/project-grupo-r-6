@@ -59,6 +59,10 @@ public class ShopService {
         shopRepository.save(shop);
     }
 
+    public void save(Shop shop){
+        shopRepository.save(shop);
+    }
+
 
     public void deleteById(Long id){
         shopRepository.deleteById(id);
@@ -97,19 +101,24 @@ public class ShopService {
         if(!imageFile.isEmpty()) {
             shop.setImageFile(BlobProxy.generateProxy(imageFile.getInputStream(),
                     imageFile.getSize()));
-        } this.save(shopDTO);
+        } this.save(shop);
     }
 
     public void saveShopWithImage(Shop shop, String imagePath) throws IOException {
-        InputStream inputStream = new ClassPathResource("/static/" + imagePath).getInputStream();
+        ClassPathResource resource = new ClassPathResource("static/" + imagePath);
+        InputStream inputStream = resource.getInputStream();
+
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "imageFile",
                 imagePath,
                 "image/jpeg",
                 inputStream
         );
+
+
         this.save(generalMapper.shopToShopDTO(shop), multipartFile);
     }
+
 
     public Blob getShopImage(Long shopID) {
         return shopRepository.findById(shopID)

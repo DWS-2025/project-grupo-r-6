@@ -51,13 +51,7 @@ public class DataBaseInit implements CommandLineRunner {
         Shop shop1=new Shop("PullAndCow", "Pull");
         Shop shop2=new Shop("Bresh", "Bershka");
         Shop shop3=new Shop("Zaro", "Zara");
-/*
-        ClassPathResource img1 = new ClassPathResource("static/Pull.jpg");
-        ClassPathResource img2 = new ClassPathResource("static/Bresh.jpg");
-        ClassPathResource img3 = new ClassPathResource("static/Zaro.jpg");
 
-
- */
         shopService.saveShopWithImage(shop1, "Pull.jpg");
         shopService.saveShopWithImage(shop2, "Bresh.jpg");
         shopService.saveShopWithImage(shop3, "Zaro.jpg");

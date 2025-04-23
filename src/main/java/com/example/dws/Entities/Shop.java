@@ -32,6 +32,13 @@ public class Shop {
         this.comments = new ArrayList<>();
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
 
     public void setImageFile(Blob imageFile) {
         this.imageFile = imageFile;
