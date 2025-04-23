@@ -37,6 +37,8 @@ public class ShopService {
     private CommentRepository commentRepository;
     @Autowired
     private GeneralMapper generalMapper;
+    @Autowired
+    private UserService userService;
 
     public List<ShopDTO> findAll(){
         System.out.println(generalMapper.ToListShopDTO(shopRepository.findAll()));
@@ -72,9 +74,11 @@ public class ShopService {
     public void saveComment(ShopDTO shopDTO, CommentDTO commentDTO){
         Shop shop= shopDTOToShop(shopDTO);
         Comment comment= generalMapper.commentDTOToComment(commentDTO);
-        shop.getComments().add(comment);
+        comment.setUser(userService.getLoggedUser());
         commentRepository.save(comment);
+        shop.getComments().add(comment);
         shopRepository.save(shop);
+
     }
 
     public List<Comment> getComments(ShopDTO shopDTO){

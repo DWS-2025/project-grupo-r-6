@@ -88,14 +88,10 @@ public class DataBaseInit implements CommandLineRunner {
         productService.saveProductInShop(productService.findByName("Camiseta").get(), shopService.findByName("Zaro").get());
         
         Shop shop = generalMapper.shopDTOToShop(shopService.findByName("PullAndCow").get());
-        Comment comment= new Comment(user1, "Atención Al Cliente", "Tuve una excelente experiencia con el servicio al cliente. Fueron muy amables y me ayudaron a encontrar lo que buscaba. ¡Muy satisfecho!", shop);
+        Comment comment= new Comment(user1, "Atención Al Cliente", "Tuve una excelente experiencia con el servicio al cliente. Fueron muy amables y me ayudaron a encontrar lo que buscaba. ¡Muy satisfecho!");
+        shop.getComments().add(comment);
         commentService.save(comment);
-        // shop.getComments().add(comment);
-
-
-
-
-
+        shopService.save(generalMapper.shopToShopDTO(shop));
 
     }
 

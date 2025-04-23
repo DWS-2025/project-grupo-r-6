@@ -46,9 +46,9 @@ public class CommentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
         if (comment.isPresent()) {
-            model.addAttribute("comment", comment);
-            model.addAttribute("shop", shop);
-            return "showComment"; // View showing shop details
+            model.addAttribute("comment", comment.get());
+            model.addAttribute("shop", shop.get());
+            return "showComment";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
         }
