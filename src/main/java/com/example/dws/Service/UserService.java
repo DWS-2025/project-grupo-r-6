@@ -25,9 +25,13 @@ public class UserService {
     public Optional<UserDTO> findById(long id) {
         return (Optional.of(userToUserDTO(userRepository.findById(id))));
     }
+
     public void save(UserDTO userDTO) {
         User user = userDTOToUser(userDTO);
         userRepository.save(user);
+    }
+    public User getLoggedUser() {
+        return userRepository.findAll().get(0);
     }
 
     public void save(User user){

@@ -152,30 +152,12 @@ public class ShopController {
     // Add new comment to the shop
     @PostMapping("/shops/{shopID}/comments/new")
     public String newCommentToShop(CommentDTO commentDTO, @PathVariable long shopID) {
-        if (commentDTO.user() == null) {
-            Optional<UserDTO> useraux = userService.findByName(commentDTO.user().getName());
             Optional<ShopDTO> shopDTO = shopService.findById(shopID);
-            if (shopDTO.isEmpty()){
+            if (shopDTO.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
-            }
-/*
-            // Crear comentario a partir del usuario encontrado
-            CommentDTO aux = new CommentDTO(
-                    commentDTO.commentId(),
-                    useraux.get(),
-                    commentDTO.issue(),
-                    commentDTO.message()
-            );
-            Optional<UserDTO> useraux = userService.findByName(commentDTO.user().getName());
-*/
-
-            if (useraux.isEmpty()){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }
             shopService.saveComment(shopDTO.get(), commentDTO);
             return "redirect:/shops/" + shopID;
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacio");
     }
 }
 

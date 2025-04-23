@@ -9,26 +9,22 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long commentId;
-    @OneToOne
+    private Long commentId;
+    @ManyToOne
     private User user;
     private String issue;
     private String message;
 
 
-    @ManyToOne
-    //@JoinColumn(name = "shop_shopid")
-    private Shop shop;
 
     public Comment() {
 
     }
 
-    public Comment(User user, String issue, String message, Shop shop) {
+    public Comment(User user, String issue, String message) {
         this.user = user;
         this.issue = issue;
         this.message = message;
-        this.shop = shop;
     }
 
 
@@ -65,11 +61,4 @@ public class Comment {
         this.commentId = id;
     }
 
-    public Shop getShop() {
-        return shop;
-    }
-
-    public void setShop(Shop shop) {
-        this.shop = shop;
-    }
 }
