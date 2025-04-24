@@ -52,6 +52,17 @@ public class DataBaseInit implements CommandLineRunner {
         Shop shop2=new Shop("Bresh", "Bershka");
         Shop shop3=new Shop("Zaro", "Zara");
 
+        User user = new User("Adri", "adri@gmail.com");
+        UserDTO userDTO = generalMapper.userToUserDTO(user);
+        userService.save(userDTO);
+
+        UserDTO userDTO1 = userService.findByName("Adri").get();
+        User user1 = generalMapper.userDTOToUser(userDTO1);
+
+        Comment comment= new Comment(user1, "Atención Al Cliente", "Tuve una excelente experiencia con el servicio al cliente. Fueron muy amables y me ayudaron a encontrar lo que buscaba. ¡Muy satisfecho!");
+        shop1.getComments().add(comment);
+        commentService.save(comment);
+
         shopService.saveShopWithImage(shop1, "Pull.jpg");
         shopService.saveShopWithImage(shop2, "Bresh.jpg");
         shopService.saveShopWithImage(shop3, "Zaro.jpg");
@@ -73,12 +84,7 @@ public class DataBaseInit implements CommandLineRunner {
         productService.save(productDTO2);
         productService.save(productDTO3);
 
-        User user = new User("Adri", "adri@gmail.com");
-        UserDTO userDTO = generalMapper.userToUserDTO(user);
-        userService.save(userDTO);
 
-        UserDTO userDTO1 = userService.findByName("Adri").get();
-        User user1 = generalMapper.userDTOToUser(userDTO1);
 
         productService.saveProductInShop(productService.findByName("Camiseta").get(), shopService.findByName("PullAndCow").get());
         productService.saveProductInShop(productService.findByName("Sudadera").get(), shopService.findByName("PullAndCow").get());
@@ -86,12 +92,7 @@ public class DataBaseInit implements CommandLineRunner {
         productService.saveProductInShop(productService.findByName("Camiseta").get(), shopService.findByName("Bresh").get());
         productService.saveProductInShop(productService.findByName("Sudadera").get(), shopService.findByName("Bresh").get());
         productService.saveProductInShop(productService.findByName("Camiseta").get(), shopService.findByName("Zaro").get());
-        
-        Shop shop = generalMapper.shopDTOToShop(shopService.findByName("PullAndCow").get());
-        Comment comment= new Comment(user1, "Atención Al Cliente", "Tuve una excelente experiencia con el servicio al cliente. Fueron muy amables y me ayudaron a encontrar lo que buscaba. ¡Muy satisfecho!");
-        shop.getComments().add(comment);
-        commentService.save(comment);
-        shopService.save(generalMapper.shopToShopDTO(shop));
+
 
     }
 

@@ -1,10 +1,7 @@
 package com.example.dws.Controllers;
 
 
-import com.example.dws.DTOs.ProductDTO;
-import com.example.dws.DTOs.ShopBasicDTO;
-import com.example.dws.DTOs.ShopDTO;
-import com.example.dws.DTOs.UserDTO;
+import com.example.dws.DTOs.*;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Entities.User;
@@ -45,6 +42,8 @@ public class ProductController {
             model.addAttribute("product", productDTO.get());
             List<ShopBasicDTO> shops = productDTO.get().shops();
             model.addAttribute("shops", shops);
+            List<ShopDTO> allShops = shopService.findAll();
+            model.addAttribute("allShops", allShops);
             return "showProduct"; // View showing shop details
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El prodcuto seleccionado no existe");// Error view if shop not found
@@ -61,7 +60,16 @@ public class ProductController {
         if(shopDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-        productService.saveProductInShop(productDTO.get(), shopDTO.get());
+        boolean alreadyAdded = false;
+        for (ProductBasicDTO p : shopDTO.get().products()) {
+            if (p.productId() == productID) {
+                alreadyAdded = true;
+                break;
+            }
+        }
+        if (!alreadyAdded) {
+            productService.saveProductInShop(productDTO.get(), shopDTO.get());
+        }
         return "redirect:/products/" + productID;
     }
 
@@ -79,16 +87,11 @@ public class ProductController {
     }
     // A user purchases a product and adds it to their cart
     @PostMapping("/products/{productID}/buy")
-    public String buyProduct(@PathVariable("productID") long productID, @RequestParam("username") String username){
+    public String buyProduct(@PathVariable("productID") long productID){
         Optional<ProductDTO> productDTO = productService.findById(productID);
         if(productDTO.isPresent()){
-            Optional<UserDTO> userDTO = userService.findByName(username);
-            if(userDTO.isPresent()){
-                userService.addProduct(userDTO.get(), productDTO.get());
-                return "redirect:/users/" + userService.getId(userDTO.get());
-            } else{
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
-            }
+            Long id = userService.addProduct(productDTO.get());
+            return "redirect:/users/" + id;
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
         }

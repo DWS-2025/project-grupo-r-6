@@ -23,6 +23,7 @@
         {{#product.shops}}
         <div class="shop-item">
             <a href="/shops/{{shopID}}">
+                <img src="/shopImage/{{shopID}}" alt="{{shopName}}" class="shop-image">
                 <p>{{shopName}}</p>
             </a>
         </div>
@@ -59,7 +60,6 @@
 <section>
     <h2>Comprar Producto</h2>
     <form action="/products/{{ product.productId }}/buy" method="post">
-        <input type="text" id="username" name="username" placeholder="Nombre de Usuario">
         <button type="submit">Comprar Producto</button>
     </form>
 </section>

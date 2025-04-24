@@ -14,13 +14,13 @@
     <div class="cart-text">
         <h1>Carrito de: {{user.name}}</h1>
         <h3>Lista de Productos</h3>
-        {{#user.allProducts}}
+        {{#allProducts}}
         <a href="/products/{{productId}}" class="link-select">{{productName}} {{productPrize}}</a><br>
-        {{/user.allProducts}}
+        {{/allProducts}}
 
-        {{^user.allProducts}}
+        {{^allProducts}}
         <p>No hay productos en el carrito todavía.</p>
-        {{/user.allProducts}}
+        {{/allProducts}}
     </div>
 </section>
 

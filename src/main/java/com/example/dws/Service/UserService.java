@@ -42,10 +42,14 @@ public class UserService {
         return ToListUserID(userRepository.findAll());
     }
 
-    public void addProduct(UserDTO userDTO,ProductDTO productDTO) {
-        User user = userDTOToUser(userDTO);
+    public Long addProduct(ProductDTO productDTO) {
+        User user = this.getLoggedUser();
         Product product = generalMapper.productDTOToProduct(productDTO);
-        user.addProduct(product);
+        if(!user.allProducts().contains(product)){
+            user.addProduct(product);
+            this.save(user);
+        }
+        return user.getId();
     }
     public Long getId(UserDTO userDTO) {
         return userDTOToUser(userDTO).getId();

@@ -11,7 +11,8 @@ public record ShopDTO(
         String shopName,
         List<ProductBasicDTO> products,
         List<CommentDTO> comments,
-        String imageName
+        String imageName,
+        Blob imageFile
 ) {
 
 }
