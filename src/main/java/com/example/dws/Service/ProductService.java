@@ -64,11 +64,18 @@ public class ProductService {
         productRepository.save(oldProduct.get());
     }
     public void removeShopFromAllProducts(ShopDTO shopDTO) {
-        Shop shop = generalMapper.shopDTOToShop(shopDTO);
-        for (Product product : productRepository.findAll()) {
-            product.getShops().remove(shop);
+        Optional<Shop> optionalShop = shopRepository.findById(shopDTO.shopID());
+        if (optionalShop.isPresent()) {
+            Shop shop = optionalShop.get();
+            for (Product product : productRepository.findAll()) {
+                if (product.getShops().contains(shop)) {
+                    product.getShops().remove(shop);
+                    productRepository.save(product);
+                }
+            }
         }
     }
+
 
     private ProductDTO  productToProductDTO(Optional<Product> product) {
         return generalMapper.productToProductDTO(product.get());

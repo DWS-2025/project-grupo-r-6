@@ -129,6 +129,8 @@ public class ShopController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         } else{
             productService.removeShopFromAllProducts(shopService.findById(shopID).get());
+            shopService.removeAllProductsFromShop(shopID);
+            shopService.removeAllCommentsFromShop(shopID);
             shopService.deleteById(shopID); // Remove the shop by its ID
             return "redirect:/"; // Redirect to shop list
         }

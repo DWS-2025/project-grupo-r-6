@@ -51,6 +51,24 @@ public class UserService {
         }
         return user.getId();
     }
+
+    public void removeProductFromUser(ProductDTO productDTO){
+        User user = this.getLoggedUser();
+        Product toRemove = null;
+
+        for (Product p : user.allProducts()) {
+            if (p.getProductId() == productDTO.productId()) {
+                toRemove = p;
+                break;
+            }
+        }
+
+        if (toRemove != null) {
+            user.allProducts().remove(toRemove);
+            userRepository.save(user);
+        }
+    }
+
     public Long getId(UserDTO userDTO) {
         return userDTOToUser(userDTO).getId();
     }

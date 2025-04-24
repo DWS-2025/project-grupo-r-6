@@ -79,6 +79,7 @@ public class ProductController {
         Optional<ProductDTO> productDTO = productService.findById(productID);
         if(productDTO.isPresent()){
             shopService.removeProductFromAllShops(productDTO.get());
+            userService.removeProductFromUser(productDTO.get());
             productService.deleteById(productID);
             return "deleted_product";
         } else{
@@ -100,7 +101,7 @@ public class ProductController {
     @PostMapping("/products/{productId}/update/")
     public String updateProduct(ProductDTO productDTO, @PathVariable long productId,Model model ){
         Optional<ProductDTO> product = productService.findById(productId);
-        if (product.isPresent()) {
+        if (product.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El producto seleccionado no existe");
         }
         if (productDTO.productPrize()== null) {
@@ -111,7 +112,7 @@ public class ProductController {
         }
 
         this.productService.update(productId,productDTO);
-        model.addAttribute("product", product);
+        model.addAttribute("product", product.get());
         return "updated_product";
     }
 

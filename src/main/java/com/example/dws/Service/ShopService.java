@@ -123,6 +123,18 @@ public class ShopService {
         this.save(generalMapper.shopToShopDTO(shop), multipartFile);
     }
 
+    public void removeAllProductsFromShop(long shopID){
+        Optional<Shop> shop = shopRepository.findById(shopID);
+        shop.get().getProducts().clear();
+        shopRepository.save(shop.get());
+    }
+
+    public void removeAllCommentsFromShop(long shopID){
+        Optional<Shop> shop = shopRepository.findById(shopID);
+        shop.get().getComments().clear();
+        shopRepository.save(shop.get());
+    }
+
 
     public Blob getShopImage(Long shopID) {
         return shopRepository.findById(shopID)
