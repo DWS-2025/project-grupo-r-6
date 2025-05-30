@@ -71,15 +71,21 @@ public class ShopService {
     }
 
     @Transactional
-    public void saveComment(ShopDTO shopDTO, CommentDTO commentDTO){
-        Shop shop= shopDTOToShop(shopDTO);
-        Comment comment= generalMapper.commentDTOToComment(commentDTO);
+    public void saveComment(ShopDTO shopDTO, CommentDTO commentDTO) {
+        Optional<Shop> optionalShop = shopRepository.findById(shopDTO.shopID());
+        if (optionalShop.isEmpty()) {
+            throw new RuntimeException("La tienda no existe");
+        }
+        Shop shop = optionalShop.get();
+
+        Comment comment = generalMapper.commentDTOToComment(commentDTO);
         comment.setUser(userService.getLoggedUser());
         commentRepository.save(comment);
+
         shop.getComments().add(comment);
         shopRepository.save(shop);
-
     }
+
 
     public List<Comment> getComments(ShopDTO shopDTO){
         Shop shop= shopDTOToShop(shopDTO);

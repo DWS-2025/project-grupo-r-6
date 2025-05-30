@@ -3,6 +3,8 @@ import java.util.Optional;
 
 import com.example.dws.DTOs.CommentDTO;
 import com.example.dws.DTOs.GeneralMapper;
+import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ import com.example.dws.DTOs.GeneralMapper;
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private ShopRepository shopRepository;
 
     @Autowired
     private UserService userService;
@@ -33,14 +38,13 @@ public class CommentService {
     public void save(Comment comment) {
         commentRepository.save(comment);
     }
-    public void deleteById(long id) {
-        commentRepository.deleteById(id);
+    public void delete(long commentID, long shopID) {
+        Optional<Comment> comment = commentRepository.findById(commentID);
+        Optional<Shop> shop = shopRepository.findById(shopID);
+        shop.get().getComments().remove(comment.get());
+        shopRepository.save(shop.get());
+        commentRepository.deleteById(commentID);
     }
-    /*public void delete(Long commentId, Shop shop) {
-        Comment comment = this.findById(commentId).get();
-        shop.getComments().remove(comment);
-        commentRepository.delete(comment);
-    }*/
 
     private CommentDTO  productToProductDTO(Optional<Comment> comment) {
         return generalMapper.commentToCommentDTO(comment.get());
@@ -50,5 +54,9 @@ public class CommentService {
     }
     private CommentDTO commentToCommentDTO(Optional<Comment> comment){
         return generalMapper.commentToCommentDTO(comment.get());
+    }
+
+    private Shop shopDTOToShop(ShopDTO shopDTO) {
+        return generalMapper.shopDTOToShop(shopDTO);
     }
 }

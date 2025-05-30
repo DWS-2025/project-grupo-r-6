@@ -12,7 +12,7 @@ public record ShopDTO(
         List<ProductBasicDTO> products,
         List<CommentDTO> comments,
         String imageName,
-        Blob imageFile
+        String imageUrl
 ) {
 
 }
