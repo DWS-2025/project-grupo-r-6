@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,6 +26,12 @@ public class ProductRestController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        List<ProductDTO> productDTOS = productService.findAll();
+        return ResponseEntity.ok(productDTOS);
+    }
 
     // GET a product by ID
     @GetMapping("/{productID}")
@@ -79,10 +86,10 @@ public class ProductRestController {
     }
 
     // POST add shop to product
-    @PostMapping("/{productID}/addShop")
+    @PostMapping("/{productID}/addShop/{shopID}")
     public ResponseEntity<String> addShopToProduct(
             @PathVariable long productID,
-            @RequestParam long shopID
+            @PathVariable long shopID
     ) {
         Optional<ProductDTO> productDTO = productService.findById(productID);
         if (productDTO.isEmpty()) {
@@ -95,6 +102,7 @@ public class ProductRestController {
         productService.saveProductInShop(productDTO.get(), shopDTO.get());
         return ResponseEntity.status(HttpStatus.CREATED).body("Tienda añadida al producto correctamente");
     }
+
 
     // POST buy product (adds to logged‐in user's cart)
     @PostMapping("/{productID}/buy")

@@ -1,7 +1,9 @@
 package com.example.dws.RestControllers;
 
+import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.UserDTO;
+import com.example.dws.Entities.Product;
 import com.example.dws.Entities.User;
 import com.example.dws.Service.UserService;
 import com.example.dws.Service.ProductService;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +30,8 @@ public class UserRestController {
 
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private GeneralMapper generalMapper;
 
     // GET all users
     @GetMapping
@@ -46,18 +51,21 @@ public class UserRestController {
     }
 
     // GET logged‐in user's shopping cart
-    @GetMapping("/me/cart")
+    @GetMapping("/loggedUserCart")
     public ResponseEntity<List<ProductDTO>> getLoggedUserCart() {
         User logged = userService.getLoggedUser();
-        // Convertir la lista de Product a ProductDTO
-        List<ProductDTO> cartDTOs = logged.allProducts().stream()
-                .map(productService::findById)      // Obtenemos Optional<ProductDTO>
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+        List<ProductDTO> cartDTOs = new ArrayList<>();
+
+        for (Product product : logged.allProducts()) {
+            Optional<ProductDTO> optionalProductDTO = productService.findById(product.getProductId());
+            if (optionalProductDTO.isPresent()) {
+                cartDTOs.add(optionalProductDTO.get());
+            }
+        }
         return ResponseEntity.ok(cartDTOs);
     }
 
+/*
     // POST create new user
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
@@ -114,5 +122,7 @@ public class UserRestController {
         userService.removeProductFromUser(existing.get());
         return ResponseEntity.ok("Producto eliminado del carrito del usuario logueado");
     }
+    
+ */
 }
 

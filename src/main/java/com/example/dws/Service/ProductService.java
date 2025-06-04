@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,9 @@ public class ProductService {
     @Autowired
     private ShopRepository shopRepository;
 
+    public List<ProductDTO> findAll(){
+        return generalMapper.ToListProductDTO(productRepository.findAll());
+    }
 
     public Optional<ProductDTO> findById(long id) {
         return Optional.of(productToProductDTO(productRepository.findById(id)));

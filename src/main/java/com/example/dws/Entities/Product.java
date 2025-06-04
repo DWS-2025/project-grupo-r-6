@@ -71,4 +71,5 @@ public class Product {
     public void setShops(List<Shop> shops) {
         this.shops = shops;
     }
+
 }

@@ -1,9 +1,8 @@
 package com.example.dws.Service;
+import java.util.List;
 import java.util.Optional;
 
-import com.example.dws.DTOs.CommentDTO;
-import com.example.dws.DTOs.GeneralMapper;
-import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.DTOs.*;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,10 @@ public class CommentService {
     private UserService userService;
     @Autowired
     private GeneralMapper generalMapper;
+
+    public List<CommentDTO> findAll(){
+        return generalMapper.ToListCommentDTO(commentRepository.findAll());
+    }
 
     public Optional<CommentDTO> findById(long id) {
         CommentDTO commentDTO= commentToCommentDTO(commentRepository.findById(id));
