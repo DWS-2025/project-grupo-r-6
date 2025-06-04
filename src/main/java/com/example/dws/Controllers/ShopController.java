@@ -123,8 +123,8 @@ public class ShopController {
     }
 
     // Delete the shop of the products that have it assigned and the shop is deleted
-    @PostMapping("/delete")
-    public String deleteShop(@RequestParam long shopID) {
+    @PostMapping("/shops/{shopID}/delete")
+    public String deleteShop(@PathVariable long shopID) {
         if(shopService.findById(shopID).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         } else{

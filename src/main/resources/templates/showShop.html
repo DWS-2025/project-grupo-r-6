@@ -57,17 +57,11 @@
     </form>
 </section>
 
+
 <section>
-    <h2>Eliminar Comentario</h2>
-    <form action="/deleteComment" method="post">
-        <input type="hidden" name="shopId" value="{{shop.shopID}}">
-        <select name="commentId" required>
-            <option value="" disabled selected>Selecciona un comentario</option>
-            {{#shop.comments}}
-            <option value="{{commentId}}">{{issue}}</option>
-            {{/shop.comments}}
-        </select>
-        <button type="submit">Eliminar</button>
+    <h2>Eliminar Tienda</h2>
+    <form action="/shops/{{ shop.shopID }}/delete" method="post">
+        <button type="submit"> Eliminar </button>
     </form>
 </section>
 

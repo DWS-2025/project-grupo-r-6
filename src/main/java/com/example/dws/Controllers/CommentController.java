@@ -53,8 +53,8 @@ public class CommentController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
         }
     }
-    @PostMapping("/deleteComment")
-    public String deleteComment(@RequestParam long commentId, @RequestParam long shopId) {
+    @PostMapping("/comments/{shopId}/{commentId}/deleteComment")
+    public String deleteComment(@PathVariable long commentId, @PathVariable long shopId) {
         if(commentService.findById(commentId).isPresent()){
             Optional<ShopDTO> shopDTO = shopService.findById(shopId);
             if(shopDTO.isEmpty()){

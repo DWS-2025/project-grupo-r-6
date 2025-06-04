@@ -39,18 +39,7 @@
     </form>
 </section>
 
-<section>
-    <h2>Eliminar Tienda</h2>
-    <form action="/delete" method="post">
-        <select name="shopID" required>
-            <option value="" disabled selected>Selecciona una tienda</option>
-            {{#shops}}
-            <option value="{{shopID}}">{{shopName}}</option>
-            {{/shops}}
-        </select>
-        <button type="submit">Eliminar</button>
-    </form>
-</section>
+
 
 <section>
     <h2>Ver Mi Carrito</h2>
