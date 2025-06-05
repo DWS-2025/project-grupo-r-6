@@ -122,7 +122,7 @@ public class UserRestController {
         userService.removeProductFromUser(existing.get());
         return ResponseEntity.ok("Producto eliminado del carrito del usuario logueado");
     }
-    
+
  */
 }
 

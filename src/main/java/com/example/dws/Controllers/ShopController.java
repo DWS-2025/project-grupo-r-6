@@ -18,6 +18,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,15 +67,27 @@ public class ShopController {
         return "index"; // View showing all the shops
     }
 
-    // View details of a shop by its ID
     @GetMapping("/shops/{shopID}")
-    public String getShopById(@PathVariable("shopID") long shopId, Model model) {
+    public String getShopById(@PathVariable("shopID") long shopId,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "2") int size,
+                              Model model) {
+
         Optional<ShopDTO> shopDTO = shopService.findById(shopId);
         if (shopDTO.isPresent()) {
-            System.out.println("Productos de la tienda: " + shopDTO.get().products());
-            System.out.println("Comentarios de la tienda: " + shopDTO.get().comments());
+            Pageable pageable = PageRequest.of(page, size, Sort.by("commentId").descending());
+            Page<CommentDTO> pagedComments = shopService.paginateShopComments(shopDTO.get(), pageable);
             model.addAttribute("shop", shopDTO.get());
-            return "showShop"; // View showing shop details
+            model.addAttribute("pagedComments", pagedComments);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", pagedComments.getTotalPages());
+            int prevPage = page > 0 ? page - 1 : 0;
+            int nextPage = page < pagedComments.getTotalPages() - 1 ? page + 1 : page;
+
+            model.addAttribute("prevPage", page > 0 ? prevPage : null);
+            model.addAttribute("nextPage", page < pagedComments.getTotalPages() - 1 ? nextPage : null);
+
+            return "showShop";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }

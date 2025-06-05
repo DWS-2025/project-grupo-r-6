@@ -63,6 +63,26 @@ public class DataBaseInit implements CommandLineRunner {
         shop1.getComments().add(comment);
         commentService.save(comment);
 
+        Comment comment1 = new Comment(user1, "Producto Dañado", "El producto llegó con un desperfecto en la carcasa. Solicito un reemplazo lo antes posible.");
+        shop1.getComments().add(comment1);
+        commentService.save(comment1);
+
+        Comment comment2 = new Comment(user1, "Entrega Rápida", "Me sorprendió lo rápido que llegó el pedido. En menos de 24 horas lo tenía en casa. ¡Excelente servicio!");
+        shop1.getComments().add(comment2);
+        commentService.save(comment2);
+
+        Comment comment3 = new Comment(user1, "Error en el Pedido", "Recibí un producto diferente al que pedí. Espero que puedan corregirlo pronto.");
+        shop1.getComments().add(comment3);
+        commentService.save(comment3);
+
+        Comment comment4 = new Comment(user1, "Recomendado", "Buena calidad, buen precio y atención rápida. Recomiendo esta tienda.");
+        shop1.getComments().add(comment4);
+        commentService.save(comment4);
+
+        Comment comment5 = new Comment(user1, "Problemas con el Pago", "Tuve dificultades para completar el pago con tarjeta. El sistema daba error constantemente.");
+        shop1.getComments().add(comment5);
+        commentService.save(comment5);
+
         shopService.saveShopWithImage(shop1, "Pull.jpg");
         shopService.saveShopWithImage(shop2, "Bresh.jpg");
         shopService.saveShopWithImage(shop3, "Zaro.jpg");

@@ -5,7 +5,9 @@ import java.util.Optional;
 import com.example.dws.DTOs.*;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.dws.Entities.Comment;
@@ -34,6 +36,8 @@ public class CommentService {
         CommentDTO commentDTO= commentToCommentDTO(commentRepository.findById(id));
         return Optional.of(commentDTO);
     }
+
+
 
     public void save(CommentDTO commentDTO) {
         commentRepository.save(commentDTOToComment(commentDTO));

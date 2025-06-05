@@ -12,6 +12,9 @@ import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.engine.jdbc.BlobProxy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
@@ -91,6 +94,19 @@ public class ShopService {
         Shop shop= shopDTOToShop(shopDTO);
         return shop.getComments();
     }
+
+    public Page<CommentDTO> paginateShopComments(ShopDTO shopDTO, Pageable pageable) {
+        List<CommentDTO> allComments = shopDTO.comments(); // Lista completa
+
+        int total = allComments.size();
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), total);
+
+        List<CommentDTO> paginatedList = allComments.subList(start, end);
+
+        return new PageImpl<>(paginatedList, pageable, total);
+    }
+
     @Transactional
     public void saveProduct(ShopDTO shopDTO, ProductDTO productDTO){
         Shop shop = shopDTOToShop(shopDTO);

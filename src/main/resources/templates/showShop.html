@@ -30,12 +30,22 @@
 <br>
 <section>
     <h2>Comentarios</h2>
-    {{#shop.comments}}
+    {{#pagedComments.content}}
     <a href="/comments/{{shop.shopID}}/{{commentId}}" class="comment-select">Asunto: {{issue}}</a><br>
-    {{/shop.comments}}
-    {{^shop.comments}}
+    {{/pagedComments.content}}
+    {{^pagedComments.content}}
     <p>No hay comentarios aún.</p>
-    {{/shop.comments}}
+    {{/pagedComments.content}}
+
+    <div class="pagination">
+        {{#prevPage}}
+        <a href="/shops/{{shop.shopID}}?page={{prevPage}}&size=2">&laquo; Anterior</a>
+        {{/prevPage}}
+        Página {{currentPage}} de {{totalPages}}
+        {{#nextPage}}
+        <a href="/shops/{{shop.shopID}}?page={{nextPage}}&size=2">Siguiente &raquo;</a>
+        {{/nextPage}}
+    </div>
 </section>
 <br>
 
