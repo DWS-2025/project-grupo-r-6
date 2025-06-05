@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Listado de Productos</title>
+</head>
+<body>
+
+<section>
+  <h2>Productos</h2>
+
+  {{#products}}
+  <a href="/products/{{productId}}" class="link-select">{{productName}}</a><br>
+  {{/products}}
+
+  {{^products}}
+  <p>No hay productos aún.</p>
+  {{/products}}
+</section>
+
+</body>
+</html>

@@ -1,11 +1,16 @@
 package com.example.dws.RestControllers;
 
 import com.example.dws.DTOs.CommentDTO;
+import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.Entities.Comment;
 import com.example.dws.Service.CommentService;
 import com.example.dws.Service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +28,24 @@ public class CommentRestController {
 
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private GeneralMapper generalMapper;
 
     @GetMapping
-    public ResponseEntity<List<CommentDTO>> getAllProducts() {
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
         List<CommentDTO> commentDTOs = commentService.findAll();
         return ResponseEntity.ok(commentDTOs);
+    }
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<CommentDTO>> getPaginatedComments(
+                                                 @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "2") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> commentPage = commentService.findAllPaginated(pageable);
+
+        Page<CommentDTO> commentDTOPage = commentPage.map(generalMapper::commentToCommentDTO);
+
+        return ResponseEntity.ok(commentDTOPage);
     }
 
     // GET a specific comment by shop‐ID and comment‐ID

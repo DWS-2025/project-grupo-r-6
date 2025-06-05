@@ -5,8 +5,10 @@ import java.util.Optional;
 import com.example.dws.DTOs.*;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
-import org.hibernate.query.Page;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +63,22 @@ public class CommentService {
     }
     private CommentDTO commentToCommentDTO(Optional<Comment> comment){
         return generalMapper.commentToCommentDTO(comment.get());
+    }
+
+    public Page<CommentDTO> paginateShopComments(ShopDTO shopDTO, Pageable pageable) {
+        List<CommentDTO> allComments = shopDTO.comments(); // Lista completa
+
+        int total = allComments.size();
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), total);
+
+        List<CommentDTO> paginatedList = allComments.subList(start, end);
+
+        return new PageImpl<>(paginatedList, pageable, total);
+    }
+
+    public Page<Comment> findAllPaginated(Pageable pageable){
+        return commentRepository.findAll(pageable);
     }
 
     private Shop shopDTOToShop(ShopDTO shopDTO) {
