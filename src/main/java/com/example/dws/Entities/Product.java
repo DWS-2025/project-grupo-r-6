@@ -22,6 +22,9 @@ public class Product {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Shop> shops;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
+
     public Product(String productName, double productPrize) {
         this.productName = productName;
         this.productPrize = productPrize;
@@ -72,4 +75,11 @@ public class Product {
         this.shops = shops;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -45,7 +45,7 @@ public class UserService {
     public Long addProduct(ProductDTO productDTO) {
         User user = this.getLoggedUser();
         Product product = generalMapper.productDTOToProduct(productDTO);
-        if(!user.allProducts().contains(product)){
+        if(!user.getUserProducts().contains(product)){
             user.addProduct(product);
             this.save(user);
         }
@@ -56,7 +56,7 @@ public class UserService {
         User user = this.getLoggedUser();
         Product toRemove = null;
 
-        for (Product p : user.allProducts()) {
+        for (Product p : user.getUserProducts()) {
             if (p.getProductId() == productDTO.productId()) {
                 toRemove = p;
                 break;
@@ -64,7 +64,7 @@ public class UserService {
         }
 
         if (toRemove != null) {
-            user.allProducts().remove(toRemove);
+            user.getUserProducts().remove(toRemove);
             userRepository.save(user);
         }
     }
