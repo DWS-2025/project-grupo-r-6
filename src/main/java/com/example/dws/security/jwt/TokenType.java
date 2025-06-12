@@ -1,4 +1,4 @@
-package com.example.dws.jwt;
+package com.example.dws.security.jwt;
 
 import java.time.Duration;
 

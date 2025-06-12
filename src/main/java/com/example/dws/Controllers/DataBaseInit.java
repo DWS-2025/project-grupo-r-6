@@ -19,12 +19,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Controller
@@ -43,6 +45,8 @@ public class DataBaseInit implements CommandLineRunner {
 
     @Autowired
     private ShopRepository shopRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -52,7 +56,7 @@ public class DataBaseInit implements CommandLineRunner {
         Shop shop2=new Shop("Bresh", "Bershka");
         Shop shop3=new Shop("Zaro", "Zara");
 
-        User user = new User("Adri", "adri@gmail.com");
+        User user = new User("Adri", "adri@gmail.com", passwordEncoder.encode("password"), "ADMIN");
         UserDTO userDTO = generalMapper.userToUserDTO(user);
         userService.save(userDTO);
 

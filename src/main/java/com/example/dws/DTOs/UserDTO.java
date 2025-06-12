@@ -6,8 +6,10 @@ import java.util.List;
 
 public record UserDTO(
         Long id,
-        String name,
+        String userName,
+        String password,
         String email,
+
         List<ProductDTO> userProducts
 ) {
 }

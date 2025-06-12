@@ -13,27 +13,27 @@ public class User {
     @Column(unique = true, nullable = false)
     private String userName; // Necesario para login
 
-    private String name;
+
     private String email;
 
-    @Column(nullable = false)
+
     private String password; // Necesario para login
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>(); // Roles: ["USER"], ["ADMIN"], etc.
+    private List<String> roles; // Roles: ["USER"], ["ADMIN"], etc.
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> userProducts = new ArrayList<>();
 
     public User() {}
 
-    public User(String userName, String name, String email, String password, List<String> roles) {
+    public User(String userName, String email, String password, String... roles) {
         this.userName = userName;
-        this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.roles = List.of(roles);
     }
+
 
     public long getId() { return id; }
 
@@ -43,9 +43,6 @@ public class User {
 
     public void setUserName(String userName) { this.userName = userName; }
 
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
 
     public String getEmail() { return email; }
 
@@ -69,5 +66,9 @@ public class User {
     public void removeProduct(Product product) {
         this.userProducts.remove(product);
         product.setUser(null);
+    }
+
+    public List<Product> allProducts() {
+        return userProducts;
     }
 }

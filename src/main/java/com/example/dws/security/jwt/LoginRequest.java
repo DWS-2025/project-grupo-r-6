@@ -1,4 +1,4 @@
-package com.example.dws.jwt;
+package com.example.dws.security.jwt;
 
 public class LoginRequest {
 

@@ -73,7 +73,10 @@ public class UserService {
         return userDTOToUser(userDTO).getId();
     }
     public Optional<UserDTO> findByName(String userName) {
-        return Optional.of(userToUserDTO(userRepository.findByName(userName)));
+        return Optional.of(userToUserDTO(userRepository.findByUserName(userName)));
+    }
+    public UserDTO getUser(String name) {
+        return generalMapper.userToUserDTO(userRepository.findByUserName(name).orElseThrow());
     }
     private UserDTO userToUserDTO(Optional<User> user) {
         return generalMapper.userToUserDTO(user.get());

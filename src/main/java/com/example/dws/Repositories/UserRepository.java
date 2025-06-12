@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public interface UserRepository  extends JpaRepository<User, Long> {
-    Optional<User> findByName(String userName);
+    Optional<User> findByUserName(String userName);
     /*
     private HashMap<Long, User> users = new HashMap<>();
     private AtomicLong nextId = new AtomicLong(0);
