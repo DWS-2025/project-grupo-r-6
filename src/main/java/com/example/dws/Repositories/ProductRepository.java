@@ -5,12 +5,11 @@ import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,6 +17,15 @@ import java.util.concurrent.atomic.AtomicLong;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByproductName(String productName);
+
+    @Query("SELECT p FROM Product p WHERE p.productPrize BETWEEN :from AND :to")
+    List<Product> findByPrecioBetween(@Param("from") Integer from, @Param("to") Integer to);
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<Product> findByNameContainingIgnoreCase(@Param("name") String name);
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%')) AND p.productPrize BETWEEN :from AND :to")
+    List<Product> findByNameContainingIgnoreCaseAndPrecioBetween(@Param("name") String name, @Param("from") Integer from, @Param("to") Integer to);
 
     /*
     private HashMap<Long, Product> products = new HashMap<>();

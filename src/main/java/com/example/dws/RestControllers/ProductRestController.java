@@ -1,7 +1,9 @@
 package com.example.dws.RestControllers;
 
+import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.Entities.Product;
 import com.example.dws.Service.ProductService;
 import com.example.dws.Service.ShopService;
 import com.example.dws.Service.UserService;
@@ -26,6 +28,8 @@ public class ProductRestController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private GeneralMapper generalMapper;
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
@@ -114,5 +118,35 @@ public class ProductRestController {
         userService.addProduct(productDTO.get());
         return ResponseEntity.ok("Producto añadido al carrito del usuario logueado");
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchProducts(
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer to,
+            @RequestParam(required = false) String name
+    ) {
+        List<ProductDTO> productDTOs;
+
+        boolean hasFrom = from != null;
+        boolean hasTo = to != null;
+        boolean hasName = name != null && !name.trim().isEmpty();
+
+        if ((hasFrom && hasTo) || hasName) {
+            List<Product> products = productService.findProductsByNameAndPrice(from, to, name);
+            productDTOs = products.stream()
+                    .map(generalMapper::productToProductDTO)
+                    .toList();
+
+            if (!productDTOs.isEmpty()) {
+                return ResponseEntity.ok(productDTOs);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of());
+            }
+        } else {
+            productDTOs = productService.findAll();
+            return ResponseEntity.ok(productDTOs);
+        }
+    }
+
 }
 

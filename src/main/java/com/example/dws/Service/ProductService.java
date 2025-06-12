@@ -87,4 +87,25 @@ public class ProductService {
     private Product productDTOToProduct(ProductDTO productDTO) {
         return generalMapper.productDTOToProduct(productDTO);
     }
+
+    public List<Product> findProductsByNameAndPrice(Integer from, Integer to, String name) {
+        boolean hasPriceRange = from != null && to != null;
+        boolean hasName = name != null && !name.isEmpty();
+
+        if (hasPriceRange && hasName) {
+            return productRepository.findByNameContainingIgnoreCaseAndPrecioBetween(name, from, to);
+        } else if (hasPriceRange) {
+            return productRepository.findByPrecioBetween(from, to);
+        } else if (hasName) {
+            return productRepository.findByNameContainingIgnoreCase(name);
+        } else {
+            return getAllProductsNormal();
+        }
+    }
+
+    public List<Product> getAllProductsNormal() {
+        return productRepository.findAll();
+    }
+
+
 }

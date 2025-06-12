@@ -11,6 +11,7 @@ import com.example.dws.Repositories.UserRepository;
 import com.example.dws.Service.ProductService;
 import com.example.dws.Service.ShopService;
 import com.example.dws.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -115,6 +116,18 @@ public class ProductController {
         model.addAttribute("product", product.get());
         return "updated_product";
     }
+
+    @GetMapping("/productSearch")
+    public String showProducts(Model model, HttpServletRequest request,
+                               @RequestParam(name = "from", required = false) Integer from,
+                               @RequestParam(name = "to", required = false) Integer to,
+                               @RequestParam(name = "name", required = false) String name) {
+
+        List<Product> productList = productService.findProductsByNameAndPrice(from, to, name);
+        model.addAttribute("products", productList);
+        return "products";
+    }
+
 
 
 

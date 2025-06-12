@@ -48,5 +48,22 @@
     </form>
 </section>
 
+<section>
+    <h2>Consulta de Productos</h2>
+    <form action="/productSearch" method="get" class="consulta">
+        <label for="productName">Nombre del producto:</label>
+        <input type="text" id="productName" name="name" placeholder="Buscar por nombre">
+
+        <label for="priceFrom">Precio desde:</label>
+        <input type="number" id="priceFrom" name="from" min="0">
+
+        <label for="priceTo">Precio hasta:</label>
+        <input type="number" id="priceTo" name="to" min="0">
+
+        <button type="submit">Filtrar</button>
+    </form>
+</section>
+
+
 </body>
 </html>
