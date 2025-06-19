@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
 
-
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class WebExceptionHandler {
 
     @ExceptionHandler({ResponseStatusException.class, Exception.class})
     public ModelAndView handleException(Exception exception, HttpServletRequest request) {
@@ -29,5 +28,6 @@ public class GlobalExceptionHandler {
 
         return modelAndView;
     }
+
 }
 

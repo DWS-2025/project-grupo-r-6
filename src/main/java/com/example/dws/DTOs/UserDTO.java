@@ -9,7 +9,7 @@ public record UserDTO(
         String userName,
         String password,
         String email,
-
+        List<String> roles,
         List<ProductDTO> userProducts
 ) {
 }

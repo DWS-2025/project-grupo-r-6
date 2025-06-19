@@ -48,10 +48,17 @@ public class ShopService {
         return generalMapper.ToListShopDTO(shopRepository.findAll());
     }
 
-    public Optional<ShopDTO> findById(Long id){
-        ShopDTO shopDTO= shopToShopDTO(shopRepository.findById(id));
-        return Optional.of(shopDTO);
+    public Optional<ShopDTO> findById(Long id) {
+        Optional<Shop> optionalShop = shopRepository.findById(id);
+        if (optionalShop.isPresent()) {
+            Shop shop = optionalShop.get();
+            ShopDTO shopDTO = generalMapper.shopToShopDTO(shop);
+            return Optional.of(shopDTO);
+        } else {
+            return Optional.empty();
+        }
     }
+
 
     public Optional<ShopDTO> findByName(String name){
         Shop shop = shopRepository.findByshopName(name).get();

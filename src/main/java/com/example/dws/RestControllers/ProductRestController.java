@@ -90,7 +90,7 @@ public class ProductRestController {
     }
 
     // POST add shop to product
-    @PostMapping("/{productID}/addShop/{shopID}")
+    @PostMapping("/products/{productID}/shops/{shopID}")
     public ResponseEntity<String> addShopToProduct(
             @PathVariable long productID,
             @PathVariable long shopID
@@ -109,7 +109,7 @@ public class ProductRestController {
 
 
     // POST buy product (adds to logged‐in user's cart)
-    @PostMapping("/{productID}/buy")
+    @PostMapping("/users/me/products/{productID}")
     public ResponseEntity<String> buyProduct(@PathVariable long productID) {
         Optional<ProductDTO> productDTO = productService.findById(productID);
         if (productDTO.isEmpty()) {
@@ -119,7 +119,7 @@ public class ProductRestController {
         return ResponseEntity.ok("Producto añadido al carrito del usuario logueado");
     }
 
-    @GetMapping("/search")
+    @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> searchProducts(
             @RequestParam(required = false) Integer from,
             @RequestParam(required = false) Integer to,

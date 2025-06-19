@@ -80,8 +80,14 @@ public class UserService {
     public Long getId(UserDTO userDTO) {
         return userDTOToUser(userDTO).getId();
     }
+
     public Optional<UserDTO> findByName(String userName) {
-        return Optional.of(userToUserDTO(userRepository.findByUserName(userName)));
+        Optional<User> user = userRepository.findByUserName(userName);
+        if(user.isPresent()){
+            return Optional.of(generalMapper.userToUserDTO(user.get()));
+        }else{
+            return Optional.empty();
+        }
     }
     public UserDTO getUser(String name) {
         return generalMapper.userToUserDTO(userRepository.findByUserName(name).orElseThrow());

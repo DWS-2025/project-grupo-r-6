@@ -47,6 +47,7 @@
             {{/allShops}}
         </select>
         <button type="submit">Añadir Tienda</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
     </form>
 </section>
 
@@ -54,6 +55,7 @@
     <h2>Eliminar Producto</h2>
     <form action="/products/{{ product.productId }}/delete" method="post">
         <button type="submit">Eliminar Producto</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
     </form>
 </section>
 
@@ -61,6 +63,7 @@
     <h2>Comprar Producto</h2>
     <form action="/products/{{ product.productId }}/buy" method="post">
         <button type="submit">Comprar Producto</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
     </form>
 </section>
 
@@ -70,11 +73,12 @@
         <input type="text" name="productName" placeholder="Nombre del Producto">
         <input type="number" name="productPrize" placeholder="Precio del Producto">
         <button type="submit">Actualizar</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
     </form>
 </section>
 
 <section>
-    <a href="/" class="back-link">Volver</a>
+    <a href="/index" class="back-link">Volver</a>
 </section>
 
 </body>

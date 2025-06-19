@@ -39,14 +39,12 @@ public class ShopRestController {
     @Autowired
     private UserService userService;
 
-    // GET all shops
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<ShopDTO>> getAllShops() {
         List<ShopDTO> shopsDTO = shopService.findAll();
         return ResponseEntity.ok(shopsDTO);
     }
 
-    // GET a shop by ID
     @GetMapping("/{shopID}")
     public ResponseEntity<ShopDTO> getShopById(@PathVariable long shopID) {
         Optional<ShopDTO> shopDTO = shopService.findById(shopID);
@@ -56,9 +54,8 @@ public class ShopRestController {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
     }
-
-    // POST create new shop
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // REVISAR PORQUE HACE FALTA ESTAR AUTORIZADO
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> saveShop(@RequestParam String shopName,
                                            @RequestParam String imageName,
                                            @RequestParam MultipartFile image) throws IOException {
@@ -74,7 +71,6 @@ public class ShopRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Tienda creada correctamente");
     }
 
-    // GET image of shop
     @GetMapping(value = "/{shopID}/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public void getShopImage(@PathVariable Long shopID, HttpServletResponse response) throws SQLException, IOException {
         Blob imageBlob = shopService.getShopImage(shopID);
@@ -83,11 +79,11 @@ public class ShopRestController {
             response.getOutputStream().write(imageBlob.getBytes(1, (int) imageBlob.length()));
             response.getOutputStream().flush();
         } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe o no tiene imagen");
         }
     }
 
-    // DELETE shop
+    // REVISAR
     @DeleteMapping("/{shopID}")
     public ResponseEntity<String> deleteShop(@PathVariable long shopID) {
         Optional<ShopDTO> shop = shopService.findById(shopID);
@@ -101,8 +97,8 @@ public class ShopRestController {
         return ResponseEntity.ok("Tienda eliminada correctamente");
     }
 
-    // POST add product to shop
-    @PostMapping("/{shopID}/addProduct")
+    // REVISAR
+    @PostMapping("/shops/{shopID}/products")
     public ResponseEntity<String> addProductToShop(@RequestBody ProductDTO productDTO, @PathVariable long shopID) {
         Optional<ShopDTO> shop = shopService.findById(shopID);
         if (shop.isEmpty()) {
@@ -116,8 +112,8 @@ public class ShopRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Producto añadido correctamente");
     }
 
-    // POST add comment to shop
-    @PostMapping("/{shopID}/addComment")
+    // REVISAR
+    @PostMapping("/shops/{shopID}/comments")
     public ResponseEntity<String> addCommentToShop(@RequestBody CommentDTO commentDTO, @PathVariable long shopID) {
         Optional<ShopDTO> shopDTO = shopService.findById(shopID);
         if (shopDTO.isEmpty()) {

@@ -3,7 +3,13 @@
     <div class="row">
         <div class="col-12 col-md-6">
             <h1>Perfil</h1>
-            <p>Welcome, {{user.userName}}!</p>
+            <p>Bienvenido {{user.userName}}!</p>
+            <p>Roles:</p>
+            <ul>
+                {{#user.roles}}
+                <li>{{.}}</li>
+                {{/user.roles}}
+            </ul>
         </div>
     </div>
 </div>

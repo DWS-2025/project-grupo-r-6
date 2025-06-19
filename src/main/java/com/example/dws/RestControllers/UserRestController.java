@@ -40,7 +40,7 @@ public class UserRestController {
     }
 
     // GET a user by ID
-    @GetMapping("/{userID}")
+    @GetMapping("/users/{userID}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable long userID) {
         Optional<UserDTO> userDTO = userService.findById(userID);
         if (userDTO.isPresent()) {
@@ -51,7 +51,7 @@ public class UserRestController {
     }
 
     // GET logged‐in user's shopping cart
-    @GetMapping("/loggedUserCart")
+    @GetMapping("/users/me/cart")
     public ResponseEntity<List<ProductDTO>> getLoggedUserCart() {
         User logged = userService.getLoggedUser();
         List<ProductDTO> cartDTOs = new ArrayList<>();
