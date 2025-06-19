@@ -55,8 +55,12 @@ public class ShopController {
 
     private static final Path IMAGES_FOLDER = Paths.get("uploads");
 
-    // Show all shops
     @GetMapping
+    public String redirectToLogin(Model model) {
+        return "login";
+    }
+    // Show all shops
+    @GetMapping("/index")
     public String getAllShops(Model model) {
         List<ShopDTO> shopsDTO = shopService.findAll();
         model.addAttribute("shops", shopsDTO);
@@ -100,7 +104,7 @@ public class ShopController {
                 Shop shop = new Shop(shopName, imageName);
                 shopService.save(shopService.shopToShopDTO(Optional.of(shop)), image);
             }
-            return "redirect:/";
+            return "redirect:/index";
         } else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de la tienda no puede ser vacío");
         }

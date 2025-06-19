@@ -1,0 +1,17 @@
+{{>header}}
+<form action="/login" method="post" class="d-flex flex-column gap-2 p-4">
+    <input type="text" class="form-control" name="username" placeholder="Username">
+    <input type="password" class="form-control" name="password" placeholder="Password">
+    <div class="text-start w-100">
+        <button type="submit" class="btn btn-primary">Log In</button>
+    </div>
+
+    <input type="hidden" name="_csrf" value="{{token}}" />
+</form>
+<form action="/index" method="get" class="d-flex flex-column gap-2 p-4">
+    <button type="submit" class="btn btn-primary">Continuar sin registrarse</button>
+</form>
+<form action="/register" method="get" class="d-flex flex-column gap-2 p-4">
+    <button type="submit" class="btn btn-primary">Crear una cuenta nueva</button>
+</form>
+{{>footer}}

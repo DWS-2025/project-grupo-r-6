@@ -66,9 +66,9 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize -> authorize
                     // PRIVATE ENDPOINTS
 					.requestMatchers(HttpMethod.GET, "/api/users/me").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST,"/api/books/").hasRole("USER")
-                    .requestMatchers(HttpMethod.PUT,"/api/books/**").hasRole("USER")
-                    .requestMatchers(HttpMethod.DELETE,"/api/books/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST,"/api/shops/**").hasRole("USER")
+                    .requestMatchers(HttpMethod.PUT,"/api/shops/**").hasRole("USER")
+                    .requestMatchers(HttpMethod.DELETE,"/api/shops/**").hasRole("ADMIN")
 					// PUBLIC ENDPOINTS
 					.anyRequest().permitAll()
 			);
@@ -92,7 +92,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	@Order(1)
+	@Order(2)
 	public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
 
 		http.authenticationProvider(authenticationProvider());
@@ -101,21 +101,28 @@ public class SecurityConfig {
 				.authorizeHttpRequests(authorize -> authorize
 						// PUBLIC PAGES
 						.requestMatchers("/").permitAll()
-						.requestMatchers("/images/**").permitAll()
-						.requestMatchers("/css/**").permitAll()
-						.requestMatchers("/books/**").permitAll()
+						.requestMatchers("/shopImage/**").permitAll()
+						.requestMatchers("/styles.css").permitAll()
+						.requestMatchers("/shops/**").permitAll()
 						.requestMatchers("/error").permitAll()
+						.requestMatchers("/index").permitAll()
+						.requestMatchers("/products/**").permitAll()
+						.requestMatchers("/register/**").permitAll()
+						.requestMatchers("/js/**").permitAll()
+						.requestMatchers("/comments/**").permitAll()
+						.requestMatchers("/login").permitAll()
 						// PRIVATE PAGES
 						.requestMatchers("/profile").hasAnyRole("USER")
 						.requestMatchers("/newbook").hasAnyRole("USER")
 						.requestMatchers("/editbook").hasAnyRole("USER")
 						.requestMatchers("/editbook/*").hasAnyRole("USER")
 						.requestMatchers("/removebook/*").hasAnyRole("ADMIN")
+						.requestMatchers("/shops/{shopID}/products/new").hasAnyRole("ADMIN")
 				)
 				.formLogin(formLogin -> formLogin
 						.loginPage("/login")
 						.failureUrl("/loginerror")
-						.defaultSuccessUrl("/")
+						.defaultSuccessUrl("/index")
 						.permitAll()
 				)
 				.logout(logout -> logout

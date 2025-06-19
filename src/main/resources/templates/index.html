@@ -11,6 +11,13 @@
 
 <header class="main-title">
     <h1>INDIE-TOX</h1>
+    <form action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="{{token}}">
+        <button type="submit" class="main-title">LogOut</button>
+    </form>
+    {{#logged}}
+    <a href="/profile" class="main-title">Profile</a>
+    {{/logged}}
 </header>
 <body>
 

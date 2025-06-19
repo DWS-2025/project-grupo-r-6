@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h2>Registro de Usuario</h2>
+<form action="/register" method="post">
+    <label  class="form-label">Usuario</label>
+    <input type="text" class="form-control" name="userName" placeholder="Username">
+    <label  class="form-label">Correo electrónico</label>
+    <input type="email" class="form-control"  name="email" placeholder="Email">
+    <label  class="form-label">Contraseña</label>
+    <input type="password" class="form-control" name="password" placeholder="Password">
+    <input type="hidden" name="_csrf" value="{{token}}" />
+    <button type="submit" class="btn btn-primary">Registrarse</button>
+</form>
+
+</body>
+</html>

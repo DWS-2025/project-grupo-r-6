@@ -22,6 +22,7 @@ h1, h2 {
     margin-bottom: 70px;
     text-transform: uppercase;
     background-color: #abc3e3;
+    justify-content: space-between;
 }
 
 .second-title h2 {

@@ -1,6 +1,8 @@
 package com.example.dws.Controllers;
 
+import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.User;
 import com.example.dws.Repositories.UserRepository;
@@ -8,13 +10,16 @@ import com.example.dws.Service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +30,11 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GeneralMapper generalMapper;
 
     // Show shopping cart of a user by its ID
     @GetMapping("/users/{userID}")
@@ -47,4 +57,31 @@ public class UserController {
             model.addAttribute("allProducts", allProducts);
             return "showShoppingCart";
     }
+
+
+    @GetMapping("/profile")
+    public String me(Model model) {
+        model.addAttribute("user", userService.getLoggedUserDTO());
+        return "profile";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(
+            @RequestParam String userName,
+            @RequestParam String email,
+            @RequestParam String password
+    ) {
+        // Verificar si el usuario ya existe
+        if (userService.findByName(userName).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El nombre de usuario ya está en uso");
+        }
+
+        //Create DTO with role USER
+        User user = new User(userName, email, passwordEncoder.encode(password), "USER");
+        UserDTO userDTO = generalMapper.userToUserDTO(user);
+        userService.save(userDTO);
+
+        return "redirect:/login"; // redirect to login
+    }
+
 }

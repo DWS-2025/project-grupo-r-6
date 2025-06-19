@@ -3,10 +3,13 @@ package com.example.dws.Service;
 import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.UserDTO;
+import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.User;
 import com.example.dws.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,17 +24,22 @@ public class UserService {
     @Autowired
     private GeneralMapper generalMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     public Optional<UserDTO> findById(long id) {
         return (Optional.of(userToUserDTO(userRepository.findById(id))));
     }
 
-    public void save(UserDTO userDTO) {
-        User user = userDTOToUser(userDTO);
-        userRepository.save(user);
-    }
+
     public User getLoggedUser() {
-        return userRepository.findAll().get(0);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUserName(username).get();
+    }
+
+    public UserDTO getLoggedUserDTO() {
+        return generalMapper.userToUserDTO(getLoggedUser());
     }
 
     public void save(User user){
@@ -87,6 +95,12 @@ public class UserService {
 
     private List<UserDTO> ToListUserID(List<User> users){
         return generalMapper.ToListUserID(users);
+    }
+
+    public void save(UserDTO userDTO){
+        User user = userDTOToUser(userDTO);
+        userRepository.save(user);
+
     }
 }
 
