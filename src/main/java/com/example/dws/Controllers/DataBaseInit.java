@@ -56,6 +56,11 @@ public class DataBaseInit implements CommandLineRunner {
         Shop shop2=new Shop("Bresh", "Bershka");
         Shop shop3=new Shop("Zaro", "Zara");
 
+        shopService.saveShopWithImage(shop1, "Pull.jpg");
+        shopService.saveShopWithImage(shop2, "Bresh.jpg");
+        shopService.saveShopWithImage(shop3, "Zaro.jpg");
+
+
         User user = new User("Adri", "adri@gmail.com", passwordEncoder.encode("password"), "ADMIN");
         UserDTO userDTO = generalMapper.userToUserDTO(user);
         userService.save(userDTO);
@@ -63,33 +68,42 @@ public class DataBaseInit implements CommandLineRunner {
         UserDTO userDTO1 = userService.findByName("Adri").get();
         User user1 = generalMapper.userDTOToUser(userDTO1);
 
+        ShopDTO shopPersistedDTO = shopService.findByName("PullAndCow").get();
+        Shop s1 = generalMapper.shopDTOToShop(shopPersistedDTO);
+
         Comment comment= new Comment(user1, "Atención Al Cliente", "Tuve una excelente experiencia con el servicio al cliente. Fueron muy amables y me ayudaron a encontrar lo que buscaba. ¡Muy satisfecho!");
-        shop1.getComments().add(comment);
+        s1.getComments().add(comment);
+        comment.setShop(s1);
         commentService.save(comment);
 
+
         Comment comment1 = new Comment(user1, "Producto Dañado", "El producto llegó con un desperfecto en la carcasa. Solicito un reemplazo lo antes posible.");
-        shop1.getComments().add(comment1);
+        s1.getComments().add(comment1);
+        comment1.setShop(s1);
         commentService.save(comment1);
 
         Comment comment2 = new Comment(user1, "Entrega Rápida", "Me sorprendió lo rápido que llegó el pedido. En menos de 24 horas lo tenía en casa. ¡Excelente servicio!");
-        shop1.getComments().add(comment2);
+        s1.getComments().add(comment2);
+        comment2.setShop(s1);
         commentService.save(comment2);
 
         Comment comment3 = new Comment(user1, "Error en el Pedido", "Recibí un producto diferente al que pedí. Espero que puedan corregirlo pronto.");
-        shop1.getComments().add(comment3);
+        s1.getComments().add(comment3);
+        comment3.setShop(s1);
         commentService.save(comment3);
 
         Comment comment4 = new Comment(user1, "Recomendado", "Buena calidad, buen precio y atención rápida. Recomiendo esta tienda.");
-        shop1.getComments().add(comment4);
+        s1.getComments().add(comment4);
+        comment4.setShop(s1);
         commentService.save(comment4);
 
         Comment comment5 = new Comment(user1, "Problemas con el Pago", "Tuve dificultades para completar el pago con tarjeta. El sistema daba error constantemente.");
-        shop1.getComments().add(comment5);
+        s1.getComments().add(comment5);
+        comment5.setShop(s1);
         commentService.save(comment5);
 
-        shopService.saveShopWithImage(shop1, "Pull.jpg");
-        shopService.saveShopWithImage(shop2, "Bresh.jpg");
-        shopService.saveShopWithImage(shop3, "Zaro.jpg");
+
+
 /*
         shopService.save(generalMapper.shopToShopDTO(shop1));
         shopService.save(generalMapper.shopToShopDTO(shop2));

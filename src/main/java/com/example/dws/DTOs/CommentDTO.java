@@ -6,6 +6,7 @@ public record CommentDTO(
         Long commentId,
         User user,
         String issue,
-        String message
+        String message,
+        long shopID
         ){
 }

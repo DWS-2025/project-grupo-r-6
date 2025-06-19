@@ -14,6 +14,8 @@ public class Comment {
     private User user;
     private String issue;
     private String message;
+    @ManyToOne
+    private Shop shop;
 
 
 
@@ -27,6 +29,13 @@ public class Comment {
         this.message = message;
     }
 
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
+    }
 
     public User getUser() {
         return user;
