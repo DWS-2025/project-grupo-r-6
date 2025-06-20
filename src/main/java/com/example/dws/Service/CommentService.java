@@ -76,6 +76,10 @@ public class CommentService {
 
         return new PageImpl<>(paginatedList, pageable, total);
     }
+    public Page<Comment> findByShopIdPaginated(Long shopId, Pageable pageable) {
+        return commentRepository.findByShop_ShopID(shopId, pageable);
+    }
+
 
     public Page<Comment> findAllPaginated(Pageable pageable){
         return commentRepository.findAll(pageable);

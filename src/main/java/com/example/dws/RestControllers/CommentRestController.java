@@ -38,15 +38,18 @@ public class CommentRestController {
     }
     @GetMapping("/paginated")
     public ResponseEntity<Page<CommentDTO>> getPaginatedComments(
-                                                 @RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "2") int size) {
+            @RequestParam Long shopID,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<Comment> commentPage = commentService.findAllPaginated(pageable);
+        Page<Comment> commentPage = commentService.findByShopIdPaginated(shopID, pageable);
 
         Page<CommentDTO> commentDTOPage = commentPage.map(generalMapper::commentToCommentDTO);
-
         return ResponseEntity.ok(commentDTOPage);
     }
+
+
 
     // GET a specific comment by shop‐ID and comment‐ID
     @GetMapping("/{shopID}/{commentID}")
