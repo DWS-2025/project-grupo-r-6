@@ -61,18 +61,35 @@ public class SecurityConfig {
 		http
 			.securityMatcher("/api/**")
 			.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
-		
+
 		http
-			.authorizeHttpRequests(authorize -> authorize
-                    // PRIVATE ENDPOINTS
-					.requestMatchers(HttpMethod.GET, "/api/users/me").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST,"/api/shops/**").hasRole("USER")
-                    .requestMatchers(HttpMethod.PUT,"/api/shops/**").hasRole("USER")
-                    .requestMatchers(HttpMethod.DELETE,"/api/shops/**").hasRole("ADMIN")
-					// PUBLIC ENDPOINTS
-					.anyRequest().permitAll()
-			);
-		
+				.authorizeHttpRequests(authorize -> authorize
+						// -------------------- PUBLIC ENDPOINTS --------------------
+						.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/shops/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/users").permitAll()
+
+						// -------------------- USER-ONLY ENDPOINTS --------------------
+						// Agregar producto al carrito del usuario logueado
+						.requestMatchers(HttpMethod.POST, "/api/products/users/me/products/**").hasRole("USER")
+						.requestMatchers(HttpMethod.GET, "/api/users/users/me/cart").hasRole("USER")
+						.requestMatchers(HttpMethod.GET, "/api/users/users/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers(HttpMethod.POST, "/api/comments/**").hasRole("USER")
+						.requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("USER")
+
+						// -------------------- ADMIN-ONLY ENDPOINTS --------------------
+						.requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/shops/**").hasRole("ADMIN")
+
+						// MIXED/SHARED ENDPOINTS
+						.requestMatchers(HttpMethod.POST, "/api/shops/**").hasRole("USER")
+						.requestMatchers(HttpMethod.POST, "/api/shops/{shopID}/image").hasRole("USER")
+
+						// Default fallback
+						.anyRequest().permitAll()
+				);
         // Disable Form login Authentication
         http.formLogin(formLogin -> formLogin.disable());
 
