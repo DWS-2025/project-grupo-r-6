@@ -6,6 +6,7 @@ import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.User;
 import com.example.dws.Repositories.UserRepository;
+import com.example.dws.Service.CommentService;
 import com.example.dws.Service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class UserController {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private GeneralMapper generalMapper;
@@ -78,6 +82,50 @@ public class UserController {
     public String me(Model model) {
         model.addAttribute("user", userService.getLoggedUserDTO());
         return "profile";
+    }
+
+    @GetMapping("/users/{userID}/edit")
+    public String editUser(@PathVariable("userID") long userID, Model model) {
+        Optional<UserDTO> user = userService.findById(userID);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        model.addAttribute("user", user.get());
+        return "editUser";
+    }
+    @PostMapping("/users/{userID}/update/")
+    public String updateUser(UserDTO userDTO, @PathVariable("userID") long userID,Model model ){
+        Optional<UserDTO> user = userService.findById(userID);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
+        }
+        if (userDTO.email()== null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email del usuario no puede estar vacío");
+        }
+        if (userDTO.userName().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacío");
+        }
+        if (userDTO.password() != null && !userDTO.password().isBlank()) {
+            if (!userDTO.password().equals(userDTO.confirmPassword())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden");
+            }
+
+            userService.updatePassword(userID, userDTO.password());
+        }
+        this.userService.update(userID,userDTO);
+        model.addAttribute("user", user.get());
+        return "updated_user";
+    }
+
+    @PostMapping("/users/{userID}/delete")
+    public String deleteUser(@PathVariable long userID) {
+        Optional<UserDTO> user = userService.findById(userID);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        commentService.deleteByUserId(userID);
+        userService.deleteById(userID);
+        return "deleted_user";
     }
 
     @PostMapping("/register")

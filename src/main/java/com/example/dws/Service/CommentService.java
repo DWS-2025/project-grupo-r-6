@@ -16,6 +16,7 @@ import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.DTOs.GeneralMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -87,5 +88,10 @@ public class CommentService {
 
     private Shop shopDTOToShop(ShopDTO shopDTO) {
         return generalMapper.shopDTOToShop(shopDTO);
+    }
+
+    @Transactional
+    public void deleteByUserId(long userID) {
+        commentRepository.deleteByUserId(userID);
     }
 }

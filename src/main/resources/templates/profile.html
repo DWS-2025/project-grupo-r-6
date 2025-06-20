@@ -4,12 +4,22 @@
         <div class="col-12 col-md-6">
             <h1>Perfil</h1>
             <p>Bienvenido {{user.userName}}!</p>
+            <p>Email: {{user.email}}</p>
             <p>Roles:</p>
             <ul>
                 {{#user.roles}}
                 <li>{{.}}</li>
                 {{/user.roles}}
             </ul>
+            <form action="/users/{{user.id}}/edit" method="get">
+                <button type="submit">Editar perfil</button>
+                <input type="hidden" name="_csrf" value="{{token}}" />
+            </form>
+            <form action="/users/{{user.id}}/delete" method="post">
+                <button type="submit">Eliminar Usuario</button>
+                <input type="hidden" name="_csrf" value="{{token}}" />
+            </form>
+            <a href="/index">Volver al inicio</a>
         </div>
     </div>
 </div>

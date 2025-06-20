@@ -8,6 +8,7 @@ public record UserDTO(
         Long id,
         String userName,
         String password,
+        String confirmPassword,
         String email,
         List<String> roles,
         List<ProductDTO> userProducts

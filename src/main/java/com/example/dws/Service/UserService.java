@@ -108,5 +108,23 @@ public class UserService {
         userRepository.save(user);
 
     }
+
+    public void deleteById(long userID) {
+        userRepository.deleteById(userID);
+    }
+
+    public void update(Long id, UserDTO userDTO) {
+        Optional<User> oldUser = userRepository.findById(id);
+        User newUser = userDTOToUser(userDTO);
+        oldUser.get().setUserName(newUser.getUserName());
+        oldUser.get().setEmail(newUser.getEmail());
+        userRepository.save(oldUser.get());
+    }
+
+    public void updatePassword(long userID, String password) {
+        User user = userRepository.findById(userID).orElseThrow();
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
 }
 

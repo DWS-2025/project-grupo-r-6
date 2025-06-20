@@ -20,6 +20,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Transactional
     void deleteByShop_ShopID(Long shopID);
 
+    void deleteByUserId(long userID);
+
 
 
     /*

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Editar Usuario</h1>
+
+<form action="/users/{{user.id}}/update/" method="post">
+    <input type="hidden" name="id" value="{{user.id}}" />
+
+    <label for="userName">Nombre de usuario:</label><br>
+    <input type="text" id="userName" name="userName" value="{{user.userName}}" required /><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" value="{{user.email}}" required /><br><br>
+
+    <label for="password">Nueva contraseña:</label><br>
+    <input type="password" id="password" name="password" /><br><br>
+
+    <label for="confirmPassword">Confirmar contraseña:</label><br>
+    <input type="password" id="confirmPassword" name="confirmPassword" /><br><br>
+
+
+    <button type="submit">Guardar cambios</button>
+    <input type="hidden" name="_csrf" value="{{token}}" />
+</form>
+
+</body>
+</html>

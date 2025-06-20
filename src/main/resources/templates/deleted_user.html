@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuario Eliminado</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+
+<section>
+    <p>El usuario ha sido eliminado</p>
+</section>
+
+<section>
+    <form action="/logout" method="post" class="d-inline">
+        <button class="btn btn-primary btn-nowrap" type="submit">Volver</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
+    </form>
+</section>
+
+</body>
+</html>

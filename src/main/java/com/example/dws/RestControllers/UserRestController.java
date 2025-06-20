@@ -64,6 +64,35 @@ public class UserRestController {
         }
         return ResponseEntity.ok(cartDTOs);
     }
+    /*@PutMapping("/users/{userID}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable long userID, @RequestBody UserDTO userDTO) {
+        Optional<UserDTO> existingUserOpt = userService.findById(userID);
+        if (existingUserOpt.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        UserDTO existingUser = existingUserOpt.get();
+
+        // Actualiza solo los campos permitidos (por ejemplo, email y userName)
+        UserDTO updatedUser = new UserDTO(
+                userID,
+                userDTO.userName() != null ? userDTO.userName() : existingUser.userName(),
+                existingUser.password(),  // Por seguridad no actualizamos password aquí
+                userDTO.email() != null ? userDTO.email() : existingUser.email(),
+                existingUser.roles(),
+                existingUser.userProducts()
+        );
+
+        userService.save(updatedUser);
+        return ResponseEntity.ok(updatedUser);
+    }*/
+    @DeleteMapping("/users/{userID}")
+    public ResponseEntity<Void> deleteUser(@PathVariable long userID) {
+        if (userService.findById(userID).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        }
+        userService.deleteById(userID);
+        return ResponseEntity.noContent().build();
+    }
 
 /*
     // POST create new user
