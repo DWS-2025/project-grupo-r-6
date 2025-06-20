@@ -64,27 +64,33 @@ public class UserRestController {
         }
         return ResponseEntity.ok(cartDTOs);
     }
-    /*@PutMapping("/users/{userID}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable long userID, @RequestBody UserDTO userDTO) {
-        Optional<UserDTO> existingUserOpt = userService.findById(userID);
-        if (existingUserOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+
+    @PutMapping("/users/{userID}")
+    public ResponseEntity<String> updateUser(@PathVariable long userID,  UserDTO userDTO) {
+        Optional<UserDTO> existingUser = userService.findById(userID);
+        if (existingUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
         }
-        UserDTO existingUser = existingUserOpt.get();
 
-        // Actualiza solo los campos permitidos (por ejemplo, email y userName)
-        UserDTO updatedUser = new UserDTO(
-                userID,
-                userDTO.userName() != null ? userDTO.userName() : existingUser.userName(),
-                existingUser.password(),  // Por seguridad no actualizamos password aquí
-                userDTO.email() != null ? userDTO.email() : existingUser.email(),
-                existingUser.roles(),
-                existingUser.userProducts()
-        );
+        if (userDTO.email() == null || userDTO.email().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El campo email no puede estar vacío");
+        }
 
-        userService.save(updatedUser);
-        return ResponseEntity.ok(updatedUser);
-    }*/
+        if (userDTO.userName() == null || userDTO.userName().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacío");
+        }
+
+        if (userDTO.password() != null && !userDTO.password().isBlank()) {
+            if (!userDTO.password().equals(userDTO.confirmPassword())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas deben coincidir");
+            }
+            userService.updatePassword(userID, userDTO.password());
+        }
+
+        userService.update(userID, userDTO);
+        return ResponseEntity.ok("Usuario actualizado correctamente");
+    }
+
     @DeleteMapping("/users/{userID}")
     public ResponseEntity<Void> deleteUser(@PathVariable long userID) {
         if (userService.findById(userID).isEmpty()) {

@@ -136,6 +136,7 @@ public class SecurityConfig {
 						.requestMatchers("/profile").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/save").hasAnyRole("ADMIN")
 						.requestMatchers("/users/{userID}/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers("/users/**").hasAnyRole("ADMIN")
 						.requestMatchers("/users/getLogged/").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/shops/{shopID}/products/new").hasAnyRole("ADMIN")
 						.requestMatchers("/shops/{shopID}/delete").hasAnyRole("ADMIN")

@@ -15,10 +15,15 @@
 </section>
 
 <section>
+    {{#admin}}
+        <a class="btn btn-primary btn-nowrap" href="/users">Volver</a>
+    {{/admin}}
+    {{^admin}}
     <form action="/logout" method="post" class="d-inline">
-        <button class="btn btn-primary btn-nowrap" type="submit">Volver</button>
-        <input type="hidden" name="_csrf" value="{{token}}" />
+        <button class="btn btn-primary btn-nowrap" type="submit">Volver al login</button>
+        <input type="hidden" name="_csrf" value="{{token}}"/>
     </form>
+    {{/admin}}
 </section>
 
 </body>

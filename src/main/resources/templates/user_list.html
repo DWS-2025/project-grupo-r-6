@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Usuarios Registrados</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Borrado</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#users}}
+    <tr>
+        <td>{{id}}</td>
+        <td>{{userName}}</td>
+        <td>{{email}}</td>
+        <td>
+            <ul>
+                {{#roles}}
+                <li>{{.}}</li>
+                {{/roles}}
+            </ul>
+        </td>
+        <td>
+            <form action="/users/{{id}}/delete" method="post" style="display:inline;">
+                <input type="hidden" name="_csrf" value="{{token}}">
+                <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    {{/users}}
+    </tbody>
+</table>
+
+<a href="/index">Volver al inicio</a>
+</body>
+</html>

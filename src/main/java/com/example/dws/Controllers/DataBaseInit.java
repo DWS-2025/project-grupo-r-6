@@ -65,8 +65,15 @@ public class DataBaseInit implements CommandLineRunner {
         UserDTO userDTO = generalMapper.userToUserDTO(user);
         userService.save(userDTO);
 
+        User user2 = new User("usuario", "usuario@gmail.com", passwordEncoder.encode("userpass"), "USER");
+        UserDTO userDTO2 = generalMapper.userToUserDTO(user2);
+        userService.save(userDTO2);
+
         UserDTO userDTO1 = userService.findByName("Adri").get();
         User user1 = generalMapper.userDTOToUser(userDTO1);
+
+        UserDTO userDTO3 = userService.findByName("usuario").get();
+        User user3 = generalMapper.userDTOToUser(userDTO3);
 
         ShopDTO shopPersistedDTO = shopService.findByName("PullAndCow").get();
         Shop s1 = generalMapper.shopDTOToShop(shopPersistedDTO);

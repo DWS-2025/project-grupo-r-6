@@ -40,10 +40,19 @@
                 <a class="btn btn-primary btn-nowrap" href="/profile">{{userName}}'s profile</a>
             </li>
             <li class="nav-item">
-                <form action="/logout" method="post" class="d-inline">
+                <form action="/logout" method="post">
                     <button class="btn btn-primary btn-nowrap" type="submit">Log Out</button>
                     <input type="hidden" name="_csrf" value="{{token}}" />
                 </form>
+            </li>
+            <li class="nav-item">
+
+                {{#admin}}
+
+                <a class="btn btn-primary btn-nowrap" href="/users">Ver usuarios registrados</a>
+
+                {{/admin}}
+
             </li>
         </ul>
         {{/logged}}

@@ -123,9 +123,17 @@ public class UserController {
         if (user.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
+
         commentService.deleteByUserId(userID);
         userService.deleteById(userID);
         return "deleted_user";
+    }
+
+    @GetMapping("/users")
+    public String listUsers(Model model) {
+        List<UserDTO> users = userService.findAll();
+        model.addAttribute("users", users);
+        return "user_list";
     }
 
     @PostMapping("/register")
