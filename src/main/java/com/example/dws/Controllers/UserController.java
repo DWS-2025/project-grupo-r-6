@@ -10,6 +10,8 @@ import com.example.dws.Service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,15 +40,28 @@ public class UserController {
 
     // Show shopping cart of a user by its ID
     @GetMapping("/users/{userID}")
-    public String getShopingCart(@PathVariable("userID") long userID, Model model){
+    public String getShopingCart(
+            @PathVariable("userID") long userID,
+            Model model,
+            @AuthenticationPrincipal UserDetails currentUser
+    ) {
         Optional<User> user = userRepository.findById(userID);
-        if(user.isPresent()){
-            model.addAttribute("user", user.get());
-            List<Product> allProducts = user.get().allProducts();
-            model.addAttribute("allProducts", allProducts);
-            return "showShoppingCart";
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
+
+        User foundUser = user.get();
+        boolean isAdmin = currentUser.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !foundUser.getUserName().equals(currentUser.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para ver este carrito");
+        }
+
+        model.addAttribute("user", foundUser);
+        List<Product> allProducts = foundUser.allProducts();
+        model.addAttribute("allProducts", allProducts);
+        return "showShoppingCart";
     }
     // Show shopping cart of a user by its name
     @GetMapping("/users/getLogged/")

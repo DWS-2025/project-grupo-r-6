@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -156,12 +158,25 @@ public class ShopController {
     // Add new comment to the shop
     @PostMapping("/shops/{shopID}/comments/new")
     public String newCommentToShop(CommentDTO commentDTO, @PathVariable long shopID) {
-            Optional<ShopDTO> shopDTO = shopService.findById(shopID);
-            if (shopDTO.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
-            }
-            shopService.saveComment(shopDTO.get(), commentDTO);
-            return "redirect:/shops/" + shopID;
+        Optional<ShopDTO> shopDTO = shopService.findById(shopID);
+        if (shopDTO.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
+        }
+
+        String cleanedMessage = Jsoup.clean(commentDTO.message(), Safelist.basic());
+
+        CommentDTO cleanedCommentDTO = new CommentDTO(
+                commentDTO.commentId(),
+                commentDTO.user(),
+                commentDTO.issue(),
+                cleanedMessage,
+                commentDTO.shopID()
+        );
+
+        shopService.saveComment(shopDTO.get(), cleanedCommentDTO);
+        return "redirect:/shops/" + shopID;
     }
+
+
 }
 

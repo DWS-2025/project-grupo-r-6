@@ -63,19 +63,38 @@
 {{#logged}}
 <section>
     <h2>Agregar Comentario</h2>
-    <form action="/shops/{{ shop.shopID }}/comments/new" method="post">
+    <form id="commentForm" action="/shops/{{ shop.shopID }}/comments/new" method="post">
         <input type="text" name="issue" placeholder="Asunto" required>
-        <input type="text" name="message" placeholder="Comentario" required>
+
+        <!-- Botones de formato -->
+        <div style="margin-bottom: 5px;">
+            <button type="button" onclick="format('bold')"><b>B</b></button>
+            <button type="button" onclick="format('italic')"><i>I</i></button>
+            <button type="button" onclick="format('underline')"><u>U</u></button>
+            <button type="button" onclick="format('insertUnorderedList')">Lista</button>
+            <button type="button" onclick="format('createLink')">Enlace</button>
+        </div>
+
+        <!-- Editor editable -->
+        <div id="editor" contenteditable="true"
+             style="border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: auto;">
+        </div>
+
+        <!-- Campo oculto para enviar el contenido -->
+        <input type="hidden" name="message" id="message">
+
         <input type="hidden" name="_csrf" value="{{token}}" />
         <button type="submit">Agregar</button>
     </form>
 </section>
+
 {{/logged}}
+
 
 <section>
     <a href="/index" class="back-link">Volver</a>
 </section>
-
+<script src="/js/enriquecido.js"></script>
 <script src="/js/paginacion.js" defer></script>
 
 </body>

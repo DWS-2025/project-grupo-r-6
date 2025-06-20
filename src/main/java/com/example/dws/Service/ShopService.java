@@ -89,6 +89,7 @@ public class ShopService {
         Shop shop = optionalShop.get();
 
         Comment comment = generalMapper.commentDTOToComment(commentDTO);
+        comment.setShop(shop);
         comment.setUser(userService.getLoggedUser());
         commentRepository.save(comment);
 
@@ -158,11 +159,11 @@ public class ShopService {
         shopRepository.save(shop.get());
     }
 
-    public void removeAllCommentsFromShop(long shopID){
-        Optional<Shop> shop = shopRepository.findById(shopID);
-        shop.get().getComments().clear();
-        shopRepository.save(shop.get());
+    @Transactional
+    public void removeAllCommentsFromShop(long shopID) {
+        commentRepository.deleteByShop_ShopID(shopID);
     }
+
 
 
     public Blob getShopImage(Long shopID) {

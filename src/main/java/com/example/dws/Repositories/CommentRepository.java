@@ -2,6 +2,7 @@ package com.example.dws.Repositories;
 
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Shop;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,9 @@ import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findByShop_ShopID(Long shopID, Pageable pageable);
+    @Transactional
+    void deleteByShop_ShopID(Long shopID);
+
 
 
     /*
