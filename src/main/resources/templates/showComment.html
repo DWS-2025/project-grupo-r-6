@@ -23,6 +23,7 @@
     <a href="/shops/{{shop.shopID}}" class="back-link">Volver</a>
     <form action="/comments/{{ shop.shopID }}/{{ comment.commentId }}/deleteComment" method="post">
         <button type="submit" class="back-link">Eliminar</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
     </form>
 </section>
 

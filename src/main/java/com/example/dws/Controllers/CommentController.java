@@ -13,6 +13,8 @@ import com.example.dws.Repositories.UserRepository;
 import com.example.dws.Service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,18 +56,34 @@ public class CommentController {
         }
     }
     @PostMapping("/comments/{shopId}/{commentId}/deleteComment")
-    public String deleteComment(@PathVariable long commentId, @PathVariable long shopId) {
-        if(commentService.findById(commentId).isPresent()){
-            Optional<ShopDTO> shopDTO = shopService.findById(shopId);
-            if(shopDTO.isEmpty()){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
-            }
-            commentService.delete(commentId, shopId);
-            return "redirect:/shops/" + shopId; // Redirect to the affected shop
-        } else{
+    public String deleteComment(
+            @PathVariable long commentId,
+            @PathVariable long shopId,
+            @AuthenticationPrincipal UserDetails currentUser
+    ) {
+        Optional<CommentDTO> commentOpt = commentService.findById(commentId);
+        if (commentOpt.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
         }
 
+        CommentDTO comment = commentOpt.get();
+
+        Optional<ShopDTO> shopDTO = shopService.findById(shopId);
+        if (shopDTO.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
+        }
+
+
+        boolean isAdmin = currentUser.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !comment.user().getUserName().equals(currentUser.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para borrar este comentario");
+        }
+
+        commentService.delete(commentId, shopId);
+        return "redirect:/shops/" + shopId;
     }
+
 
 }
