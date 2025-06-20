@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.security.Principal;
 
-@ControllerAdvice(basePackages = "es.codeurjc.daw.library.controller.web")
+@ControllerAdvice(basePackages = "com.example.dws.Controllers")
 public class UserModelAttributes {
     
 	@ModelAttribute
