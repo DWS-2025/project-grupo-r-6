@@ -10,6 +10,8 @@
 
 <body>
 
+{{>header}}
+
 <header class="second-title">
     <h2>{{shop.shopName}}</h2>
 </header>
@@ -27,7 +29,9 @@
     <p>No hay productos aún.</p>
     {{/shop.products}}
 </section>
+
 <br>
+
 <section>
     <h2>Comentarios</h2>
     <div id="comments-container"></div>
@@ -36,6 +40,7 @@
 
 <br>
 
+{{#admin}}
 <section>
     <h2>Agregar Producto</h2>
     <form action="/shops/{{ shop.shopID }}/products/new" method="post">
@@ -47,6 +52,16 @@
 </section>
 
 <section>
+    <h2>Eliminar Tienda</h2>
+    <form action="/shops/{{ shop.shopID }}/delete" method="post">
+        <button type="submit">Eliminar</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
+    </form>
+</section>
+{{/admin}}
+
+{{#logged}}
+<section>
     <h2>Agregar Comentario</h2>
     <form action="/shops/{{ shop.shopID }}/comments/new" method="post">
         <input type="text" name="issue" placeholder="Asunto" required>
@@ -55,21 +70,13 @@
         <button type="submit">Agregar</button>
     </form>
 </section>
-
-
-<section>
-    <h2>Eliminar Tienda</h2>
-    <form action="/shops/{{ shop.shopID }}/delete" method="post">
-        <button type="submit"> Eliminar </button>
-        <input type="hidden" name="_csrf" value="{{token}}" />
-    </form>
-</section>
+{{/logged}}
 
 <section>
     <a href="/index" class="back-link">Volver</a>
 </section>
 
-<script src="/js/paginacion.js" defer ></script>
+<script src="/js/paginacion.js" defer></script>
 
 </body>
 </html>

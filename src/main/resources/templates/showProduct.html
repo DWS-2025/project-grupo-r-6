@@ -10,6 +10,8 @@
 
 <body>
 
+{{>header}}
+
 <header class="third-title">
     <h3>{{product.productName}}</h3>
 </header>
@@ -29,15 +31,13 @@
         </div>
         {{/product.shops}}
     </div>
-    <br>
-
 
     {{^product.shops}}
     <p>No hay tiendas disponibles para este producto.</p>
     {{/product.shops}}
-
 </section>
-<br>
+
+{{#admin}}
 <section>
     <h2>Añadir Tienda</h2>
     <form action="/products/{{ product.productId }}/addShop/" method="post">
@@ -60,14 +60,6 @@
 </section>
 
 <section>
-    <h2>Comprar Producto</h2>
-    <form action="/products/{{ product.productId }}/buy" method="post">
-        <button type="submit">Comprar Producto</button>
-        <input type="hidden" name="_csrf" value="{{token}}" />
-    </form>
-</section>
-
-<section>
     <h2>Actualizar Producto</h2>
     <form action="/products/{{ product.productId }}/update/" method="post">
         <input type="text" name="productName" placeholder="Nombre del Producto">
@@ -76,6 +68,17 @@
         <input type="hidden" name="_csrf" value="{{token}}" />
     </form>
 </section>
+{{/admin}}
+
+{{#logged}}
+<section>
+    <h2>Comprar Producto</h2>
+    <form action="/products/{{ product.productId }}/buy" method="post">
+        <button type="submit">Comprar Producto</button>
+        <input type="hidden" name="_csrf" value="{{token}}" />
+    </form>
+</section>
+{{/logged}}
 
 <section>
     <a href="/index" class="back-link">Volver</a>

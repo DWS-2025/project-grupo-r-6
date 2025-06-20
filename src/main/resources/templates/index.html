@@ -8,17 +8,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
+{{>header}}
 
-<header class="main-title">
-    <h1>INDIE-TOX</h1>
-    <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="{{token}}">
-        <button type="submit" class="main-title">LogOut</button>
-    </form>
-
-    <a href="/profile" class="main-title">Profile</a>
-
-</header>
 <body>
 
 <section>
@@ -35,26 +26,27 @@
     </div>
 </section>
 
-
+{{#admin}}
 <section>
     <h2>Agregar Tienda</h2>
     <form action="/save" method="post" enctype="multipart/form-data">
         <input type="text" name="shopName" placeholder="Nombre de la tienda">
         <input type="text" name="imageName" placeholder="Nombre de la imagen">
         <input type="file" name="image" accept=".jpg, .jpeg">
-        <button type="submit">Agregar</button>
         <input type="hidden" name="_csrf" value="{{token}}" />
+        <button type="submit">Agregar</button>
     </form>
 </section>
+{{/admin}}
 
-
-
+{{#logged}}
 <section>
     <h2>Ver Mi Carrito</h2>
     <form action="/users/getLogged/" method="get">
         <button type="submit">Ver carrito</button>
     </form>
 </section>
+{{/logged}}
 
 <section>
     <h2>Consulta de Productos</h2>
@@ -71,7 +63,6 @@
         <button type="submit">Filtrar</button>
     </form>
 </section>
-
 
 </body>
 </html>
