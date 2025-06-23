@@ -9,6 +9,7 @@ import com.example.dws.Repositories.UserRepository;
 import com.example.dws.Service.CommentService;
 import com.example.dws.Service.UserService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -93,29 +94,43 @@ public class UserController {
         model.addAttribute("user", user.get());
         return "editUser";
     }
+
     @PostMapping("/users/{userID}/update/")
-    public String updateUser(UserDTO userDTO, @PathVariable("userID") long userID,Model model ){
+    public String updateUser(UserDTO userDTO,
+                             @PathVariable("userID") long userID,
+                             Model model,
+                             HttpServletResponse response) {
+
         Optional<UserDTO> user = userService.findById(userID);
         if (user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
-        if (userDTO.email()== null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email del usuario no puede estar vacío");
+
+        if (userDTO.email() == null || userDTO.email().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El email no puede estar vacío");
         }
+
         if (userDTO.userName().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacío");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario no puede estar vacío");
         }
+
         if (userDTO.password() != null && !userDTO.password().isBlank()) {
             if (!userDTO.password().equals(userDTO.confirmPassword())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden");
             }
-
             userService.updatePassword(userID, userDTO.password());
         }
-        this.userService.update(userID,userDTO);
-        model.addAttribute("user", user.get());
+
+        userService.update(userID, userDTO);
+
+        if (!userDTO.userName().equals(user.get().userName())) {
+            return "redirect:/login?userNameChanged";
+        }
+
+        model.addAttribute("user", userDTO);
         return "updated_user";
     }
+
 
     @PostMapping("/users/{userID}/delete")
     public String deleteUser(@PathVariable long userID) {
