@@ -8,12 +8,16 @@ import com.example.dws.Entities.User;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
+import com.example.dws.Service.FileStorageService;
 import com.example.dws.Service.ProductService;
 import com.example.dws.Service.ShopService;
 import com.example.dws.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +26,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +42,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     @Autowired
+    private FileStorageService fileStorageService;
+    @Autowired
     private UserService userService;
 
     @GetMapping("/products/{productID}")
@@ -45,11 +55,39 @@ public class ProductController {
             model.addAttribute("shops", shops);
             List<ShopDTO> allShops = shopService.findAll();
             model.addAttribute("allShops", allShops);
+            boolean hasFile = false;
+            String originalFileName = null;
+
+            try {
+                originalFileName = fileStorageService.getOriginalFilename(productDTO.get().productId());
+                Path filePath = Paths.get(fileStorageService.getFileStorageLocation().toString(),
+                        productDTO.get().productId() + "_" + originalFileName);
+                if (Files.exists(filePath)) {
+                    hasFile = true;
+                    model.addAttribute("fileName", originalFileName);
+                }
+            } catch (Exception e){
+            }
             return "showProduct"; // View showing shop details
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El prodcuto seleccionado no existe");// Error view if shop not found
         }
     }
+
+    @GetMapping("/products/{productID}/file")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long productID) {
+        try {
+            Resource resource = fileStorageService.loadFileAsResource(productID);
+            String originalFileName = fileStorageService.getOriginalFilename(productID);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + originalFileName + "\"")
+                    .body(resource);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Archivo no encontrado");
+        }
+    }
+
 
     @PostMapping("/products/{productID}/addShop/")
     public String addShopToProduct(@PathVariable("productID") long productID, long shopID) {

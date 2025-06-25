@@ -9,10 +9,7 @@ import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
 import com.example.dws.Repositories.UserRepository;
-import com.example.dws.Service.CommentService;
-import com.example.dws.Service.ShopService;
-import com.example.dws.Service.UserService;
-import com.example.dws.Service.ProductService;
+import com.example.dws.Service.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.io.Resource;
@@ -54,6 +51,8 @@ public class ShopController {
     private UserService userService;
     @Autowired
     private GeneralMapper generalMapper;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     private static final Path IMAGES_FOLDER = Paths.get("uploads");
 
@@ -141,20 +140,42 @@ public class ShopController {
     }
     // Add new product to the shop
     @PostMapping("/shops/{shopID}/products/new")
-    public String newProductToShop(ProductDTO productDTO, @PathVariable long shopID) {
-        if(shopService.findById(shopID).isEmpty()){
+    public String newProductToShop(
+            @ModelAttribute ProductDTO productDTO,
+            @RequestParam("file") MultipartFile file,
+            @PathVariable long shopID) {
+
+        var shopOptional = shopService.findById(shopID);
+        if (shopOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-        if (productDTO.productName() == null) {
+
+        if (productDTO.productPrize() == null || productDTO.productPrize() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El precio del producto no puede estar vacío");
         }
-        if (productDTO.productName().trim().isEmpty()) {
+        if (productDTO.productName() == null || productDTO.productName().trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
 
-        productService.saveProductInShop(productDTO, shopService.findById(shopID).get());
+        // Paso 1: guardar producto SIN archivo
+        ProductDTO savedProduct = productService.saveProductInShop(productDTO, shopOptional.get());
+
+        // Paso 2: guardar archivo y actualizar entidad real (no DTO)
+        try {
+            String storedFileName = fileStorageService.storeFile(file, savedProduct.productId());
+            String originalFileName = file.getOriginalFilename();
+
+            // Aquí actualizas el modelo real Product, no el DTO
+            productService.updateProductFileInfo(savedProduct.productId(), originalFileName, storedFileName);
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al guardar el archivo");
+        }
+
         return "redirect:/shops/" + shopID;
     }
+
+
     // Add new comment to the shop
     @PostMapping("/shops/{shopID}/comments/new")
     public String newCommentToShop(CommentDTO commentDTO, @PathVariable long shopID) {

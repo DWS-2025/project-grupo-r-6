@@ -49,17 +49,6 @@ public class ProductRestController {
     }
 
     // POST create new product (standalone, no shop association)
-    @PostMapping
-    public ResponseEntity<String> createProduct(@RequestBody ProductDTO productDTO) {
-        if (productDTO.productName() == null || productDTO.productName().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
-        }
-        if (productDTO.productPrize() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El precio del producto no puede ser nulo");
-        }
-        productService.save(productDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Producto creado correctamente");
-    }
 
     // PUT update existing product
     @PutMapping("/{productID}")
