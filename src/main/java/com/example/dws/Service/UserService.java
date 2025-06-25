@@ -2,6 +2,7 @@ package com.example.dws.Service;
 
 import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.UserBasicDTO;
 import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
@@ -34,7 +35,9 @@ public class UserService {
     public Optional<UserDTO> findById(long id) {
         return (Optional.of(userToUserDTO(userRepository.findById(id))));
     }
-
+    public Optional<UserBasicDTO> findUserById(long id) {
+        return (Optional.of(userToUserBasicDTO(userRepository.findById(id))));
+    }
 
     public User getLoggedUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -113,6 +116,13 @@ public class UserService {
     private User userDTOToUser(UserDTO userDTO){
         return generalMapper.userDTOToUser(userDTO);
     }
+    private UserBasicDTO userToUserBasicDTO(Optional<User> user) {
+        return generalMapper.userToUserBasicDTO(user.get());
+    }
+    private User userBasicDTOToUser(UserBasicDTO userDTO){
+        return generalMapper.userBasicDTOToUser(userDTO);
+    }
+
 
     private List<UserDTO> ToListUserID(List<User> users){
         return generalMapper.ToListUserID(users);

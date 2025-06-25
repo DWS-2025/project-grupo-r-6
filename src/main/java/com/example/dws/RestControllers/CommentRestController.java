@@ -1,9 +1,6 @@
 package com.example.dws.RestControllers;
 
-import com.example.dws.DTOs.CommentDTO;
-import com.example.dws.DTOs.GeneralMapper;
-import com.example.dws.DTOs.ProductDTO;
-import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.DTOs.*;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Service.CommentService;
 import com.example.dws.Service.ShopService;
@@ -53,7 +50,7 @@ public class CommentRestController {
 
     // GET a specific comment by shop‐ID and comment‐ID
     @GetMapping("/{shopID}/{commentID}")
-    public ResponseEntity<CommentDTO> getCommentById(
+    public ResponseEntity<CommentBasicDTO> getCommentById(
             @PathVariable long shopID,
             @PathVariable long commentID
     ) {
@@ -61,7 +58,7 @@ public class CommentRestController {
         if (shopDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-        Optional<CommentDTO> commentDTO = commentService.findById(commentID);
+        Optional<CommentBasicDTO> commentDTO = commentService.findCommentById(commentID);
         if (commentDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
         }

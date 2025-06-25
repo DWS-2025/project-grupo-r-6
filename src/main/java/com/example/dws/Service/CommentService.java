@@ -39,7 +39,10 @@ public class CommentService {
         CommentDTO commentDTO= commentToCommentDTO(commentRepository.findById(id));
         return Optional.of(commentDTO);
     }
-
+    public Optional<CommentBasicDTO> findCommentById(long id) {
+        CommentBasicDTO commentDTO= commentToCommentBasicDTO(commentRepository.findById(id));
+        return Optional.of(commentDTO);
+    }
 
 
     public void save(CommentDTO commentDTO) {
@@ -64,6 +67,12 @@ public class CommentService {
     }
     private CommentDTO commentToCommentDTO(Optional<Comment> comment){
         return generalMapper.commentToCommentDTO(comment.get());
+    }
+    private Comment commentBasicDTOToComment(CommentBasicDTO commentDTO) {
+        return generalMapper.commentBasicDTOToComment(commentDTO);
+    }
+    private CommentBasicDTO commentToCommentBasicDTO(Optional<Comment> comment){
+        return generalMapper.commentToCommentBasicDTO(comment.get());
     }
 
     public Page<CommentDTO> paginateShopComments(ShopDTO shopDTO, Pageable pageable) {

@@ -2,6 +2,7 @@ package com.example.dws.RestControllers;
 
 import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
+import com.example.dws.DTOs.UserBasicDTO;
 import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.User;
@@ -46,10 +47,10 @@ public class UserRestController {
 
     // GET a user by ID
     @GetMapping("/users/{userID}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable long userID) {
+    public ResponseEntity<UserBasicDTO> getUserById(@PathVariable long userID) {
         boolean isAdmin = userService.isAdmin();
         long actual = userService.getLoggedUser().getId();
-        Optional<UserDTO> userDTO = userService.findById(userID);
+        Optional<UserBasicDTO> userDTO = userService.findUserById(userID);
         if (userDTO.isPresent()) {
             if(isAdmin || actual == userID){
                 return ResponseEntity.ok(userDTO.get());
