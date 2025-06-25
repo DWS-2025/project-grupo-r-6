@@ -36,15 +36,26 @@ public class UserRestController {
     // GET all users
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+        boolean isAdmin = userService.isAdmin();
+        if (isAdmin) {
+            return ResponseEntity.ok(userService.findAll());
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "El usuario no tiene permisos");
+        }
     }
 
     // GET a user by ID
     @GetMapping("/users/{userID}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable long userID) {
+        boolean isAdmin = userService.isAdmin();
+        long actual = userService.getLoggedUser().getId();
         Optional<UserDTO> userDTO = userService.findById(userID);
         if (userDTO.isPresent()) {
-            return ResponseEntity.ok(userDTO.get());
+            if(isAdmin || actual == userID){
+                return ResponseEntity.ok(userDTO.get());
+            }else{
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "El usuario no tiene permisos");
+            }
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
         }
@@ -66,38 +77,48 @@ public class UserRestController {
     }
 
     @PutMapping("/users/{userID}")
-    public ResponseEntity<String> updateUser(@PathVariable long userID,  UserDTO userDTO) {
+    public ResponseEntity<String> updateUser(@PathVariable long userID,@RequestBody  UserDTO userDTO) {
+        boolean isAdmin = userService.isAdmin();
+        long actual = userService.getLoggedUser().getId();
         Optional<UserDTO> existingUser = userService.findById(userID);
-        if (existingUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
-        }
-
-        if (userDTO.email() == null || userDTO.email().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El campo email no puede estar vacío");
-        }
-
-        if (userDTO.userName() == null || userDTO.userName().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacío");
-        }
-
-        if (userDTO.password() != null && !userDTO.password().isBlank()) {
-            if (!userDTO.password().equals(userDTO.confirmPassword())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas deben coincidir");
+        if(isAdmin || actual == userID){
+            if (existingUser.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario seleccionado no existe");
             }
-            userService.updatePassword(userID, userDTO.password());
-        }
 
-        userService.update(userID, userDTO);
-        return ResponseEntity.ok("Usuario actualizado correctamente");
+            if (userDTO.userName() == null || userDTO.userName().trim().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del usuario no puede estar vacío");
+            }
+            if (userDTO.email() == null || userDTO.email().trim().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El campo email no puede estar vacío");
+            }
+            if (userDTO.password() != null && !userDTO.password().isBlank()) {
+                if (!userDTO.password().equals(userDTO.confirmPassword())) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas deben coincidir");
+                }
+                userService.updatePassword(userID, userDTO.password());
+            }
+
+            userService.update(userID, userDTO);
+            return ResponseEntity.ok("Usuario actualizado correctamente");
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "El usuario no tiene permisos");
+        }
     }
 
     @DeleteMapping("/users/{userID}")
-    public ResponseEntity<Void> deleteUser(@PathVariable long userID) {
+    public ResponseEntity<String> deleteUser(@PathVariable long userID) {
+        boolean isAdmin = userService.isAdmin();
+        long actual = userService.getLoggedUser().getId();
         if (userService.findById(userID).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
-        userService.deleteById(userID);
-        return ResponseEntity.noContent().build();
+        if (isAdmin || actual == userID){
+            userService.deleteById(userID);
+            return ResponseEntity.ok("Usuario eliminado correctamente");
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "El usuario no tiene permisos");
+        }
     }
 
 /*

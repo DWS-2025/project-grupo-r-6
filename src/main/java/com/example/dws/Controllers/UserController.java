@@ -134,14 +134,19 @@ public class UserController {
 
     @PostMapping("/users/{userID}/delete")
     public String deleteUser(@PathVariable long userID) {
+        boolean isAdmin = userService.isAdmin();
+        long actual = userService.getLoggedUser().getId();
         Optional<UserDTO> user = userService.findById(userID);
         if (user.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
-
-        commentService.deleteByUserId(userID);
-        userService.deleteById(userID);
-        return "deleted_user";
+        if(isAdmin || actual == userID){
+            commentService.deleteByUserId(userID);
+            userService.deleteById(userID);
+            return "deleted_user";
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "El usuario no tiene permisos");
+        }
     }
 
     @GetMapping("/users")
