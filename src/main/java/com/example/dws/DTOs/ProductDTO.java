@@ -9,8 +9,9 @@ public record ProductDTO(
         Long productId,
         String productName,
         Double productPrize,
-        List<ShopBasicDTO> shops
-) {
+        List<ShopBasicDTO> shops,
+        String originalFileName,
+        String storedFileName
+) {}
 
-}
 

@@ -35,6 +35,14 @@
     {{^product.shops}}
     <p>No hay tiendas disponibles para este producto.</p>
     {{/product.shops}}
+
+    {{#fileName}}
+    <section>
+        <h2>Archivo adjunto:</h2>
+        <a href="/products/{{product.productId}}/file" target="_blank">{{fileName}}</a>
+    </section>
+    {{/fileName}}
+
 </section>
 
 {{#admin}}

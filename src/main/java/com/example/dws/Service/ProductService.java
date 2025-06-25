@@ -38,21 +38,26 @@ public class ProductService {
     }
 
 
-    public void saveProductInShop(ProductDTO productDTO, ShopDTO shopDTO) {
+    public ProductDTO saveProductInShop(ProductDTO productDTO, ShopDTO shopDTO) {
         Product product = productDTOToProduct(productDTO);
-        if(product.getShops() == null){
+
+        if (product.getShops() == null) {
             product.setShops(new ArrayList<>());
         }
+
         Shop shop = generalMapper.shopDTOToShop(shopDTO);
+
         if (!product.getShops().contains(shop)) {
             product.getShops().add(shop);
         }
         if (!shop.getProducts().contains(product)) {
             shop.getProducts().add(product);
         }
-        productRepository.save(product);
 
+        Product savedProduct = productRepository.save(product);
+        return generalMapper.productToProductDTO(savedProduct);
     }
+
     public void deleteById(long id){
         productRepository.deleteById(id);
     }
@@ -79,6 +84,17 @@ public class ProductService {
             }
         }
     }
+
+    public void updateProductFileInfo(Long productId, String originalName, String storedName) {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            product.setOriginalFileName(originalName);
+            product.setStoredFileName(storedName);
+            productRepository.save(product);
+        }
+    }
+
 
 
     private ProductDTO  productToProductDTO(Optional<Product> product) {

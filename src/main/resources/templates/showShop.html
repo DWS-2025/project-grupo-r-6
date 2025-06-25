@@ -43,9 +43,13 @@
 {{#admin}}
 <section>
     <h2>Agregar Producto</h2>
-    <form action="/shops/{{ shop.shopID }}/products/new" method="post">
+    <form action="/shops/{{ shop.shopID }}/products/new" method="post" enctype="multipart/form-data">
         <input type="text" name="productName" placeholder="Nombre del producto" required>
         <input type="number" name="productPrize" placeholder="Precio del producto" required>
+
+        <label for="file">Archivo adjunto (PDF, DOC, TXT):</label>
+        <input type="file" id="file" name="file" required>
+
         <button type="submit">Agregar</button>
         <input type="hidden" name="_csrf" value="{{token}}" />
     </form>
@@ -59,6 +63,8 @@
     </form>
 </section>
 {{/admin}}
+
+
 
 {{#logged}}
 <section>
