@@ -36,13 +36,26 @@ public class FileStorageService {
         }
 
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileName = productId + "_" + originalFilename;
 
-        Path targetLocation = this.fileStorageLocation.resolve(fileName);
+        if (originalFilename.contains("..")) {
+            throw new SecurityException("Nombre de archivo inválido: contiene secuencias peligrosas");
+        }
+
+        String fileName = productId + "_" + System.currentTimeMillis() + "_" + originalFilename;
+
+        Path targetLocation = this.fileStorageLocation.resolve(fileName).normalize();
+
+        if (!targetLocation.startsWith(this.fileStorageLocation)) {
+            throw new SecurityException("Intento de escritura fuera del directorio permitido");
+        }
+
         Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
         return fileName;
     }
+
+
+
 
     public Resource loadFileAsResource(Long productId) throws IOException {
         try (Stream<Path> paths = Files.walk(this.fileStorageLocation)) {
