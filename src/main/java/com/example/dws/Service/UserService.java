@@ -28,6 +28,8 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private SanitizationService sanitizationService;
+    @Autowired
     private GeneralMapper generalMapper;
 
     @Autowired
@@ -87,7 +89,7 @@ public class UserService {
         }
 
         User user = optionalUser.get();
-        Product product = generalMapper.productDTOToProduct(productDTO);
+        Product product = generalMapper.productDTOToProduct(sanitizationService.sanitizeProductDTO(productDTO));
 
         if (!user.getUserProducts().contains(product)) {
             user.addProduct(product);
@@ -149,7 +151,7 @@ public class UserService {
     }
 
     public void save(UserDTO userDTO){
-        User user = userDTOToUser(userDTO);
+        User user = userDTOToUser(sanitizationService.sanitizeUserDTO(userDTO));
         userRepository.save(user);
 
     }
@@ -160,7 +162,7 @@ public class UserService {
 
     public void update(Long id, UserDTO userDTO) {
         Optional<User> oldUser = userRepository.findById(id);
-        User newUser = userDTOToUser(userDTO);
+        User newUser = userDTOToUser(sanitizationService.sanitizeUserDTO(userDTO));
         oldUser.get().setUserName(newUser.getUserName());
         oldUser.get().setEmail(newUser.getEmail());
         userRepository.save(oldUser.get());

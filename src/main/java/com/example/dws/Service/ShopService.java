@@ -32,6 +32,8 @@ public class ShopService {
     @Autowired
     private ShopRepository shopRepository;
     @Autowired
+    private SanitizationService sanitizationService;
+    @Autowired
     private ProductRepository productRepository;
     @Autowired
     private CommentRepository commentRepository;
@@ -78,7 +80,7 @@ public class ShopService {
 
 
     public void save(ShopDTO shopDTO){
-        Shop shop = shopDTOToShop(shopDTO);
+        Shop shop = shopDTOToShop(sanitizationService.sanitizeShopDTO(shopDTO));
         shopRepository.save(shop);
     }
 
