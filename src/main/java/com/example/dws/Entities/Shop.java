@@ -13,7 +13,7 @@ public class Shop {
     private String shopName;
     @ManyToMany(mappedBy = "shops", fetch = FetchType.EAGER)
     private List<Product> products;
-    @OneToMany
+    @OneToMany(mappedBy = "shop", fetch = FetchType.EAGER)
     private List<Comment> comments;
     private String imageName;
     @Lob

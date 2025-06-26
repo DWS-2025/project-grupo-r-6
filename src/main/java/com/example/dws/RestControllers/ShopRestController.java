@@ -113,7 +113,7 @@ public class ShopRestController {
     }
 
     // REVISAR
-    @PostMapping("/shops/{shopID}/comments")
+    @PostMapping("/comments/{shopID}")
     public ResponseEntity<String> addCommentToShop(@RequestBody CommentDTO commentDTO, @PathVariable long shopID) {
         Optional<ShopDTO> shopDTO = shopService.findById(shopID);
         if (shopDTO.isEmpty()) {

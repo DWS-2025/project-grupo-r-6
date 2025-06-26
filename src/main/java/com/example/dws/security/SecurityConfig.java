@@ -86,6 +86,8 @@ public class SecurityConfig {
 						// MIXED/SHARED ENDPOINTS
 						.requestMatchers(HttpMethod.POST, "/api/shops/**").hasRole("USER")
 						.requestMatchers(HttpMethod.POST, "/api/shops/{shopID}/image").hasRole("USER")
+						.requestMatchers(HttpMethod.POST, "/comments/{shopID}").hasAnyRole("ADMIN", "USER")
+
 
 						// Default fallback
 						.anyRequest().permitAll()
