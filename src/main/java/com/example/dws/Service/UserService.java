@@ -9,12 +9,14 @@ import com.example.dws.Entities.Product;
 import com.example.dws.Entities.User;
 import com.example.dws.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,9 +42,18 @@ public class UserService {
     }
 
     public User getLoggedUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUserName(username).get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No estás logueado");
+        }
+
+        String username = authentication.getName();
+
+        return userRepository.findByUserName(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No estás logueado"));
     }
+
     public static boolean isAuthenticated() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
@@ -69,14 +80,23 @@ public class UserService {
     }
 
     public Long addProduct(ProductDTO productDTO) {
-        User user = this.getLoggedUser();
+        Optional<User> optionalUser = userRepository.findByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        if (optionalUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Necesitas estar logueado");
+        }
+
+        User user = optionalUser.get();
         Product product = generalMapper.productDTOToProduct(productDTO);
-        if(!user.getUserProducts().contains(product)){
+
+        if (!user.getUserProducts().contains(product)) {
             user.addProduct(product);
             this.save(user);
         }
+
         return user.getId();
     }
+
 
     public void removeProductFromUser(ProductDTO productDTO){
         User user = this.getLoggedUser();
