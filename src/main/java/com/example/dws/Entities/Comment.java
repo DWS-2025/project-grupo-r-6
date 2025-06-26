@@ -29,6 +29,14 @@ public class Comment {
         this.message = message;
     }
 
+    public Comment(Long commentId, User user, String issue, String message, Shop shop) {
+        this.user = user;
+        this.issue = issue;
+        this.commentId = commentId;
+        this.message = message;
+        this.shop = shop;
+    }
+
     public Shop getShop() {
         return shop;
     }

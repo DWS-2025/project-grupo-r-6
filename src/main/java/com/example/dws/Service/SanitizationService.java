@@ -4,6 +4,7 @@ import com.example.dws.DTOs.CommentDTO;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.DTOs.UserDTO;
+import com.example.dws.Entities.Comment;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
@@ -100,6 +101,17 @@ public class SanitizationService {
                 sanitizeBasic(commentDTO.issue()),
                 sanitizeQuill(commentDTO.message()),
                 commentDTO.shopID()
+        );
+    }
+    public Comment sanitizeComment(Comment comment) {
+        if (comment == null) return null;
+
+        return new Comment(
+                comment.getCommentId(),
+                comment.getUser(),
+                sanitizeBasic(comment.getIssue()),
+                sanitizeQuill(comment.getMessage()),
+                comment.getShop()
         );
     }
 
