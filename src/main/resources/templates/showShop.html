@@ -58,8 +58,8 @@
 <section>
     <h2>Eliminar Tienda</h2>
     <form action="/shops/{{ shop.shopID }}/delete" method="post">
-        <button type="submit">Eliminar</button>
         <input type="hidden" name="_csrf" value="{{token}}" />
+        <button type="submit">Eliminar</button>
     </form>
 </section>
 {{/admin}}

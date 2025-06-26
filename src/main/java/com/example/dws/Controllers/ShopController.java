@@ -137,7 +137,7 @@ public class ShopController {
             shopService.removeAllProductsFromShop(shopID);
             shopService.removeAllCommentsFromShop(shopID);
             shopService.deleteById(shopID); // Remove the shop by its ID
-            return "redirect:/index"; // Redirect to shop list
+            return "/deleted_shop"; // Redirect to shop list
         }
         }else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tiene permisos");
