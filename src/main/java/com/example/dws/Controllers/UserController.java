@@ -9,6 +9,7 @@ import com.example.dws.Repositories.UserRepository;
 import com.example.dws.Service.CommentService;
 import com.example.dws.Service.UserService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,18 +89,21 @@ public class UserController {
     @GetMapping("/users/{userID}/edit")
     public String editUser(@PathVariable("userID") long userID, Model model) {
         Optional<UserDTO> user = userService.findById(userID);
-        if (user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+        boolean isAdmin= userService.isAdmin();
+        boolean permisos= (isAdmin || user.get().userName().equals(userService.getLoggedUser().getUserName()));
+        if (user.isPresent() && permisos) {
+            model.addAttribute("user", user.get());
+            return "editUser";
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no tiene permisos");
         }
-        model.addAttribute("user", user.get());
-        return "editUser";
     }
 
     @PostMapping("/users/{userID}/update/")
     public String updateUser(UserDTO userDTO,
                              @PathVariable("userID") long userID,
                              Model model,
-                             HttpServletResponse response) {
+                             HttpServletResponse response, HttpServletRequest request) {
 
         Optional<UserDTO> user = userService.findById(userID);
         if (user.isEmpty()) {
@@ -114,17 +118,20 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario no puede estar vacío");
         }
 
+        boolean passwordChanged = false;
         if (userDTO.password() != null && !userDTO.password().isBlank()) {
             if (!userDTO.password().equals(userDTO.confirmPassword())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden");
             }
             userService.updatePassword(userID, userDTO.password());
+            passwordChanged = true;
         }
 
         userService.update(userID, userDTO);
-
-        if (!userDTO.userName().equals(user.get().userName())) {
-            return "redirect:/login?userNameChanged";
+        boolean usernameChanged = !userDTO.userName().equals(user.get().userName());
+        if (usernameChanged || passwordChanged) {
+            request.getSession().invalidate();
+            return "redirect:/login?logout";
         }
 
         model.addAttribute("user", userDTO);

@@ -128,6 +128,8 @@ public class ShopController {
     // Delete the shop of the products that have it assigned and the shop is deleted
     @PostMapping("/shops/{shopID}/delete")
     public String deleteShop(@PathVariable long shopID) {
+        boolean isAdmin= userService.isAdmin();
+        if(isAdmin){
         if(shopService.findById(shopID).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         } else{
@@ -135,7 +137,10 @@ public class ShopController {
             shopService.removeAllProductsFromShop(shopID);
             shopService.removeAllCommentsFromShop(shopID);
             shopService.deleteById(shopID); // Remove the shop by its ID
-            return "redirect:/"; // Redirect to shop list
+            return "redirect:/index"; // Redirect to shop list
+        }
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tiene permisos");
         }
     }
     // Add new product to the shop

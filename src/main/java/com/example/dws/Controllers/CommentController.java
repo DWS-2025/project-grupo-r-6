@@ -61,28 +61,32 @@ public class CommentController {
             @PathVariable long shopId,
             @AuthenticationPrincipal UserDetails currentUser
     ) {
-        Optional<CommentDTO> commentOpt = commentService.findById(commentId);
-        if (commentOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
+        if(currentUser!=null) {
+            Optional<CommentDTO> commentOpt = commentService.findById(commentId);
+            if (commentOpt.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
+            }
+
+            CommentDTO comment = commentOpt.get();
+
+            Optional<ShopDTO> shopDTO = shopService.findById(shopId);
+            if (shopDTO.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
+            }
+
+
+            boolean isAdmin = currentUser.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+            if (!isAdmin && !comment.user().getUserName().equals(currentUser.getUsername())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para borrar este comentario");
+            }
+
+            commentService.delete(commentId, shopId);
+            return "redirect:/shops/" + shopId;
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No estas loggeado");
         }
-
-        CommentDTO comment = commentOpt.get();
-
-        Optional<ShopDTO> shopDTO = shopService.findById(shopId);
-        if (shopDTO.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
-        }
-
-
-        boolean isAdmin = currentUser.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-
-        if (!isAdmin && !comment.user().getUserName().equals(currentUser.getUsername())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para borrar este comentario");
-        }
-
-        commentService.delete(commentId, shopId);
-        return "redirect:/shops/" + shopId;
     }
 
 
