@@ -72,6 +72,7 @@ public class SanitizationService {
                 userDTO.confirmPassword(),
                 sanitizeNone(userDTO.email()),
                 userDTO.roles(),
+                userDTO.userProducts()
         );
     }
 
