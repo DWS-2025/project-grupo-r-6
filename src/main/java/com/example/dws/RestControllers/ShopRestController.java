@@ -84,6 +84,7 @@ public class ShopRestController {
         }
     }
 
+
     // REVISAR
     @DeleteMapping("/{shopID}")
     public ResponseEntity<String> deleteShop(@PathVariable long shopID) {
@@ -99,7 +100,7 @@ public class ShopRestController {
     }
 
     // REVISAR
-    @PostMapping("/shops/{shopID}/products")
+    @PostMapping("/{shopID}/products")
     public ResponseEntity<String> addProductToShop(@RequestBody ProductDTO productDTO, @PathVariable long shopID) {
         Optional<ShopDTO> shop = shopService.findById(shopID);
         if (shop.isEmpty()) {

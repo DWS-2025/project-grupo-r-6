@@ -46,7 +46,7 @@ public class UserRestController {
     }
 
     // GET a user by ID
-    @GetMapping("/users/{userID}")
+    @GetMapping("/{userID}")
     public ResponseEntity<UserBasicDTO> getUserById(@PathVariable long userID) {
         boolean isAdmin = userService.isAdmin();
         long actual = userService.getLoggedUser().getId();
@@ -63,7 +63,7 @@ public class UserRestController {
     }
 
     // GET logged‐in user's shopping cart
-    @GetMapping("/users/me/cart")
+    @GetMapping("/me/cart")
     public ResponseEntity<List<ProductDTO>> getLoggedUserCart() {
         User logged = userService.getLoggedUser();
         List<ProductDTO> cartDTOs = new ArrayList<>();
@@ -77,7 +77,7 @@ public class UserRestController {
         return ResponseEntity.ok(cartDTOs);
     }
 
-    @PutMapping("/users/{userID}")
+    @PutMapping("/{userID}")
     public ResponseEntity<String> updateUser(@PathVariable long userID,@RequestBody  UserDTO userDTO) {
         boolean isAdmin = userService.isAdmin();
         long actual = userService.getLoggedUser().getId();
