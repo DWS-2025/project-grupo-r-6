@@ -188,18 +188,8 @@ public class ShopController {
         if (shopDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-
-        String cleanedMessage = Jsoup.clean(commentDTO.message(), Safelist.basic());
-
-        CommentDTO cleanedCommentDTO = new CommentDTO(
-                commentDTO.commentId(),
-                commentDTO.user(),
-                commentDTO.issue(),
-                cleanedMessage,
-                commentDTO.shopID()
-        );
-
-        shopService.saveComment(shopDTO.get(), cleanedCommentDTO);
+        
+        shopService.saveComment(shopDTO.get(), commentDTO);
         return "redirect:/shops/" + shopID;
     }
 

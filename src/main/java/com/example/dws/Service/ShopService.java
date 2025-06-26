@@ -136,7 +136,7 @@ public class ShopService {
     }
 
     public void save(ShopDTO shopDTO, MultipartFile imageFile) throws IOException {
-        Shop shop = shopDTOToShop(shopDTO);
+        Shop shop = shopDTOToShop(sanitizationService.sanitizeShopDTO(shopDTO));
         if(!imageFile.isEmpty()) {
             shop.setImageFile(BlobProxy.generateProxy(imageFile.getInputStream(),
                     imageFile.getSize()));

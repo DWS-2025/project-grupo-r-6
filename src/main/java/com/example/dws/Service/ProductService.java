@@ -41,7 +41,7 @@ public class ProductService {
 
 
     public ProductDTO saveProductInShop(ProductDTO productDTO, ShopDTO shopDTO) {
-        Product product = productDTOToProduct(productDTO);
+        Product product = productDTOToProduct(sanitizationService.sanitizeProductDTO(productDTO));
 
         if (product.getShops() == null) {
             product.setShops(new ArrayList<>());
