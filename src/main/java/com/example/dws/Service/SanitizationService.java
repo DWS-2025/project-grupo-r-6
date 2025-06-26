@@ -5,6 +5,8 @@ import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.DTOs.UserDTO;
 import com.example.dws.Entities.Comment;
+import com.example.dws.Entities.Shop;
+import com.example.dws.Entities.User;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,9 @@ public class SanitizationService {
             return null;
         }
 
-        return Jsoup.clean(input, Safelist.basic());
+        return Jsoup.clean(input, Safelist.none()).trim();
     }
+
 
 
     // Use JSOUP to sanitize inputs forms with none
@@ -117,6 +120,24 @@ public class SanitizationService {
                 sanitizeImg(shopDTO.imageName()),
                 sanitizeBasic(shopDTO.imageUrl())
         );
+    }
+
+    public Comment sanitizeAndMapToComment(CommentDTO dto, Shop shop, User user) {
+        if (dto == null) return null;
+        if (shop == null) throw new IllegalArgumentException("Shop no puede ser null");
+        if (user == null) throw new IllegalArgumentException("User no puede ser null");
+
+        String sanitizedIssue = sanitizeBasic(dto.issue());
+        String sanitizedMessage = sanitizeQuill(dto.message());
+
+        Comment comment = new Comment();
+        comment.setCommentId(dto.commentId());
+        comment.setIssue(sanitizedIssue);
+        comment.setMessage(sanitizedMessage);
+        comment.setShop(shop);
+        comment.setUser(user);
+
+        return comment;
     }
 }
 

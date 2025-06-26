@@ -4,6 +4,7 @@ import com.example.dws.DTOs.*;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
+import com.example.dws.Entities.User;
 import com.example.dws.Repositories.CommentRepository;
 import com.example.dws.Repositories.ProductRepository;
 import com.example.dws.Repositories.ShopRepository;
@@ -101,7 +102,8 @@ public class ShopService {
         }
         Shop shop = optionalShop.get();
 
-        Comment comment = generalMapper.commentDTOToComment(sanitizationService.sanitizeCommentDTO(commentDTO));
+        User loggedUser = userService.getLoggedUser();
+        Comment comment = sanitizationService.sanitizeAndMapToComment(commentDTO, shop, loggedUser);
         comment.setShop(shop);
         comment.setUser(userService.getLoggedUser());
         commentRepository.save(comment);

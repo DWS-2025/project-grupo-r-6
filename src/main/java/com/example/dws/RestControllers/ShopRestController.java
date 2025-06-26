@@ -5,10 +5,7 @@ import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.DTOs.ShopExDTO;
 import com.example.dws.Entities.Shop;
-import com.example.dws.Service.CommentService;
-import com.example.dws.Service.ProductService;
-import com.example.dws.Service.ShopService;
-import com.example.dws.Service.UserService;
+import com.example.dws.Service.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +36,9 @@ public class ShopRestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping("/")
     public ResponseEntity<List<ShopExDTO>> getAllShops() {
@@ -99,20 +99,52 @@ public class ShopRestController {
         return ResponseEntity.ok("Tienda eliminada correctamente");
     }
 
-    // REVISAR
-    @PostMapping("/{shopID}/products")
-    public ResponseEntity<String> addProductToShop(@RequestBody ProductDTO productDTO, @PathVariable long shopID) {
-        Optional<ShopDTO> shop = shopService.findById(shopID);
-        if (shop.isEmpty()) {
+
+    @PostMapping(value = "/{shopID}/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> addProductToShopFromFormData(
+            @RequestParam("productName") String productName,
+            @RequestParam("productPrize") Double productPrize,
+            @RequestParam("file") MultipartFile file,
+            @PathVariable long shopID) {
+
+        Optional<ShopDTO> shopOpt = shopService.findById(shopID);
+        if (shopOpt.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
-        if (productDTO.productName() == null || productDTO.productName().trim().isEmpty()) {
+
+        if (productName == null || productName.trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del producto no puede estar vacío");
         }
 
-        productService.saveProductInShop(productDTO, shop.get());
-        return ResponseEntity.status(HttpStatus.CREATED).body("Producto añadido correctamente");
+        if (productPrize == null || productPrize <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El precio debe ser positivo");
+        }
+
+
+        ProductDTO productDTO = new ProductDTO(
+                null,
+                productName,
+                productPrize,
+                null,
+                null,
+                null
+        );
+
+        ProductDTO savedProduct = productService.saveProductInShop(productDTO, shopOpt.get());
+
+        try {
+            String storedFileName = fileStorageService.storeFile(file, savedProduct.productId());
+            String originalFileName = file.getOriginalFilename();
+            productService.updateProductFileInfo(savedProduct.productId(), originalFileName, storedFileName);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al guardar el archivo");
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Producto añadido correctamente con archivo");
     }
+
+
+
 
     // REVISAR
     @PostMapping("/comments/{shopID}")

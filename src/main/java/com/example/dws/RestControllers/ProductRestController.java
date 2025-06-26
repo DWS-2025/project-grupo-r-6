@@ -4,15 +4,21 @@ import com.example.dws.DTOs.GeneralMapper;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
 import com.example.dws.Entities.Product;
+import com.example.dws.Service.FileStorageService;
 import com.example.dws.Service.ProductService;
 import com.example.dws.Service.ShopService;
 import com.example.dws.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +36,8 @@ public class ProductRestController {
     private UserService userService;
     @Autowired
     private GeneralMapper generalMapper;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
@@ -136,6 +144,29 @@ public class ProductRestController {
             return ResponseEntity.ok(productDTOs);
         }
     }
+
+    @GetMapping("/{productID}/file")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long productID) {
+        try {
+            Resource resource = fileStorageService.loadFileAsResource(productID);
+            String originalFileName = fileStorageService.getOriginalFilename(productID);
+
+
+            String contentType = Files.probeContentType(resource.getFile().toPath());
+            if (contentType == null) {
+                contentType = "application/octet-stream"; // tipo genérico si no se detecta
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + originalFileName + "\"")
+                    .body(resource);
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Archivo no encontrado");
+        }
+    }
+
 
 }
 

@@ -385,6 +385,28 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "DownloadFIle",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/api/products/4/file",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"products",
+								"4",
+								"file"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
