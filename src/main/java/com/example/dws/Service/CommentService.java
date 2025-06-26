@@ -24,6 +24,9 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
+    private SanitizationService sanitizationService;
+
+    @Autowired
     private ShopRepository shopRepository;
 
     @Autowired
@@ -49,7 +52,8 @@ public class CommentService {
 
 
     public void save(CommentDTO commentDTO) {
-        commentRepository.save(commentDTOToComment(commentDTO));
+        Comment comment = commentDTOToComment(sanitizationService.sanitizeCommentDTO(commentDTO));
+        commentRepository.save(comment);
     }
     public void save(Comment comment) {
         commentRepository.save(comment);

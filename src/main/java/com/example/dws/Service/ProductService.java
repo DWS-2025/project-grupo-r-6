@@ -21,6 +21,8 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
+    private SanitizationService sanitizationService;
+    @Autowired
     private GeneralMapper generalMapper;
     @Autowired
     private ShopRepository shopRepository;
@@ -62,12 +64,12 @@ public class ProductService {
         productRepository.deleteById(id);
     }
     public void save(ProductDTO productDTO) {
-        Product product = productDTOToProduct(productDTO);
+        Product product = productDTOToProduct(sanitizationService.sanitizeProductDTO(productDTO));
         productRepository.save(product);
     }
     public void update(Long id, ProductDTO productDTO) {
         Optional<Product> oldProduct = productRepository.findById(id);
-        Product newProduct = productDTOToProduct(productDTO);
+        Product newProduct = productDTOToProduct(sanitizationService.sanitizeProductDTO(productDTO));
         oldProduct.get().setProductName(newProduct.getProductName());
         oldProduct.get().setProductPrize(newProduct.getProductPrize());
         productRepository.save(oldProduct.get());

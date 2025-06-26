@@ -101,7 +101,7 @@ public class ShopService {
         }
         Shop shop = optionalShop.get();
 
-        Comment comment = generalMapper.commentDTOToComment(commentDTO);
+        Comment comment = generalMapper.commentDTOToComment(sanitizationService.sanitizeCommentDTO(commentDTO));
         comment.setShop(shop);
         comment.setUser(userService.getLoggedUser());
         commentRepository.save(comment);
@@ -128,14 +128,6 @@ public class ShopService {
         return new PageImpl<>(paginatedList, pageable, total);
     }
 
-    @Transactional
-    public void saveProduct(ShopDTO shopDTO, ProductDTO productDTO){
-        Shop shop = shopDTOToShop(shopDTO);
-        Product product = generalMapper.productDTOToProduct(productDTO);
-        shop.getProducts().add(product);
-        product.getShops().add(shop);
-        shopRepository.save(shop);
-    }
     public void removeProductFromAllShops(ProductDTO productDTO) {
         Product product= generalMapper.productDTOToProduct(productDTO);
         for (Shop shop : shopRepository.findAll()) {
