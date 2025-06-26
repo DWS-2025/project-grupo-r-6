@@ -85,15 +85,16 @@ public class ProductService {
         }
     }
 
-    public void updateProductFileInfo(Long productId, String originalName, String storedName) {
-        Optional<Product> productOptional = productRepository.findById(productId);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            product.setOriginalFileName(originalName);
-            product.setStoredFileName(storedName);
+    public void updateProductFileInfo(Long productId, String originalFileName, String storedFileName) {
+        Optional<Product> productOpt = productRepository.findById(productId);
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            product.setOriginalFileName(originalFileName);
+            product.setStoredFileName(storedFileName);
             productRepository.save(product);
         }
     }
+
 
 
 
