@@ -3,6 +3,7 @@ package com.example.dws.RestControllers;
 import com.example.dws.DTOs.CommentDTO;
 import com.example.dws.DTOs.ProductDTO;
 import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.DTOs.ShopExDTO;
 import com.example.dws.Entities.Shop;
 import com.example.dws.Service.CommentService;
 import com.example.dws.Service.ProductService;
@@ -40,18 +41,18 @@ public class ShopRestController {
     private UserService userService;
 
     @GetMapping("/")
-    public ResponseEntity<List<ShopDTO>> getAllShops() {
-        List<ShopDTO> shopsDTO = shopService.findAll();
+    public ResponseEntity<List<ShopExDTO>> getAllShops() {
+        List<ShopExDTO> shopsDTO = shopService.findAllShops();
         return ResponseEntity.ok(shopsDTO);
     }
 
     @GetMapping("/{shopID}")
-    public ResponseEntity<ShopDTO> getShopById(@PathVariable long shopID) {
-        Optional<ShopDTO> shopDTO = shopService.findById(shopID);
+    public ResponseEntity<ShopExDTO> getShopById(@PathVariable long shopID) {
+        Optional<ShopExDTO> shopDTO = shopService.findShopById(shopID);
         if (shopDTO.isPresent()){
             return ResponseEntity.ok(shopDTO.get());
         } else{
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
     }
     // REVISAR PORQUE HACE FALTA ESTAR AUTORIZADO

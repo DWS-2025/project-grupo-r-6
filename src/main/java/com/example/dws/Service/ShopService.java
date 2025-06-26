@@ -1,9 +1,6 @@
 package com.example.dws.Service;
 
-import com.example.dws.DTOs.CommentDTO;
-import com.example.dws.DTOs.GeneralMapper;
-import com.example.dws.DTOs.ProductDTO;
-import com.example.dws.DTOs.ShopDTO;
+import com.example.dws.DTOs.*;
 import com.example.dws.Entities.Comment;
 import com.example.dws.Entities.Product;
 import com.example.dws.Entities.Shop;
@@ -47,12 +44,26 @@ public class ShopService {
         System.out.println(generalMapper.ToListShopDTO(shopRepository.findAll()));
         return generalMapper.ToListShopDTO(shopRepository.findAll());
     }
+    public List<ShopExDTO> findAllShops(){
+        System.out.println(generalMapper.ToListShopExDTO(shopRepository.findAll()));
+        return generalMapper.ToListShopExDTO(shopRepository.findAll());
+    }
 
     public Optional<ShopDTO> findById(Long id) {
         Optional<Shop> optionalShop = shopRepository.findById(id);
         if (optionalShop.isPresent()) {
             Shop shop = optionalShop.get();
             ShopDTO shopDTO = generalMapper.shopToShopDTO(shop);
+            return Optional.of(shopDTO);
+        } else {
+            return Optional.empty();
+        }
+    }
+    public Optional<ShopExDTO> findShopById(Long id) {
+        Optional<Shop> optionalShop = shopRepository.findById(id);
+        if (optionalShop.isPresent()) {
+            Shop shop = optionalShop.get();
+            ShopExDTO shopDTO = generalMapper.shopToShopExDTO(shop);
             return Optional.of(shopDTO);
         } else {
             return Optional.empty();

@@ -34,6 +34,9 @@ public class CommentService {
     public List<CommentDTO> findAll(){
         return generalMapper.ToListCommentDTO(commentRepository.findAll());
     }
+    public List<CommentBasicDTO> findAllComments(){
+        return generalMapper.ToListCommentBasicDTO(commentRepository.findAll());
+    }
 
     public Optional<CommentDTO> findById(long id) {
         CommentDTO commentDTO= commentToCommentDTO(commentRepository.findById(id));

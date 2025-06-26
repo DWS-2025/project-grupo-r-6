@@ -28,4 +28,9 @@ public interface GeneralMapper {
     UserBasicDTO userToUserBasicDTO(User user);
     CommentBasicDTO commentToCommentBasicDTO(Comment comment);
     Comment commentBasicDTOToComment(CommentBasicDTO commentBasicDTO);
+    List<CommentBasicDTO> ToListCommentBasicDTO(List<Comment> all);
+    List<ShopExDTO> ToListShopExDTO(List<Shop> all);
+
+    ShopExDTO shopToShopExDTO(Shop shop);
+
 }

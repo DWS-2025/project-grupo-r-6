@@ -29,8 +29,8 @@ public class CommentRestController {
     private GeneralMapper generalMapper;
 
     @GetMapping
-    public ResponseEntity<List<CommentDTO>> getAllComments() {
-        List<CommentDTO> commentDTOs = commentService.findAll();
+    public ResponseEntity<List<CommentBasicDTO>> getAllComments() {
+        List<CommentBasicDTO> commentDTOs = commentService.findAllComments();
         return ResponseEntity.ok(commentDTOs);
     }
     @GetMapping("/paginated")
