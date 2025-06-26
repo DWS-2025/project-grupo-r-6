@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -65,22 +67,32 @@ public class CommentRestController {
         return ResponseEntity.ok(commentDTO.get());
     }
 
-    // DELETE a specific comment by shop‐ID and comment‐ID
     @DeleteMapping("/{shopID}/{commentID}")
     public ResponseEntity<String> deleteComment(
             @PathVariable long shopID,
-            @PathVariable long commentID
+            @PathVariable long commentID,
+            @AuthenticationPrincipal UserDetails currentUser
     ) {
         Optional<ShopDTO> shopDTO = shopService.findById(shopID);
         if (shopDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tienda seleccionada no existe");
         }
+
         Optional<CommentDTO> commentDTO = commentService.findById(commentID);
         if (commentDTO.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El comentario seleccionado no existe");
         }
+
+        boolean isAdmin = currentUser.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !commentDTO.get().user().getUserName().equals(currentUser.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para borrar este comentario");
+        }
+
         commentService.delete(commentID, shopID);
         return ResponseEntity.ok("Comentario eliminado correctamente");
     }
+
 }
 

@@ -76,9 +76,11 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.POST, "/api/comments/**").hasRole("USER")
 						.requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
 
-						.requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/comments/**").hasAnyRole("ADMIN", "USER")
 						.requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
-						.requestMatchers(HttpMethod.DELETE, "/api/shops/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/shops/**").hasAnyRole("ADMIN", "USER")
+						.requestMatchers(HttpMethod.POST, "/api/shops/comments/*").hasAnyRole("ADMIN", "USER")
+
 						.requestMatchers(HttpMethod.POST, "/api/products/{productID}/shops/{shopID}").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/shops/**").hasRole( "ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/shops/{shopID}/image").hasRole("USER")
