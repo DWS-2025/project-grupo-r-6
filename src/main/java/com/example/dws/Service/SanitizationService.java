@@ -103,17 +103,7 @@ public class SanitizationService {
                 commentDTO.shopID()
         );
     }
-    public Comment sanitizeComment(Comment comment) {
-        if (comment == null) return null;
 
-        return new Comment(
-                comment.getCommentId(),
-                comment.getUser(),
-                sanitizeBasic(comment.getIssue()),
-                sanitizeQuill(comment.getMessage()),
-                comment.getShop()
-        );
-    }
 
     // ------------ SHOP ------------
     public ShopDTO sanitizeShopDTO(ShopDTO shopDTO) {

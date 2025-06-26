@@ -56,7 +56,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
     public void save(Comment comment) {
-        commentRepository.save(sanitizationService.sanitizeComment(comment));
+        commentRepository.save(comment);
     }
     public void delete(long commentID, long shopID) {
         Optional<Comment> comment = commentRepository.findById(commentID);
