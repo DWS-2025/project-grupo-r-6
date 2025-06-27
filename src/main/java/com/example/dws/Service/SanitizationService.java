@@ -131,7 +131,7 @@ public class SanitizationService {
         String sanitizedMessage = sanitizeQuill(dto.message());
 
         Comment comment = new Comment();
-        comment.setCommentId(dto.commentId());
+        // comment.setCommentId(dto.commentId())
         comment.setIssue(sanitizedIssue);
         comment.setMessage(sanitizedMessage);
         comment.setShop(shop);
@@ -139,5 +139,6 @@ public class SanitizationService {
 
         return comment;
     }
+
 }
 

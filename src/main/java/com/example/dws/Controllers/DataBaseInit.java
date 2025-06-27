@@ -70,7 +70,7 @@ public class DataBaseInit implements CommandLineRunner {
         userService.save(userDTO2);
 
         User user3 = new User("usuario2", "usuario2@gmail.com", passwordEncoder.encode("userpass"), "USER");
-        UserDTO userDTO3 = generalMapper.userToUserDTO(user2);
+        UserDTO userDTO3 = generalMapper.userToUserDTO(user3);
         userService.save(userDTO3);
 
         UserDTO userDTO1 = userService.findByName("Adri").get();

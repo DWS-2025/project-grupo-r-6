@@ -94,7 +94,6 @@ public class ShopService {
         shopRepository.deleteById(id);
     }
 
-    @Transactional
     public void saveComment(ShopDTO shopDTO, CommentDTO commentDTO) {
         Optional<Shop> optionalShop = shopRepository.findById(shopDTO.shopID());
         if (optionalShop.isEmpty()) {
